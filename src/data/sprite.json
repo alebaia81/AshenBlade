@@ -213,9 +213,9 @@
   },
   "compagni": {
     "corrado": "cavaliere_visiera",
-    "elisa": { "immagine": "donna", "tinta": "#c8b0ff" },
-    "volpe": { "immagine": "ragazzo", "tinta": "#ffc890" },
-    "agata": { "immagine": "anziana", "tinta": "#fff0b0" }
+    "elisa": { "immagine": "mago", "tinta": "#e0b8ff" },
+    "volpe": { "immagine": "bandana", "tinta": "#ffd098" },
+    "agata": { "immagine": "soldato", "tinta": "#fff0a8" }
   },
   "abitanti": {
     "berta": "donna",

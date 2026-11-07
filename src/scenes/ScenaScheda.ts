@@ -183,9 +183,9 @@ export class ScenaScheda extends Phaser.Scene {
     }
     const partita = leggiPartita(this);
     const èArmatura = spazio !== 'primaria' && spazio !== 'secondaria';
-    testo(alto + 100, NOMI_SPAZI[spazio]!, { fontStyle: 'bold', fontSize: '18px' });
+    testo(alto + 96, NOMI_SPAZI[spazio]!, { fontStyle: 'bold', fontSize: '17px' });
     const id = partita.equipaggiamento[spazio];
-    if (id) testo(alto + 126, righeOggetto(id, this.dati).filter((r) => r !== '').slice(0, 3).join('\n'), { fontSize: '13px', color: '#c8c8c8' });
+    if (id) testo(alto + 128, righeOggetto(id, this.dati).filter((r) => r !== '').slice(0, 3).join('\n'), { fontSize: '12px', color: '#c8c8c8', wordWrap: { width: 290 } });
 
     if (èArmatura && this.bloccata) {
       testo(alto + 200, 'Non durante un combattimento: allontanati dai nemici per cambiare armatura.', { color: '#ff9a9a' });

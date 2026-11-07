@@ -78,22 +78,22 @@ export class ScenaInventario extends Phaser.Scene {
     this.inMano = this.add.text(this.sinistra + 24, this.alto + 44, '', { ...STILE_TESTO, fontSize: '13px', color: '#c8c8c8' });
     this.griglia = this.add.container(0, 0);
 
-    this.nomeOggetto = this.add.text(destra, this.alto + 70, '', { ...STILE_TITOLO, fontSize: '20px', wordWrap: { width: 380 } });
-    this.dettagli = this.add.text(destra, this.alto + 104, '', { ...STILE_TESTO, wordWrap: { width: 380 }, lineSpacing: 6 });
-    this.esito = this.add.text(destra, this.alto + 316, '', { ...STILE_TESTO, fontSize: '14px', color: '#ffe680', wordWrap: { width: 380 } });
+    this.nomeOggetto = this.add.text(destra, this.alto + 64, '', { ...STILE_TITOLO, fontSize: '18px', wordWrap: { width: 380 } });
+    this.dettagli = this.add.text(destra, this.alto + 90, '', { ...STILE_TESTO, fontSize: '13px', wordWrap: { width: 380 }, lineSpacing: 3 });
+    this.esito = this.add.text(destra, this.alto + 314, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffe680', wordWrap: { width: 380 } });
     const pulsante = (dx: number, testo: string, alClic: () => void) =>
-      new Pulsante(this, destra + dx, this.alto + 290, { larghezza: 110, altezza: 38, testo, alClic });
+      new Pulsante(this, destra + dx, this.alto + 288, { larghezza: 110, altezza: 36, testo, alClic });
     this.usa = pulsante(60, 'Usa', () => this.usaSelezionato());
     this.getta = pulsante(190, 'Getta', () => this.gettaSelezionato());
     this.aiPreferiti = pulsante(320, 'Preferiti', () => this.mettiNeiPreferiti());
-    this.altroSlot = new Pulsante(this, destra + 88, this.alto + 252, {
+    this.altroSlot = new Pulsante(this, destra + 88, this.alto + 248, {
       larghezza: 165,
       altezza: 28,
       testo: 'Come primaria (1ª)',
       dimensioneTesto: 13,
       alClic: () => this.impugnaInAltroSlot(),
     });
-    this.scambiaArmiBtn = new Pulsante(this, destra + 275, this.alto + 252, {
+    this.scambiaArmiBtn = new Pulsante(this, destra + 275, this.alto + 248, {
       larghezza: 145,
       altezza: 28,
       testo: 'Scambia 1ª ↔ 2ª',

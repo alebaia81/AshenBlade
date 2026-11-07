@@ -69,8 +69,8 @@ export class ScenaNegozio extends Phaser.Scene {
     this.monete = this.add.text(sinistra + PANNELLO.larghezza - 104, alto + 19, '', { ...STILE_TESTO, fontSize: '20px', color: '#ffe680', fontStyle: 'bold' });
 
     const destra = sinistra + 680;
-    this.nomeOggetto = this.add.text(destra, alto + 70, '', { ...STILE_TITOLO, fontSize: '17px', wordWrap: { width: 200 } });
-    this.dettagli = this.add.text(destra, alto + 100, '', { ...STILE_TESTO, fontSize: '13px', wordWrap: { width: 200 }, lineSpacing: 3 });
+    this.nomeOggetto = this.add.text(destra, alto + 68, '', { ...STILE_TITOLO, fontSize: '16px', wordWrap: { width: 200 } });
+    this.dettagli = this.add.text(destra, alto + 96, '', { ...STILE_TESTO, fontSize: '12px', wordWrap: { width: 200 }, lineSpacing: 2 });
     this.azione = new Pulsante(this, destra + 100, alto + 352, { larghezza: 200, altezza: 40, testo: '', dimensioneTesto: 15, alClic: () => this.esegui() });
     this.esito = this.add.text(destra, alto + 380, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffe680', wordWrap: { width: 200 } });
     this.add.text(sinistra + 24, alto + PANNELLO.altezza - 30, 'Clic: seleziona · Clic destro: compra o vende subito', { ...STILE_TESTO, fontSize: '13px', color: '#9aa7b8' });
