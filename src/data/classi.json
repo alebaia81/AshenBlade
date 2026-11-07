@@ -1,0 +1,120 @@
+{
+  "guerriero": {
+    "id": "guerriero",
+    "nome": "Guerriero",
+    "descrizione": "Resistente e solido in mischia. Spada e scudo.",
+    "caratteristiche": {
+      "FOR": 15,
+      "DES": 12,
+      "COS": 14,
+      "INT": 8,
+      "SAG": 10,
+      "CAR": 10
+    },
+    "vitaBase": 14,
+    "vitaPerLivello": 6,
+    "manaBase": 0,
+    "arma": "spada_e_scudo",
+    "abilita": {
+      "id": "parata",
+      "nome": "Parata",
+      "descrizione": "Per un attimo i colpi che arrivano davanti non fanno danno e il nemico viene respinto.",
+      "ricaricaMs": 3000,
+      "costoMana": 0,
+      "mira": false,
+      "durataMs": 600
+    },
+    "passive": [],
+    "colore": "#5b8fd6"
+  },
+  "mago": {
+    "id": "mago",
+    "nome": "Mago",
+    "descrizione": "Fragile ma letale a distanza. Bastone e dardi magici.",
+    "caratteristiche": {
+      "FOR": 8,
+      "DES": 12,
+      "COS": 12,
+      "INT": 15,
+      "SAG": 12,
+      "CAR": 10
+    },
+    "vitaBase": 8,
+    "vitaPerLivello": 3,
+    "manaBase": 10,
+    "arma": "bastone",
+    "abilita": {
+      "id": "palla_di_fuoco",
+      "nome": "Palla di fuoco",
+      "descrizione": "Lanci una palla di fuoco: esplode e colpisce tutti i nemici vicini. Clicca il pulsante, poi il bersaglio.",
+      "ricaricaMs": 2000,
+      "costoMana": 6,
+      "mira": true,
+      "dado": "2d6",
+      "raggio": 24,
+      "gittata": 160
+    },
+    "passive": [],
+    "colore": "#a46be0"
+  },
+  "ladro": {
+    "id": "ladro",
+    "nome": "Ladro",
+    "descrizione": "Rapido e preciso, colpisce alle spalle. Pugnali.",
+    "caratteristiche": {
+      "FOR": 10,
+      "DES": 15,
+      "COS": 12,
+      "INT": 10,
+      "SAG": 10,
+      "CAR": 12
+    },
+    "vitaBase": 10,
+    "vitaPerLivello": 4,
+    "manaBase": 0,
+    "arma": "pugnali",
+    "abilita": {
+      "id": "scatto_ombra",
+      "nome": "Scatto nell'ombra",
+      "descrizione": "Diventi invisibile per 3 secondi: i nemici ti perdono. Finisce se attacchi. Alle spalle fai sempre danno doppio.",
+      "ricaricaMs": 6000,
+      "costoMana": 0,
+      "mira": false,
+      "durataMs": 3000
+    },
+    "passive": [
+      "alle_spalle"
+    ],
+    "colore": "#d08a3c"
+  },
+  "chierico": {
+    "id": "chierico",
+    "nome": "Chierico",
+    "descrizione": "Cura le ferite e punisce i non morti. Mazza.",
+    "caratteristiche": {
+      "FOR": 12,
+      "DES": 10,
+      "COS": 12,
+      "INT": 10,
+      "SAG": 15,
+      "CAR": 10
+    },
+    "vitaBase": 11,
+    "vitaPerLivello": 5,
+    "manaBase": 8,
+    "arma": "mazza",
+    "abilita": {
+      "id": "cura",
+      "nome": "Cura",
+      "descrizione": "Recuperi vita usando il mana. Contro i non morti fai sempre +1d6 di danno.",
+      "ricaricaMs": 4000,
+      "costoMana": 5,
+      "mira": false,
+      "dado": "1d8"
+    },
+    "passive": [
+      "contro_nonmorti"
+    ],
+    "colore": "#f0e2a0"
+  }
+}

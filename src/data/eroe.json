@@ -1,0 +1,16 @@
+{
+  "velocita": 80,
+  "dimensione": 12,
+  "coloreOcchio": "#1a1a1a",
+  "armatura": 0,
+  "schivata": {
+    "velocita": 220,
+    "durataMs": 220,
+    "ricaricaBaseMs": 650
+  },
+  "respinta": {
+    "velocita": 150,
+    "durataMs": 180
+  },
+  "invulnerabilitaMs": 900
+}

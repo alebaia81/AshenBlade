@@ -1,0 +1,185 @@
+{
+  "id": "colline",
+  "nome": "Colline Grigie",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#3a3a36",
+      "tessera": [{ "immagine": "erba", "tinta": "#d0d0a8" }, "albero_autunno"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#7a7a5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#5e5e5a",
+      "tessera": [{ "immagine": "erba", "tinta": "#d8d8a8" }, { "immagine": "cespuglio", "tinta": "#a8a8a0" }]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#4a5a36",
+      "tessera": [{ "immagine": "erba", "tinta": "#d8d8a8" }, "albero_autunno"]
+    },
+    "W": {
+      "tipo": "muro",
+      "colore": "#8a6a4a",
+      "tessera": "muro_legno"
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d0702a",
+      "tessera": "braciere"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radura",
+      "arrivo": "d",
+      "tessera": "sentiero"
+    },
+    "L": {
+      "tipo": "nemico",
+      "nemico": "lupo",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "U": {
+      "tipo": "abitante",
+      "abitante": "ugo",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#7a7a5e",
+      "coloreMuro": "#5e5e5a",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" },
+      "tesseraMuro": [{ "immagine": "erba", "tinta": "#d8d8a8" }, { "immagine": "cespuglio", "tinta": "#a8a8a0" }]
+    },
+    "Z": {
+      "tipo": "forziere",
+      "contenuto": [
+        "spada_cavaliere"
+      ],
+      "monete": 50,
+      "colore": "#7a7a5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" }
+    },
+    "C": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "colore": "#8a8a6a",
+      "testo": "«Miniera — a est». Qualcuno ha aggiunto sotto, col carbone: «FRANATA».",
+      "cambiaCon": {
+        "quest": "atto1_cripta",
+        "stato": "conclusa"
+      },
+      "diventa": "D",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "F": {
+      "tipo": "cartello",
+      "aspetto": "frana",
+      "colore": "#a89a78",
+      "testo": "Una frana blocca la strada per la miniera. Servirebbe un'intera squadra di minatori per liberarla.",
+      "cambiaCon": {
+        "quest": "atto1_cripta",
+        "stato": "conclusa"
+      },
+      "diventa": ":",
+      "tessera": "sentiero"
+    },
+    "D": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "colore": "#8a8a6a",
+      "testo": "«Miniera — a est». Sotto, la scritta «FRANATA» è stata cancellata con una croce.",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "m": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "miniera_gallerie",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "e": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "bandito",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "o": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "brughiera",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "g": {
+      "tipo": "arrivo",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "G": {
+      "tipo": "cartello",
+      "aspetto": "nebbia",
+      "colore": "#8a8a6a",
+      "testo": "Una nebbia fitta e fredda viene da ovest. Non si vede a un passo: meglio non entrarci, per ora.",
+      "cambiaCon": {
+        "quest": "atto2_miniera",
+        "stato": "conclusa"
+      },
+      "diventa": ".",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    }
+  },
+  "griglia": [
+    "################n###############",
+    "#RRRRR..........a...........RRR#",
+    "#RRZ,R....T....:::......T....RR#",
+    "#RR,,R.........:::..T.........R#",
+    "#RRRMR......T..:::............R#",
+    "#..........L...:::...........CR#",
+    "#..............:::::::::::::::Fm",
+    "#......T.......:::::::::::::e:F#",
+    "#..............:::............R#",
+    "#...T..........:::....L......RR#",
+    "#.......RR.....:::..T..........#",
+    "#........R.....:::........T....#",
+    "oG.g...........:::....RR.......#",
+    "#....T.....T...:::.....R.......#",
+    "#..............:::..........T..#",
+    "#..............:::......L......#",
+    "#.....RR....B.:::::............#",
+    "#..T......B.WWW.:........RR....#",
+    "#......L....WWW.:U.............#",
+    "#..............::f....T........#",
+    "#RR......T...........B.........#",
+    "#RRR..............T.......RR..R#",
+    "#RRRR.......................RRR#",
+    "################################"
+  ]
+}

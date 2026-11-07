@@ -1,0 +1,10 @@
+{
+  "livelli": [
+    { "livello": 1, "materiali": { "minerale_ferro": 1 }, "monete": 15 },
+    { "livello": 2, "materiali": { "minerale_ferro": 2, "carbone": 1 }, "monete": 30 },
+    { "livello": 3, "materiali": { "minerale_ferro": 3, "carbone": 2 }, "monete": 60 },
+    { "livello": 4, "materiali": { "minerale_ferro": 4, "carbone": 2, "cristallo_miniera": 1 }, "monete": 100 },
+    { "livello": 5, "materiali": { "minerale_ferro": 5, "carbone": 3, "cristallo_miniera": 2 }, "monete": 160 }
+  ],
+  "moltiplicatoreRarita": { "comune": 1, "non_comune": 1.5, "rara": 2, "leggendaria": 3, "esotica": 4 }
+}

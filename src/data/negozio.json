@@ -1,0 +1,23 @@
+{
+  "gemma": {
+    "nome": "Bottega di Gemma",
+    "merce": [
+      "pozione_vita",
+      "pozione_mana",
+      "pozione_forza",
+      "pozione_resistenza",
+      "borsa",
+      "zaino_20",
+      "zaino_24",
+      "spada_lunga",
+      "arco",
+      "pergamena_mazza_gelo",
+      "bacchetta",
+      "corazza_cuoio",
+      "mappa_cavaliere",
+      "elmo_ferro",
+      "guanti_ferro",
+      "corazza_ferro"
+    ]
+  }
+}

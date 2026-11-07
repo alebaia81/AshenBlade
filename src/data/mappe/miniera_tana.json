@@ -1,0 +1,72 @@
+{
+  "id": "miniera_tana",
+  "nome": "Miniera dei Goblin – la tana del troll",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1e1610",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#806850" }
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#4a3a2a",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#b89878" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5e4a38",
+      "tessera": { "immagine": "terra", "tinta": "#d0c0b0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6450",
+      "tessera": "sabbia"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a6450",
+      "tessera": "sabbia"
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "miniera_gallerie",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "B": {
+      "tipo": "barriera",
+      "boss": "troll_caverne",
+      "colore": "#7a6450",
+      "tessera": "sabbia"
+    },
+    "T": {
+      "tipo": "nemico",
+      "nemico": "troll_caverne",
+      "colore": "#5e4a38",
+      "tessera": { "immagine": "terra", "tinta": "#d0c0b0" }
+    }
+  },
+  "griglia": [
+    "#############n############",
+    "#RRRRRRRRRRR:a:RRRRRRRRRR#",
+    "#RRRRRRRRRRR:::RRRRRRRRRR#",
+    "#RRRRRRRRRRR:::RRRRRRRRRR#",
+    "#RRRRRRRRRRR:::RRRRRRRRRR#",
+    "#RRRRRRRRRRRBBBRRRRRRRRRR#",
+    "#R......................R#",
+    "#R......................R#",
+    "#R......................R#",
+    "#R....RR...........R....R#",
+    "#R......................R#",
+    "#R......................R#",
+    "#R...........T..........R#",
+    "#R......................R#",
+    "#R......................R#",
+    "#R....R...........RR....R#",
+    "#R......................R#",
+    "#R......................R#",
+    "#R......................R#",
+    "##########################"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "id": "torre_piani",
+  "nome": "Torre del Negromante – i piani",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#120e18",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#8878a8" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#2e2838",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#b0a0d0" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#3e3848",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#807898" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    "c": {
+      "tipo": "arrivo",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "brughiera",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "d": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "torre_cima",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "P": {
+      "tipo": "porta",
+      "aspetto": "cancello",
+      "chiave": "chiave_torre",
+      "nome": "il cancello della scala",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#3e3848",
+      "coloreMuro": "#2e2838",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#807898" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#b0a0d0" }
+    },
+    "C": {
+      "tipo": "nemico",
+      "nemico": "cultista",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "spettro",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "golem",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "k": {
+      "tipo": "forziere",
+      "contenuto": [
+        "chiave_torre",
+        "pozione_vita"
+      ],
+      "monete": 25,
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "x": {
+      "tipo": "forziere",
+      "contenuto": [
+        "chiave_piccola",
+        "pozione_mana",
+        "pozione_vita"
+      ],
+      "monete": 20,
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "L": {
+      "tipo": "forziere",
+      "chiusoCon": "chiave_piccola",
+      "contenuto": [
+        "pergamena_bastone_orvald",
+        "pozione_resistenza"
+      ],
+      "monete": 80,
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "E": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pugnale_ombra"
+      ],
+      "monete": 50,
+      "colore": "#3e3848",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#807898" }
+    }
+  },
+  "griglia": [
+    "############################",
+    "#KKKKKKKKKKKKKKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKKKKKKKKKKKKKKK#",
+    "#KKKKK........d........KKKK#",
+    "#KKKKK.C.............S.KKKK#",
+    "#K,,,K...K....c....K...KKKK#",
+    "#K,E,M.................KKKK#",
+    "#K,,,K...K.........K...KKKK#",
+    "#KKKKK.S.............L.KKKK#",
+    "#KKKKK.G...............KKKK#",
+    "#KKKKKKKKKKKKK:KKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:KKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:KKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:KKKKKKKKKKKK#",
+    "#K.....KKKKKKK:KKKKKKK.....#",
+    "#K..G..KKKKKKK:KKKKKKK....x#",
+    "#K.....KKKKKKKPKKKKKKK..S..#",
+    "#K.....K.............K.....#",
+    "#K.....K..C.......C..K.....#",
+    "#K.k.....................S.#",
+    "#K.....K.............K.....#",
+    "#KKKKKKK.............KKKKKK#",
+    "#KKKKKKKKKKKK:::KKKKKKKKKKK#",
+    "#KKKKKKKKKKKK:::KKKKKKKKKKK#",
+    "#KKKKKKKKKKKK:a:KKKKKKKKKKK#",
+    "##############n#############"
+  ]
+}

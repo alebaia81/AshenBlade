@@ -1,0 +1,105 @@
+{
+  "id": "brughiera",
+  "nome": "Brughiera della Torre",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1420",
+      "tessera": [{ "immagine": "erba", "tinta": "#a090b8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2a2a3a",
+      "tessera": [{ "immagine": "erba", "tinta": "#b8a0c8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#4a4a52",
+      "tessera": [{ "immagine": "erba", "tinta": "#b8a0c8" }, { "immagine": "cespuglio", "tinta": "#a098b0" }]
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#2e2838",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#a090b0" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "x": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "colline",
+      "arrivo": "g",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "t": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "torre_piani",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "L": {
+      "tipo": "nemico",
+      "nemico": "lupo_brughiera",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "bandito_brughiera",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "slime_nero",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    }
+  },
+  "griglia": [
+    "##################################",
+    "#................................#",
+    "#................................#",
+    "#.........T.........T.........T..#",
+    "#...T..............R......S......#",
+    "#...........B.T..................#",
+    "#.................L.......T......#",
+    "#KKKKKK..........................#",
+    "#KKKKKK..T.....R.................#",
+    "#KKKKKK...............T.....R....#",
+    "#KKKKKK..........................#",
+    "#KKKKKK.:::::::::::::::::::::::::#",
+    "#KKKKKt.b:::::::::::::::::::::::ax",
+    "#KKKKKK.:::::::::::::::::::::::::#",
+    "#KKKKKK....................T.....#",
+    "#KKKKKK....R.........B.R.........#",
+    "#KKKKKK......L..T................#",
+    "#KKKKKK.................T........#",
+    "#...........T....................#",
+    "#................S...........T...#",
+    "#...T.............T.....L........#",
+    "#................................#",
+    "#................................#",
+    "##################################"
+  ]
+}

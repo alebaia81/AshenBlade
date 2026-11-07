@@ -1,0 +1,169 @@
+{
+  "id": "bosco",
+  "nome": "Sentiero nel bosco",
+  "legenda": {
+    "f": {
+      "tipo": "vena",
+      "materiale": "minerale_ferro",
+      "quantita": [
+        1,
+        2
+      ],
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "k": {
+      "tipo": "vena",
+      "materiale": "carbone",
+      "quantita": [
+        1,
+        2
+      ],
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "#": {
+      "tipo": "muro",
+      "colore": "#1b3318",
+      "tessera": [{ "immagine": "erba", "tinta": "#a0c090" }, "pino"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2a5225",
+      "tessera": [{ "immagine": "erba", "tinta": "#a0c090" }, "albero"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
+    },
+    "2": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radura",
+      "arrivo": "b",
+      "tessera": "sentiero"
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "slime",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "L": {
+      "tipo": "nemico",
+      "nemico": "lupo",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_mana",
+        "pozione_resistenza"
+      ],
+      "monete": 20,
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "arco_lungo",
+        "corazza_maglia",
+        "pergamena_arco_cacciatore"
+      ],
+      "monete": 40,
+      "colore": "#4d7238",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a0c090" }
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#4d7238",
+      "coloreMuro": "#1b3318",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a0c090" },
+      "tesseraMuro": [{ "immagine": "erba", "tinta": "#a0c090" }, "pino"]
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#4d7238",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a0c090" }
+    },
+    "e": {
+      "tipo": "vena",
+      "materiale": "erba_medicinale",
+      "quantita": [
+        1,
+        2
+      ],
+      "aspetto": "cespuglio",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "3": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cimitero",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "c": {
+      "tipo": "arrivo",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
+    }
+  },
+  "griglia": [
+    "###############2##############",
+    "#..T......TT.T:a:......T#,,,,#",
+    "#.T.TTT.......:::.....T.#,Y,,#",
+    "#.T..T..T....f:::.......#,,,,#",
+    "#.............:::.TT....##M###",
+    "#.T.T.T.......:::.....T.....T#",
+    "#..e.......T..::::::......T.T#",
+    "#..T........T....:::.TT.T....#",
+    "#TT....T..TT..T..:::T..TT.T.T#",
+    "#.T....S...T...T.:::.T...TT..#",
+    "#.......T.....T.T:::.T.......#",
+    "#....T.........T.:::T......T.#",
+    "#.......T.....::::::..L.T....#",
+    "#.T..T..T.....:::...e....T...#",
+    "#.......T.....:::......TT....#",
+    "#........T.TT.:::......T.....#",
+    "#.....T...T...:::....T.T..T..#",
+    "#...........T.:::.T.T.......T#",
+    "#.T..TT.T.....::::::T.....TTT#",
+    "#T.......T....T..:::...S...T.#",
+    "#.T...e..........:::.....T...#",
+    "#...T.TTT.......k:::T..TTT...#",
+    "#.TT...TT........:::........T#",
+    "#..T...........T.:::..T...T..#",
+    "#.T...T..T.T.....:::::::.T...#",
+    "#T..TT..T.T..T..T....:::..TT.#",
+    "#....T...L.....TT...T:::....T#",
+    "#.T.....T.T...T....T.:::.eT..#",
+    "#..T..TTTTT......T..T:::.....#",
+    "#..................T.:::.....#",
+    "#.T.T........T..L....::::::..#",
+    "#TT.......e.T...T.....TT:::T.#",
+    "#...T...................:::..#",
+    "#...T...................:::T.#",
+    "#.T..........L..........:::TT#",
+    "#...X...................:::..#",
+    "#...T..............e.::::::..#",
+    "#.TT.................:::..T.T#",
+    "#T..T................:c:.T..T#",
+    "######################3#######"
+  ]
+}

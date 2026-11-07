@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ashen Blade: L'Ombra della Quercia</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #111; }
+      #gioco { width: 100%; height: 100%; }
+      #avvio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+        color: #ccc; font: 18px sans-serif; text-align: center; padding: 2rem; }
+      #errore { display: none; position: fixed; inset: 0; padding: 2rem; overflow: auto;
+        background: #300; color: #fdd; font: 16px monospace; white-space: pre-wrap; }
+    </style>
+    <!--
+      Script "classico" (non modulo), eseguito prima del gioco. Serve a diagnosticare
+      i casi in cui il gioco non parte: se il browser non capisce il codice del gioco,
+      l'errore arriva comunque qui e viene mostrato invece di una pagina vuota.
+    -->
+    <script>
+      (function () {
+        function mostra(titolo, dettaglio) {
+          var riquadro = document.getElementById('errore');
+          if (!riquadro || riquadro.style.display === 'block') return;
+          var webgl = false;
+          try { webgl = !!document.createElement('canvas').getContext('webgl'); } catch (e) {}
+          riquadro.textContent = titolo + '\n\n' + (dettaglio || '') +
+            '\n\n--- Informazioni per la diagnosi ---' +
+            '\nBrowser: ' + navigator.userAgent +
+            '\nWebGL disponibile: ' + (webgl ? 'sì' : 'no') +
+            '\nIndirizzo: ' + location.protocol + '//…/' + location.pathname.split('/').pop();
+          riquadro.style.display = 'block';
+          var avvio = document.getElementById('avvio');
+          if (avvio) avvio.style.display = 'none';
+        }
+        window.mostraErroreAvvio = mostra;
+        window.addEventListener('error', function (e) {
+          mostra('Si è verificato un errore e il gioco si è fermato.', e.error ? (e.error.stack || e.error.message) : e.message);
+        });
+        // Se dopo 8 secondi il gioco non ha dato segni di vita, lo diciamo.
+        setTimeout(function () {
+          if (!window.giocoPronto) mostra('Il gioco non è partito entro 8 secondi.', 'Nessun errore ricevuto: forse il browser è troppo vecchio o blocca gli script nei file locali.');
+        }, 8000);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="avvio">Caricamento del gioco…<br /><br />
+      <small>Se questa scritta resta per sempre, il browser sta bloccando JavaScript per i file aperti dal disco.</small>
+    </div>
+    <div id="gioco"></div>
+    <div id="errore"></div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

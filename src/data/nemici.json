@@ -1,0 +1,527 @@
+{
+  "slime": {
+    "nome": "Slime",
+    "comportamento": "inseguitore",
+    "vita": 8,
+    "armatura": 0,
+    "danno": "1d4",
+    "velocita": 35,
+    "raggioVista": 80,
+    "raggioAbbandono": 140,
+    "dimensione": 10,
+    "colore": "#7ad3c0",
+    "storditoMs": 300,
+    "pausaDopoAttaccoMs": 600,
+    "esperienza": 5,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.15
+      },
+      {
+        "oggetto": "gelatina_slime",
+        "probabilita": 0.3
+      }
+    ],
+    "monete": [
+      1,
+      3
+    ]
+  },
+  "lupo": {
+    "nome": "Lupo",
+    "comportamento": "inseguitore",
+    "vita": 14,
+    "armatura": 1,
+    "danno": "1d6",
+    "velocita": 65,
+    "raggioVista": 110,
+    "raggioAbbandono": 200,
+    "dimensione": 12,
+    "colore": "#8d8f99",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 12,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "pozione_forza",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "stivali_cuoio",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "corazza_cuoio",
+        "probabilita": 0.04
+      },
+      {
+        "oggetto": "pelle_lupo",
+        "probabilita": 0.4
+      }
+    ],
+    "monete": [
+      2,
+      5
+    ]
+  },
+  "scheletro": {
+    "nome": "Scheletro",
+    "comportamento": "inseguitore",
+    "vita": 12,
+    "armatura": 1,
+    "danno": "1d6",
+    "velocita": 40,
+    "raggioVista": 90,
+    "raggioAbbandono": 160,
+    "dimensione": 12,
+    "colore": "#e6e2d3",
+    "storditoMs": 260,
+    "pausaDopoAttaccoMs": 600,
+    "esperienza": 10,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "pozione_mana",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "pozione_resistenza",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "elmo_ferro",
+        "probabilita": 0.06
+      },
+      {
+        "oggetto": "guanti_ferro",
+        "probabilita": 0.06
+      },
+      {
+        "oggetto": "arco",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "osso_antico",
+        "probabilita": 0.4
+      }
+    ],
+    "monete": [
+      3,
+      6
+    ]
+  },
+  "zombie": {
+    "nome": "Zombie",
+    "comportamento": "inseguitore",
+    "vita": 22,
+    "armatura": 1,
+    "danno": "1d6",
+    "velocita": 24,
+    "raggioVista": 80,
+    "raggioAbbandono": 150,
+    "dimensione": 12,
+    "colore": "#6a8a5a",
+    "storditoMs": 320,
+    "pausaDopoAttaccoMs": 900,
+    "esperienza": 14,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "osso_antico",
+        "probabilita": 0.3
+      },
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.15
+      }
+    ],
+    "monete": [
+      2,
+      5
+    ]
+  },
+  "pipistrello": {
+    "nome": "Pipistrello",
+    "comportamento": "inseguitore",
+    "vita": 5,
+    "armatura": 0,
+    "danno": "1d3",
+    "velocita": 78,
+    "raggioVista": 110,
+    "raggioAbbandono": 180,
+    "dimensione": 8,
+    "colore": "#5a4a6a",
+    "storditoMs": 200,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 6,
+    "etichette": [],
+    "bottino": [],
+    "monete": [
+      0,
+      2
+    ]
+  },
+  "bandito": {
+    "nome": "Bandito",
+    "comportamento": "inseguitore",
+    "vita": 22,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 48,
+    "raggioVista": 100,
+    "raggioAbbandono": 170,
+    "dimensione": 12,
+    "colore": "#8a5a3a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 18,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "minerale_ferro",
+        "probabilita": 0.3
+      }
+    ],
+    "monete": [
+      6,
+      14
+    ]
+  },
+  "goblin": {
+    "nome": "Goblin",
+    "comportamento": "inseguitore",
+    "vita": 16,
+    "armatura": 1,
+    "danno": "1d6",
+    "velocita": 56,
+    "raggioVista": 100,
+    "raggioAbbandono": 170,
+    "dimensione": 10,
+    "colore": "#5a8a3a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 14,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "carbone",
+        "probabilita": 0.3
+      },
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      3,
+      8
+    ]
+  },
+  "goblin_arciere": {
+    "nome": "Goblin arciere",
+    "comportamento": "tiratore",
+    "vita": 11,
+    "armatura": 0,
+    "danno": "1d6",
+    "velocita": 45,
+    "raggioVista": 130,
+    "raggioAbbandono": 190,
+    "dimensione": 10,
+    "colore": "#7aa04a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 16,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "arco",
+        "probabilita": 0.05
+      }
+    ],
+    "monete": [
+      3,
+      8
+    ],
+    "tiro": {
+      "distanzaMin": 50,
+      "distanzaMax": 110,
+      "ricaricaMs": 1800,
+      "velocita": 170,
+      "gittata": 170,
+      "dimensione": 2,
+      "colore": "#d8c890"
+    }
+  },
+  "ragno": {
+    "nome": "Ragno",
+    "comportamento": "caricatore",
+    "vita": 18,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 30,
+    "raggioVista": 110,
+    "raggioAbbandono": 180,
+    "dimensione": 12,
+    "colore": "#3a2a3a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 700,
+    "esperienza": 18,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "gelatina_slime",
+        "probabilita": 0.2
+      }
+    ],
+    "monete": [
+      2,
+      6
+    ],
+    "carica": {
+      "distanza": 80,
+      "miraMs": 550,
+      "scattoMs": 350,
+      "velocita": 210,
+      "stancoMs": 800
+    }
+  },
+  "lupo_brughiera": {
+    "nome": "Lupo della brughiera",
+    "comportamento": "inseguitore",
+    "vita": 26,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 62,
+    "raggioVista": 110,
+    "raggioAbbandono": 200,
+    "dimensione": 12,
+    "colore": "#5a5a6a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 24,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "pozione_forza",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "stivali_cuoio",
+        "probabilita": 0.05
+      },
+      {
+        "oggetto": "corazza_cuoio",
+        "probabilita": 0.04
+      },
+      {
+        "oggetto": "pelle_lupo",
+        "probabilita": 0.4
+      }
+    ],
+    "monete": [
+      2,
+      6
+    ]
+  },
+  "bandito_brughiera": {
+    "nome": "Predone della brughiera",
+    "comportamento": "inseguitore",
+    "vita": 34,
+    "armatura": 2,
+    "danno": "1d10",
+    "velocita": 48,
+    "raggioVista": 100,
+    "raggioAbbandono": 170,
+    "dimensione": 12,
+    "colore": "#6a3a2a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 30,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "minerale_ferro",
+        "probabilita": 0.3
+      }
+    ],
+    "monete": [
+      10,
+      20
+    ]
+  },
+  "slime_nero": {
+    "nome": "Slime nero",
+    "comportamento": "inseguitore",
+    "vita": 20,
+    "armatura": 0,
+    "danno": "1d6",
+    "velocita": 35,
+    "raggioVista": 80,
+    "raggioAbbandono": 140,
+    "dimensione": 10,
+    "colore": "#3a3a50",
+    "storditoMs": 300,
+    "pausaDopoAttaccoMs": 600,
+    "esperienza": 14,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.15
+      },
+      {
+        "oggetto": "gelatina_slime",
+        "probabilita": 0.3
+      }
+    ],
+    "monete": [
+      1,
+      3
+    ]
+  },
+  "cultista": {
+    "nome": "Cultista",
+    "comportamento": "tiratore",
+    "vita": 16,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 42,
+    "raggioVista": 130,
+    "raggioAbbandono": 190,
+    "dimensione": 12,
+    "colore": "#b05ab0",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 22,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_mana",
+        "probabilita": 0.2
+      },
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.15
+      }
+    ],
+    "monete": [
+      5,
+      12
+    ],
+    "tiro": {
+      "distanzaMin": 50,
+      "distanzaMax": 115,
+      "ricaricaMs": 1700,
+      "velocita": 150,
+      "gittata": 170,
+      "dimensione": 3,
+      "colore": "#d07aff"
+    }
+  },
+  "spettro": {
+    "nome": "Spettro",
+    "comportamento": "inseguitore",
+    "vita": 18,
+    "armatura": 0,
+    "danno": "1d8",
+    "velocita": 52,
+    "raggioVista": 110,
+    "raggioAbbandono": 200,
+    "dimensione": 12,
+    "colore": "#c8d0e8",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 20,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "osso_antico",
+        "probabilita": 0.2
+      }
+    ],
+    "monete": [
+      1,
+      4
+    ],
+    "opacita": 0.55
+  },
+  "golem": {
+    "nome": "Golem di pietra",
+    "comportamento": "inseguitore",
+    "vita": 55,
+    "armatura": 4,
+    "danno": "2d6",
+    "velocita": 20,
+    "raggioVista": 110,
+    "raggioAbbandono": 200,
+    "dimensione": 18,
+    "colore": "#7a7a8a",
+    "storditoMs": 100,
+    "pausaDopoAttaccoMs": 1000,
+    "esperienza": 35,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "minerale_ferro",
+        "probabilita": 0.5
+      },
+      {
+        "oggetto": "cristallo_miniera",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      4,
+      10
+    ]
+  },
+  "ombra": {
+    "nome": "Ombra di un paesano",
+    "comportamento": "inseguitore",
+    "vita": 10,
+    "armatura": 0,
+    "danno": "1d6",
+    "velocita": 45,
+    "raggioVista": 110,
+    "raggioAbbandono": 200,
+    "dimensione": 11,
+    "colore": "#6a6a90",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 5,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [],
+    "monete": [
+      0,
+      1
+    ],
+    "opacita": 0.6
+  }
+}

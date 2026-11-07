@@ -1,0 +1,97 @@
+{
+  "spada_lunga": {
+    "id": "spada_lunga",
+    "risultato": "spada_lunga",
+    "materiali": {
+      "minerale_ferro": 3,
+      "carbone": 1
+    },
+    "monete": 20,
+    "conosciutaDallInizio": true
+  },
+  "balestra": {
+    "id": "balestra",
+    "risultato": "balestra",
+    "materiali": {
+      "minerale_ferro": 2,
+      "pelle_lupo": 2
+    },
+    "monete": 25,
+    "conosciutaDallInizio": true
+  },
+  "pugnali_lancio": {
+    "id": "pugnali_lancio",
+    "risultato": "pugnali_lancio",
+    "materiali": {
+      "minerale_ferro": 2
+    },
+    "monete": 10,
+    "conosciutaDallInizio": true
+  },
+  "arco_cacciatore": {
+    "id": "arco_cacciatore",
+    "risultato": "arco_cacciatore",
+    "materiali": {
+      "pelle_lupo": 3,
+      "minerale_ferro": 1,
+      "gelatina_slime": 2
+    },
+    "monete": 40,
+    "conosciutaDallInizio": false
+  },
+  "mazza_gelo": {
+    "id": "mazza_gelo",
+    "risultato": "mazza_gelo",
+    "materiali": {
+      "minerale_ferro": 3,
+      "gelatina_slime": 3,
+      "carbone": 1
+    },
+    "monete": 40,
+    "conosciutaDallInizio": false
+  },
+  "spada_eroe": {
+    "id": "spada_eroe",
+    "risultato": "spada_eroe",
+    "materiali": {
+      "minerale_ferro": 5,
+      "carbone": 3,
+      "frammento_corona": 1
+    },
+    "monete": 120,
+    "conosciutaDallInizio": false
+  },
+  "arco_lungo": {
+    "id": "arco_lungo",
+    "risultato": "arco_lungo",
+    "materiali": {
+      "minerale_ferro": 2,
+      "pelle_lupo": 2,
+      "carbone": 1
+    },
+    "monete": 35,
+    "conosciutaDallInizio": false
+  },
+  "ascia_troll": {
+    "id": "ascia_troll",
+    "risultato": "ascia_troll",
+    "materiali": {
+      "zanna_troll": 1,
+      "cristallo_miniera": 3,
+      "minerale_ferro": 4
+    },
+    "monete": 150,
+    "conosciutaDallInizio": false
+  },
+  "bastone_orvald": {
+    "id": "bastone_orvald",
+    "risultato": "bastone_orvald",
+    "materiali": {
+      "ossidiana_nera": 1,
+      "cristallo_miniera": 2,
+      "osso_antico": 3
+    },
+    "monete": 180,
+    "conosciutaDallInizio": false
+  }
+}

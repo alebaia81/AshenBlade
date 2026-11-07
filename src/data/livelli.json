@@ -1,0 +1,4 @@
+{
+  "descrizione": "Esperienza totale necessaria per ogni livello (1–20). Curva: 25 × L × (L − 1), design §5.",
+  "soglie": [0, 50, 150, 300, 500, 750, 1050, 1400, 1800, 2250, 2750, 3300, 3900, 4550, 5250, 6000, 6800, 7650, 8550, 9500]
+}

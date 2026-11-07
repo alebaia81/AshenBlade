@@ -1,0 +1,149 @@
+{
+  "id": "miniera_gallerie",
+  "nome": "Miniera dei Goblin – le gallerie",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1e1610",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#806850" }
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#4a3a2a",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#b89878" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6450",
+      "tessera": "sabbia"
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#5a4636",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a6450",
+      "tessera": "sabbia"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "w": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "colline",
+      "arrivo": "e",
+      "tessera": "scale"
+    },
+    "d": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "miniera_tana",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#5a4636",
+      "coloreMuro": "#4a3a2a",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#b89878" }
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "goblin",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "A": {
+      "tipo": "nemico",
+      "nemico": "goblin_arciere",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "K": {
+      "tipo": "nemico",
+      "nemico": "ragno",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "c": {
+      "tipo": "vena",
+      "materiale": "cristallo_miniera",
+      "quantita": [
+        1,
+        1
+      ],
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "x": {
+      "tipo": "forziere",
+      "contenuto": [
+        "chiave_piccola",
+        "pozione_vita",
+        "pozione_vita"
+      ],
+      "monete": 20,
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "L": {
+      "tipo": "forziere",
+      "chiusoCon": "chiave_piccola",
+      "contenuto": [
+        "pergamena_ascia_troll",
+        "pozione_forza"
+      ],
+      "monete": 60,
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "E": {
+      "tipo": "forziere",
+      "contenuto": [
+        "stivali_vento"
+      ],
+      "monete": 40,
+      "colore": "#5a4636",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" }
+    }
+  },
+  "griglia": [
+    "####################################",
+    "#RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR#",
+    "#RRRRRRRRR.........RRRRRRR........R#",
+    "#RRRRRRRRR.......A.RRRRRRR....A...R#",
+    "#:::::::::...G.....RRRRRRR.......cR#",
+    "wa::::::::.........:::::::........R#",
+    "#:::::::::.........:::::::.....G..R#",
+    "#RRRRRRRRR......G..RRRRRRR........R#",
+    "#RRRRRRRRR.........RRRRRRR........R#",
+    "#RRRRRRRRR.........RRRRRRR..A.....R#",
+    "#RRRRRRRRRRRR:::RRRRRRRRRR........R#",
+    "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",
+    "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",
+    "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",
+    "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",
+    "#RRRRRRRc............RRRRRRRR:::RRR#",
+    "#RRRRRRR............cRRRRRR.......R#",
+    "#RRR,,,R..K..........RRRRRR..b....R#",
+    "#RRR,E,M.............RRRRRR.......R#",
+    "#RRR,,,R..........K..RRRRRR.......R#",
+    "#RRRRRRR.x..........LRRRRRR.......R#",
+    "#RRRRRRR.............RRRRRR....d.cR#",
+    "#RRRRRRRRRRRRRRRRRRRRRRRRRR.......R#",
+    "#RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR#",
+    "#RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR#",
+    "####################################"
+  ]
+}

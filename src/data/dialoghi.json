@@ -1,0 +1,1101 @@
+{
+  "berta": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Un forestiero? Di questi tempi! Benvenuto a Borgo Quercia. Io sono Berta, la sindaca. Scusa le barricate: la strada principale è piena di morti che camminano.",
+        "risposte": [
+          {
+            "testo": "Morti che camminano?",
+            "va": "morti"
+          },
+          {
+            "testo": "Come posso aiutare?",
+            "va": "aiuto"
+          },
+          {
+            "testo": "Sono pronto: che lavoro hai per me?",
+            "va": "lavoro",
+            "se": {
+              "quest": "atto1_cimitero",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Dov'è il cimitero?",
+            "va": "attesa",
+            "se": {
+              "quest": "atto1_cimitero",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Sono stato al cimitero.",
+            "va": "chiave",
+            "se": {
+              "quest": "atto1_cimitero",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto1_cimitero"
+            }
+          },
+          {
+            "testo": "E adesso? La cripta…",
+            "va": "cripta",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto scendendo nella cripta.",
+            "va": "incoraggia",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Anselmo mi ha raccontato di Orvald.",
+            "va": "miniera",
+            "se": {
+              "quest": "atto2_miniera",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "La miniera…",
+            "va": "attesa2",
+            "se": {
+              "quest": "atto2_miniera",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "È finita. Orvald non c'è più.",
+            "va": "confessione1",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto3_torre"
+            }
+          },
+          {
+            "testo": "Come va il villaggio?",
+            "va": "epilogo",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "morti": {
+        "testo": "Escono dalla cripta sulla collina, oltre il bosco. Nessuno sa perché. Nessuno… vuole saperlo.",
+        "risposte": [
+          {
+            "testo": "Sembra che tu sappia qualcosa.",
+            "va": "sospetto"
+          },
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "sospetto": {
+        "testo": "Io? Io so solo che questo villaggio ha già sofferto abbastanza. Ora scusami, ho molto da fare.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "aiuto": {
+        "testo": "Per ora resta vivo. Gemma ha pozioni e armi, Tobia alla taverna conosce gente che sa combattere. Quando sarai pronto, avrò un lavoro per te.",
+        "risposte": [
+          {
+            "testo": "Grazie, sindaca.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "lavoro": {
+        "testo": "Bene. I morti escono dalla cripta del cimitero, sulla collina in fondo al sentiero del bosco. Vai a vedere com'è la situazione. Solo guardare, per ora: poi torna da me.",
+        "risposte": [
+          {
+            "testo": "Vado.",
+            "va": "vai",
+            "azione": {
+              "accetta": "atto1_cimitero"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "vai": {
+        "testo": "Il sentiero del bosco parte dalla Radura, verso est. Il cimitero è in fondo, a sud. Che la Quercia ti protegga.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesa": {
+        "testo": "In fondo al sentiero del bosco, verso sud. Torna quando l'avrai visto con i tuoi occhi.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "chiave": {
+        "testo": "Scheletri tra le tombe… e il cancello della cripta sbarrato. Prendi questa: è la chiave della cripta. È stata custodita qui, in municipio, per molto tempo.",
+        "risposte": [
+          {
+            "testo": "Perché la tenevi tu?",
+            "va": "nonChiedere"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "nonChiedere": {
+        "testo": "Non chiedermelo. Scendi là sotto e ferma tutto questo, ti prego. Per il resto… ci sarà tempo.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "cripta": {
+        "testo": "La chiave apre il cancello della cripta. Scendi, trova chi sta svegliando i nostri morti… e fermalo. Noi qui non abbiamo nessuno che sappia tenere una spada.",
+        "risposte": [
+          {
+            "testo": "Ci vado.",
+            "va": "criptaOk",
+            "azione": {
+              "accetta": "atto1_cripta"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "criptaOk": {
+        "testo": "Che la Quercia ti protegga. E… se trovi qualcosa di strano laggiù, portalo prima a frate Anselmo.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "incoraggia": {
+        "testo": "Il cancello è in fondo al cimitero. Torna vivo, mi raccomando.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "miniera": {
+        "testo": "…Quindi lo sai. Sì, c'ero anch'io quella notte. Non ne vado fiera. Ma adesso conta fermarlo. Gli uomini hanno liberato la frana nelle Colline Grigie: la strada per la miniera è aperta. Se Orvald cerca qualcosa laggiù, arrivaci prima di lui.",
+        "risposte": [
+          {
+            "testo": "Ci vado.",
+            "va": "minieraOk",
+            "azione": {
+              "accetta": "atto2_miniera"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "minieraOk": {
+        "testo": "Dalle Colline Grigie, verso est, dove c'era la frana. Attento ai goblin: non sono cattivi, sono spaventati. Ma uno spaventato con un arco tira lo stesso.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesa2": {
+        "testo": "La miniera è a est delle Colline Grigie. Torna sano, ti prego.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "confessione1": {
+        "testo": "…Grazie. Davvero. Domani, in piazza, davanti a tutti, dirò la verità. Vent'anni fa ho guidato io gli uomini che cacciarono Orvald. Non gli abbiamo mai chiesto perché. Non abbiamo mai pianto Lia con lui.",
+        "risposte": [
+          {
+            "testo": "Hai avuto paura.",
+            "va": "confessione2"
+          }
+        ]
+      },
+      "confessione2": {
+        "testo": "Sì. E la paura ci ha resi crudeli. Frate Anselmo ha proposto di piantare un germoglio della Quercia sulla tomba di Lia, al cimitero. Credo sia giusto. Credo sia il minimo.",
+        "risposte": [
+          {
+            "testo": "È un buon inizio.",
+            "va": "confessione3"
+          }
+        ]
+      },
+      "confessione3": {
+        "testo": "Le porte del villaggio restano aperte, per te. Gemma, Bruno, Tobia… tutti ti devono qualcosa. Io per prima.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "epilogo": {
+        "testo": "Si ricomincia. Le barricate sono legna da ardere, ormai. E al cimitero il germoglio ha già messo due foglie.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "anselmo": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Pace a te, viandante. Io custodisco la cappella e prego per i morti della valle. Ultimamente… le preghiere sembrano non bastare.",
+        "risposte": [
+          {
+            "testo": "Da quanto succede?",
+            "va": "quando"
+          },
+          {
+            "testo": "Hai mai visto una cosa simile?",
+            "va": "passato",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": [
+                "non_disponibile",
+                "disponibile",
+                "attiva"
+              ]
+            }
+          },
+          {
+            "testo": "Posso aiutarti in qualche modo?",
+            "va": "erbe",
+            "se": {
+              "quest": "erbe_anselmo",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Quante erbe ti servono?",
+            "va": "attesaErbe",
+            "se": {
+              "quest": "erbe_anselmo",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho trovato le erbe.",
+            "va": "grazieErbe",
+            "se": {
+              "quest": "erbe_anselmo",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "erbe_anselmo"
+            }
+          },
+          {
+            "testo": "Ho trovato questa pagina nella tomba del re.",
+            "va": "verita1",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto1_cripta"
+            }
+          },
+          {
+            "testo": "Parlami ancora di Orvald.",
+            "va": "ricordo",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "quando": {
+        "testo": "Da poche settimane. Prima i cani che ululavano, poi le tombe smosse. Ora la cripta.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "passato": {
+        "testo": "No… cioè, una volta un vecchio amico studiava cose che non avrebbe dovuto. Ma è storia passata. Molto passata.",
+        "risposte": [
+          {
+            "testo": "Un vecchio amico?",
+            "va": "amico"
+          },
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "amico": {
+        "testo": "Non chiedermelo oggi, figliolo. Forse un giorno, se troverai il coraggio di scendere nella cripta, ne riparleremo.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "erbe": {
+        "testo": "Sì, figliolo. Gli unguenti sono finiti e i feriti aumentano. Nel bosco crescono cespugli di erba medicinale: me ne servirebbero cinque mazzetti.",
+        "risposte": [
+          {
+            "testo": "Te le porto io.",
+            "va": "erbeOk",
+            "azione": {
+              "accetta": "erbe_anselmo"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "erbeOk": {
+        "testo": "Che la luce ti accompagni. I cespugli hanno le foglie più chiare degli altri: li riconoscerai.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaErbe": {
+        "testo": "Cinque mazzetti. Cerca i cespugli dalle foglie chiare, nel bosco.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "grazieErbe": {
+        "testo": "Profumano ancora di bosco… Grazie. Prendi queste pozioni: le preparo io stesso.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "verita1": {
+        "testo": "Questa calligrafia… la conosco. È di Orvald. Il guaritore di Borgo Quercia, vent'anni fa. Il mio migliore amico.",
+        "risposte": [
+          {
+            "testo": "Cosa gli è successo?",
+            "va": "verita2"
+          }
+        ]
+      },
+      "verita2": {
+        "testo": "Venne la febbre. Orvald curò tutti, uno per uno. Tutti tranne sua figlia, Lia. Lei morì tra le sue braccia, e lui… non lo accettò. Cominciò a studiare libri che nessuno dovrebbe aprire.",
+        "risposte": [
+          {
+            "testo": "La negromanzia.",
+            "va": "verita3"
+          }
+        ]
+      },
+      "verita3": {
+        "testo": "Sì. Quando il villaggio lo scoprì, lo cacciarono. Berta guidava il gruppo. Da allora nessuno ha più detto il suo nome. E ora è tornato, e vuole riportarla indietro. Lei e tutti i morti della valle.",
+        "risposte": [
+          {
+            "testo": "Lo fermerò.",
+            "va": "verita4"
+          },
+          {
+            "testo": "Perché Berta non me l'ha detto?",
+            "va": "verita4"
+          }
+        ]
+      },
+      "verita4": {
+        "testo": "Perché la vergogna pesa più di una spada, figliolo. Vai, ora. E che il Signore abbia pietà di lui… e di noi.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "ricordo": {
+        "testo": "Orvald rideva sempre. Prima della febbre, prima di Lia. Lo ricordo così, quando prego. Fermalo, ma… non dimenticare chi era.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      }
+    }
+  },
+  "gemma": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Ehilà! Gemma, mercante, e la lingua più veloce della valle. Pozioni, armi, borse… tutto quello che serve a chi vuole tornare vivo dal bosco!",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce.",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Novità in paese?",
+            "va": "pettegolezzi",
+            "se": {
+              "quest": "atto1_cripta",
+              "stato": [
+                "non_disponibile",
+                "disponibile",
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Novità?",
+            "va": "dopoRe",
+            "se": {
+              "quest": "atto2_miniera",
+              "stato": [
+                "disponibile",
+                "attiva"
+              ]
+            }
+          },
+          {
+            "testo": "Novità?",
+            "va": "dopoTroll",
+            "se": {
+              "quest": "atto2_miniera",
+              "stato": "pronta"
+            }
+          },
+          {
+            "testo": "Novità?",
+            "va": "dopoTroll",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": [
+                "disponibile",
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Novità?",
+            "va": "dopoFinale",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "pettegolezzi": {
+        "testo": "Novità? La sindaca non dorme da una settimana, il frate parla da solo e Bruno ha spento la forgia. E nessuno, NESSUNO, vuole dirmi niente. Tu sai qualcosa?",
+        "risposte": [
+          {
+            "testo": "Purtroppo no.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "dopoRe": {
+        "testo": "Il Re Scheletro! Abbattuto da te, dicono. Tutto il borgo non parla d'altro. Io l'ho sempre detto che eri in gamba. Beh, quasi sempre.",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce.",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "dopoTroll": {
+        "testo": "Un troll! Un troll vero, nella nostra miniera! E tu l'hai fatto scappare. Ho già alzato i prezzi dei bendaggi… scherzo, scherzo. Però hai visto la Quercia? Nessuno ride più, in piazza.",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce.",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "dopoFinale": {
+        "testo": "La sindaca ha detto tutto, in piazza. Tutto. Non avevo mai visto il borgo così zitto. Poi qualcuno ha cominciato a piangere, e poi tutti. Strano: da allora si respira meglio.",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce.",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "tobia": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Benvenuto al Cinghiale Zoppo! Birra calda e gente coraggiosa: in questi giorni la seconda è più rara della prima.",
+        "risposte": [
+          {
+            "testo": "Cerco qualcuno che combatta con me.",
+            "apri": "taverna"
+          },
+          {
+            "testo": "Sai di tesori nascosti?",
+            "va": "tesori"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "tesori": {
+        "testo": "Ah, i vecchi cercatori ne parlavano sempre. Dicevano che nella valle certi muri suonano vuoti, se li colpisci. Chiedi a nonna Rosalba: lei se le ricorda tutte, quelle storie.",
+        "risposte": [
+          {
+            "testo": "Grazie, Tobia.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "bruno": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "…Bruno. Fabbro. La forgia è di nuovo accesa: ho raschiato il fondo del magazzino del carbone. Se hai materiali, li lavoro.",
+        "risposte": [
+          {
+            "testo": "Lavoriamo.",
+            "apri": "fucina"
+          },
+          {
+            "testo": "Che materiali ti servono?",
+            "va": "materiali"
+          },
+          {
+            "testo": "Hai altro per me?",
+            "va": "lettera",
+            "se": {
+              "quest": "lettera_bruno",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "La lettera per tuo fratello…",
+            "va": "attesaLettera",
+            "se": {
+              "quest": "lettera_bruno",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho dato la lettera a Ugo.",
+            "va": "fratelloOk",
+            "se": {
+              "quest": "lettera_bruno",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Ti serve qualcosa?",
+            "va": "carbone",
+            "se": {
+              "quest": "carbone_bruno",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Quanto carbone ti serve?",
+            "va": "attesaCarbone",
+            "se": {
+              "quest": "carbone_bruno",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ti ho portato il carbone.",
+            "va": "grazieCarbone",
+            "se": {
+              "quest": "carbone_bruno",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "carbone_bruno"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "materiali": {
+        "testo": "Ferro e carbone dalle vene di roccia: le vedi, sono pietre con le venature. Pelle di lupo, gelatina di slime… tutto serve. E se trovi una pergamena con un disegno d'arma, portamela: imparo in fretta.",
+        "risposte": [
+          {
+            "testo": "E per il carbone della miniera?",
+            "va": "miniera"
+          },
+          {
+            "testo": "Lavoriamo.",
+            "apri": "fucina"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "miniera": {
+        "testo": "Quello che ho basterà per un po'. Il resto… è giù in miniera. Dove c'è mio figlio. Non ne voglio parlare, adesso.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "carbone": {
+        "testo": "Carbone. Il magazzino è quasi vuoto. Portamene cinque pezzi e ti do una cosa che ho trovato nella bottega di mio padre.",
+        "risposte": [
+          {
+            "testo": "Affare fatto.",
+            "va": "carboneOk",
+            "azione": {
+              "accetta": "carbone_bruno"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "carboneOk": {
+        "testo": "Le vene scure, nella Radura e nel bosco. Ci clicchi sopra e scavi.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaCarbone": {
+        "testo": "Cinque pezzi. Vene scure.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "grazieCarbone": {
+        "testo": "Bene. Questa è la pergamena di un arco lungo: era di mio padre. Leggila e te lo forgio quando vuoi.",
+        "risposte": [
+          {
+            "testo": "Lavoriamo.",
+            "apri": "fucina"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "lettera": {
+        "testo": "…Sì. Mio fratello Ugo è scappato nelle Colline Grigie quando sono arrivati i morti. Si è accampato laggiù, a sud della Radura. Portagli questa lettera. Io… a voce non ci riesco.",
+        "risposte": [
+          {
+            "testo": "La porto io.",
+            "va": "letteraOk",
+            "azione": {
+              "accetta": "lettera_bruno"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "letteraOk": {
+        "testo": "Le colline sono a sud della Radura. Attento ai lupi.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaLettera": {
+        "testo": "Ugo. Colline Grigie, a sud della Radura. Non perderla.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "fratelloOk": {
+        "testo": "Davvero? E… come sta? No, non dirmelo. Me lo dirà lui. Grazie.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "rosalba": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Vieni, vieni, siediti accanto alla vecchia Rosalba. Vuoi sentire una storia? Alla mia età si hanno solo storie e mal di schiena.",
+        "risposte": [
+          {
+            "testo": "Raccontami della Quercia Antica.",
+            "va": "quercia"
+          },
+          {
+            "testo": "Conosci storie di tesori?",
+            "va": "tesoro"
+          },
+          {
+            "testo": "Nonna, la Quercia… un ramo è stato tagliato!",
+            "va": "ramo",
+            "se": {
+              "quest": "atto2_miniera",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto2_miniera"
+            }
+          },
+          {
+            "testo": "La torre di Orvald…",
+            "va": "torre",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto andando alla torre.",
+            "va": "torreAttesa",
+            "se": {
+              "quest": "atto3_torre",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Un'altra volta, nonna."
+          }
+        ]
+      },
+      "quercia": {
+        "testo": "La Quercia era qui prima del villaggio. Si dice che finché resta in piedi la valle è protetta. I bambini le lasciano un sassolino tra le radici, per buona fortuna.",
+        "risposte": [
+          {
+            "testo": "E i tesori?",
+            "va": "tesoro"
+          },
+          {
+            "testo": "Grazie, nonna."
+          }
+        ]
+      },
+      "tesoro": {
+        "testo": "Mio nonno diceva: «Nel bosco, dove il sentiero sale verso nord e gli alberi si chiudono a destra, il muro ha una ferita. Colpiscila, e il bosco ti darà ciò che nasconde.» Io non ci sono mai andata: avevo paura dei lupi.",
+        "risposte": [
+          {
+            "testo": "Una ferita nel muro… una crepa!",
+            "va": "crepa"
+          },
+          {
+            "testo": "Grazie, nonna."
+          }
+        ]
+      },
+      "crepa": {
+        "testo": "Sì, sì, una crepa! Ma stai attento ai lupi, giovanotto. Ai lupi, e a chi c'è dietro i lupi.",
+        "risposte": [
+          {
+            "testo": "Grazie, nonna."
+          }
+        ]
+      },
+      "ramo": {
+        "testo": "Lo so, figliolo. L'ho visto stamattina, e il cuore mi si è fermato. Legno della Quercia Antica, ossa di re, ossidiana nera… Le vecchie storie dicono che servono queste tre cose per svegliare i morti.",
+        "risposte": [
+          {
+            "testo": "Allora Orvald ha tutto.",
+            "va": "ramo2"
+          }
+        ]
+      },
+      "ramo2": {
+        "testo": "Sì. E la luna nera è vicina. La sua torre è oltre la Brughiera, dove la nebbia non si alza mai. Vai, prima che sia troppo tardi.",
+        "risposte": [
+          {
+            "testo": "Vado alla torre.",
+            "va": "torreOk",
+            "azione": {
+              "accetta": "atto3_torre"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "torre": {
+        "testo": "La Brughiera è a ovest delle Colline Grigie. Da stamattina la nebbia si è diradata: è lui che vuole farti arrivare, figliolo. Ti aspetta.",
+        "risposte": [
+          {
+            "testo": "Vado alla torre.",
+            "va": "torreOk",
+            "azione": {
+              "accetta": "atto3_torre"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "torreOk": {
+        "testo": "Porta con te tutto quello che hai imparato. E ricordati che lassù c'è un padre, non solo un mostro.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "torreAttesa": {
+        "testo": "A ovest delle Colline Grigie, oltre la nebbia. La vecchia Rosalba pregherà per te.",
+        "risposte": [
+          {
+            "testo": "Grazie, nonna.",
+            "va": "saluto"
+          }
+        ]
+      }
+    }
+  },
+  "dario": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Sei armato? Bene. Io sono Dario, porto il gregge qui nella Radura. O quel che ne resta.",
+        "risposte": [
+          {
+            "testo": "Cosa è successo al gregge?",
+            "va": "lupi",
+            "se": {
+              "quest": "lupi_dario",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Novità dai lupi?",
+            "va": "attesa",
+            "se": {
+              "quest": "lupi_dario",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "I lupi non torneranno.",
+            "va": "grazie",
+            "se": {
+              "quest": "lupi_dario",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "lupi_dario"
+            }
+          },
+          {
+            "testo": "Come sta il gregge?",
+            "va": "pace",
+            "se": {
+              "quest": "lupi_dario",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "lupi": {
+        "testo": "Lupi. Escono dal bosco ogni notte: ne ho perse tre, di pecore. Se ne abbatti quattro, gli altri impareranno a starne lontani. Ti pagherò come posso.",
+        "risposte": [
+          {
+            "testo": "Me ne occupo io.",
+            "va": "accettata",
+            "azione": {
+              "accetta": "lupi_dario"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "accettata": {
+        "testo": "Grazie! Il bosco è a est, oltre la fila di rocce. Stai attento: cacciano in branco.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesa": {
+        "testo": "Ancora ululati, stanotte. Il bosco è a est, oltre le rocce.",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazie": {
+        "testo": "Stanotte le pecore hanno dormito! Tieni, è tutto quello che ho. E questa pozione: era di mio padre, a me non serve.",
+        "risposte": [
+          {
+            "testo": "Grazie, Dario."
+          }
+        ]
+      },
+      "pace": {
+        "testo": "Tranquillo, finalmente. Grazie a te.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "ugo": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Chi va là? …Un viaggiatore. Scusa, di questi tempi non si sa mai. Sono Ugo. Vivevo a Borgo Quercia, una volta.",
+        "risposte": [
+          {
+            "testo": "Ho una lettera di tuo fratello Bruno.",
+            "va": "letto",
+            "se": {
+              "quest": "lettera_bruno",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "lettera_bruno"
+            }
+          },
+          {
+            "testo": "Perché sei qui?",
+            "va": "perche"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "letto": {
+        "testo": "Bruno… Non mi scriveva da anni. La forgia è di nuovo accesa? Allora laggiù c'è ancora speranza. Tieni: a te servirà più che a me.",
+        "risposte": [
+          {
+            "testo": "Grazie, Ugo."
+          }
+        ]
+      },
+      "perche": {
+        "testo": "La strada per la miniera è franata, e dal bosco arrivano i morti. Qui sulle colline, almeno, vedo chi arriva.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      }
+    }
+  }
+}

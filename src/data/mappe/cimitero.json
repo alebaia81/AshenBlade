@@ -1,0 +1,112 @@
+{
+  "id": "cimitero",
+  "nome": "Cimitero sulla collina",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#2a2a30",
+      "tessera": "muro_pietra"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5a6a4a",
+      "tessera": { "immagine": "erba", "tinta": "#b8c0a0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a7060",
+      "tessera": { "immagine": "sentiero", "tinta": "#c0b8a8" }
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#3a3a2a",
+      "tessera": [{ "immagine": "erba", "tinta": "#b8c0a0" }, { "immagine": "pino", "tinta": "#a8a890" }]
+    },
+    "t": {
+      "tipo": "muro",
+      "colore": "#9a9aa0",
+      "tessera": [{ "immagine": "erba", "tinta": "#b8c0a0" }, "croce"]
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#45454e",
+      "tessera": "muro_pietra"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a7060",
+      "tessera": { "immagine": "sentiero", "tinta": "#c0b8a8" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "bosco",
+      "arrivo": "c",
+      "tessera": { "immagine": "sentiero", "tinta": "#c0b8a8" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "scheletro",
+      "colore": "#5a6a4a",
+      "tessera": { "immagine": "erba", "tinta": "#b8c0a0" }
+    },
+    "G": {
+      "tipo": "porta",
+      "aspetto": "cancello",
+      "chiave": "chiave_cripta",
+      "nome": "il cancello della cripta",
+      "colore": "#7a7060",
+      "tessera": { "immagine": "sentiero", "tinta": "#c0b8a8" }
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cripta_sale",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#7a7060",
+      "tessera": { "immagine": "sentiero", "tinta": "#c0b8a8" }
+    },
+    "l": {
+      "tipo": "cartello",
+      "aspetto": "lapide",
+      "colore": "#5a6a4a",
+      "testo": "«Lia, figlia di Orvald. Riposa in pace.» La pietra è coperta di muschio: nessuno la cura da anni.",
+      "cambiaCon": {
+        "boss": "negromante"
+      },
+      "diventa": "j",
+      "tessera": { "immagine": "erba", "tinta": "#b8c0a0" }
+    },
+    "j": {
+      "tipo": "cartello",
+      "aspetto": "germoglio",
+      "colore": "#5a6a4a",
+      "testo": "«Lia, figlia di Orvald.» Davanti alla lapide qualcuno ha piantato un germoglio della Quercia Antica. Ha già due foglie.",
+      "tessera": { "immagine": "erba", "tinta": "#b8c0a0" }
+    }
+  },
+  "griglia": [
+    "############n#############",
+    "#T..........a..........T.#",
+    "#...t.t.t..:::..t.t.t....#",
+    "#..........:::...........#",
+    "#...t.t.t..:::..t.t.t..T.#",
+    "#.....S....:::......S....#",
+    "#...t.t.t..:::..t.t.t....#",
+    "#T.........:::...........#",
+    "#...t.t.t..:::..t.t.t....#",
+    "#.....S....:::...........#",
+    "#T.........:::.........T.#",
+    "#.......::::b::::........#",
+    "#.......KKKKGKKKK........#",
+    "#..T....KKKKuKKKK....T...#",
+    "#.......KKKKKKKKK........#",
+    "#.T.....KKKKKKKKK..l..T..#",
+    "#........................#",
+    "##########################"
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "id": "borgo",
+  "nome": "Borgo Quercia",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#5a3d22",
+      "tessera": ["erba", "pino"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#a39e92",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    },
+    "@": {
+      "tipo": "partenza",
+      "colore": "#a39e92",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "g": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radura",
+      "arrivo": "c",
+      "tessera": "sentiero"
+    },
+    "Q": {
+      "tipo": "muro",
+      "colore": "#2f5a24",
+      "cambiaCon": {
+        "boss": "troll_caverne"
+      },
+      "diventa": "q",
+      "tessera": ["erba", "albero"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2e5a28",
+      "tessera": ["erba", "albero"]
+    },
+    "r": {
+      "tipo": "muro",
+      "colore": "#8c3b2e",
+      "tessera": "tetto_rosso"
+    },
+    "H": {
+      "tipo": "muro",
+      "colore": "#b08a5a",
+      "tessera": "muro_legno"
+    },
+    "C": {
+      "tipo": "muro",
+      "colore": "#d8d0c0",
+      "tessera": "muro_pietra_chiara"
+    },
+    "D": {
+      "tipo": "muro",
+      "colore": "#4a3020",
+      "tessera": "porta_casa"
+    },
+    "B": {
+      "tipo": "muro",
+      "colore": "#6b4a2a",
+      "tessera": ["erba", "palo"]
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#c0602a",
+      "tessera": "braciere"
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#3a6ea5",
+      "tessera": ["#3a6ea5", { "immagine": "onde", "alfa": 0.25 }]
+    },
+    "E": {
+      "tipo": "abitante",
+      "abitante": "berta",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "F": {
+      "tipo": "abitante",
+      "abitante": "anselmo",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "G": {
+      "tipo": "abitante",
+      "abitante": "gemma",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "O": {
+      "tipo": "abitante",
+      "abitante": "tobia",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "U": {
+      "tipo": "abitante",
+      "abitante": "bruno",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "N": {
+      "tipo": "abitante",
+      "abitante": "rosalba",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "q": {
+      "tipo": "muro",
+      "colore": "#5a5a2a",
+      "tessera": ["erba", { "immagine": "albero", "tinta": "#d8c070" }]
+    },
+    "h": {
+      "tipo": "pavimento",
+      "colore": "#a39e92",
+      "cambiaCon": {
+        "boss": "troll_caverne"
+      },
+      "diventa": "Y",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    },
+    "Y": {
+      "tipo": "cartello",
+      "aspetto": "ramo",
+      "colore": "#a39e92",
+      "testo": "Un grosso ramo della Quercia Antica, tagliato di netto. Sul taglio la linfa è nera come l'inchiostro.",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    }
+  },
+  "griglia": [
+    "########################################",
+    "#......................................#",
+    "#..rrrrrrr......rrrrrrrr..rrrrrrr.T....#",
+    "#..rrrrrrr.T....rrrrrrrr..rrrrrrr......#",
+    "#..CCCCCCC......HHHHHHHH..HHHHHHH..B.T.#",
+    "#..CCCCCCC...T..HHHDDHHH..HHHDHHH..B...#",
+    "#..CCCDCCC.........::....T...:.....B...#",
+    "#.....:............::.E......:.G...B...#",
+    "#.....:.F..........::........:.....B...#",
+    "#.T...::::::pppppppppppppppp.......BT..#",
+    "#...........pp~~pppppppppppp.......B...#",
+    "#...........pp~~pppppppppppp.......B...#",
+    "#..rrrrrr.N.ppppppQQQppppppp...........#",
+    "#..rrrrrr:::ppppppQQQppppppp:::::::::a:g",
+    "#..HHHHHH:::ppppppQQQppppppp:::::::::::g",
+    "#..HHHDHH:::ppppppphpppppppp...........#",
+    "#.....::::::ppppppp@pppppppp.......B...#",
+    "#...........pppppppppppppppp.....T.B...#",
+    "#.T.........pppppppppppppppp.......B...#",
+    "#.....::::::::..............:......B.T.#",
+    "#.......U...................:.O....B...#",
+    "#..rrrrrrr..............rrrrrrrrr..B...#",
+    "#..rrrrrrr..T...........rrrrrrrrr..B...#",
+    "#..HHHHHHHff........T...HHHHHHHHH..B...#",
+    "#..HHHHHHHff............HHHHHHHHH...T..#",
+    "#..HHHHHHH....T.......T.HHHHHHHHH......#",
+    "#......................................#",
+    "########################################"
+  ]
+}

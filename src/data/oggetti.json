@@ -1,0 +1,379 @@
+{
+  "pozione_vita": {
+    "id": "pozione_vita",
+    "nome": "Pozione di vita",
+    "descrizione": "Recupera 12 punti vita.",
+    "tipo": "pozione",
+    "rarita": "comune",
+    "pila": 10,
+    "prezzo": 15,
+    "colore": "#e04848",
+    "effetto": {
+      "tipo": "cura",
+      "quantita": 12
+    }
+  },
+  "pozione_mana": {
+    "id": "pozione_mana",
+    "nome": "Pozione di mana",
+    "descrizione": "Recupera 10 punti mana.",
+    "tipo": "pozione",
+    "rarita": "comune",
+    "pila": 10,
+    "prezzo": 15,
+    "colore": "#4870e0",
+    "effetto": {
+      "tipo": "mana",
+      "quantita": 10
+    }
+  },
+  "pozione_forza": {
+    "id": "pozione_forza",
+    "nome": "Pozione di forza",
+    "descrizione": "+2 ai danni in mischia per 60 secondi.",
+    "tipo": "pozione",
+    "rarita": "non_comune",
+    "pila": 5,
+    "prezzo": 30,
+    "colore": "#e09048",
+    "effetto": {
+      "tipo": "temporaneo",
+      "effetto": "forza",
+      "valore": 2,
+      "durataMs": 60000
+    }
+  },
+  "pozione_resistenza": {
+    "id": "pozione_resistenza",
+    "nome": "Pozione di resistenza",
+    "descrizione": "+2 all'armatura per 60 secondi: i colpi fanno meno male.",
+    "tipo": "pozione",
+    "rarita": "non_comune",
+    "pila": 5,
+    "prezzo": 30,
+    "colore": "#9aa6b8",
+    "effetto": {
+      "tipo": "temporaneo",
+      "effetto": "resistenza",
+      "valore": 2,
+      "durataMs": 60000
+    }
+  },
+  "borsa": {
+    "id": "borsa",
+    "nome": "Borsa di cuoio",
+    "descrizione": "Si aggancia allo zaino: gli spazi diventano 16.",
+    "tipo": "borsa",
+    "rarita": "non_comune",
+    "pila": 1,
+    "prezzo": 60,
+    "colore": "#9a6b3c",
+    "effetto": {
+      "tipo": "capacita",
+      "spazi": 16
+    }
+  },
+  "zaino_20": {
+    "id": "zaino_20",
+    "nome": "Zaino da viaggio",
+    "descrizione": "Uno zaino robusto: gli spazi diventano 20.",
+    "tipo": "borsa",
+    "rarita": "non_comune",
+    "pila": 1,
+    "prezzo": 150,
+    "colore": "#7a5230",
+    "effetto": {
+      "tipo": "capacita",
+      "spazi": 20
+    }
+  },
+  "zaino_24": {
+    "id": "zaino_24",
+    "nome": "Zaino dell'esploratore",
+    "descrizione": "Il più grande che Gemma abbia mai cucito: gli spazi diventano 24.",
+    "tipo": "borsa",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 300,
+    "colore": "#5a3a20",
+    "effetto": {
+      "tipo": "capacita",
+      "spazi": 24
+    }
+  },
+  "minerale_ferro": {
+    "id": "minerale_ferro",
+    "nome": "Minerale di ferro",
+    "descrizione": "Si estrae dalle vene di roccia. Bruno ci fa lame e punte.",
+    "tipo": "materiale",
+    "rarita": "comune",
+    "pila": 20,
+    "prezzo": 4,
+    "colore": "#b07050",
+    "forma": "minerale"
+  },
+  "carbone": {
+    "id": "carbone",
+    "nome": "Carbone",
+    "descrizione": "Tiene accesa la forgia. Si trova nelle vene scure.",
+    "tipo": "materiale",
+    "rarita": "comune",
+    "pila": 20,
+    "prezzo": 3,
+    "colore": "#303030",
+    "forma": "minerale"
+  },
+  "pelle_lupo": {
+    "id": "pelle_lupo",
+    "nome": "Pelle di lupo",
+    "descrizione": "Resistente e morbida: buona per archi e impugnature.",
+    "tipo": "materiale",
+    "rarita": "comune",
+    "pila": 20,
+    "prezzo": 5,
+    "colore": "#8a6a4a",
+    "forma": "pelle"
+  },
+  "gelatina_slime": {
+    "id": "gelatina_slime",
+    "nome": "Gelatina di slime",
+    "descrizione": "Fredda e appiccicosa. Bruno dice che \"tempra\" il metallo.",
+    "tipo": "materiale",
+    "rarita": "comune",
+    "pila": 20,
+    "prezzo": 2,
+    "colore": "#7ad07a",
+    "forma": "gelatina"
+  },
+  "osso_antico": {
+    "id": "osso_antico",
+    "nome": "Osso antico",
+    "descrizione": "Dagli scheletri della cripta. Duro come la pietra.",
+    "tipo": "materiale",
+    "rarita": "non_comune",
+    "pila": 20,
+    "prezzo": 4,
+    "colore": "#e8e0c8",
+    "forma": "osso"
+  },
+  "cristallo_miniera": {
+    "id": "cristallo_miniera",
+    "nome": "Cristallo della miniera",
+    "descrizione": "Brilla al buio. Serve per i potenziamenti più alti (si trova nella miniera).",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 20,
+    "prezzo": 40,
+    "colore": "#8fd3ff",
+    "forma": "cristallo"
+  },
+  "frammento_corona": {
+    "id": "frammento_corona",
+    "nome": "Frammento della corona",
+    "descrizione": "Un pezzo della corona del Re Scheletro.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 20,
+    "prezzo": 100,
+    "colore": "#ffc94a",
+    "forma": "frammento"
+  },
+  "pergamena_arco_cacciatore": {
+    "id": "pergamena_arco_cacciatore",
+    "nome": "Pergamena: Arco del cacciatore",
+    "descrizione": "Insegna a Bruno a forgiare: Arco del cacciatore. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 100,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "arco_cacciatore"
+    }
+  },
+  "pergamena_mazza_gelo": {
+    "id": "pergamena_mazza_gelo",
+    "nome": "Pergamena: Mazza del gelo",
+    "descrizione": "Insegna a Bruno a forgiare: Mazza del gelo. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 80,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "mazza_gelo"
+    }
+  },
+  "pergamena_spada_eroe": {
+    "id": "pergamena_spada_eroe",
+    "nome": "Pergamena: Spada dell’eroe",
+    "descrizione": "Insegna a Bruno a forgiare: Spada dell’eroe. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 300,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "spada_eroe"
+    }
+  },
+  "erba_medicinale": {
+    "id": "erba_medicinale",
+    "nome": "Erba medicinale",
+    "descrizione": "Foglie amare che crescono nei cespugli del bosco. Frate Anselmo ne fa unguenti.",
+    "tipo": "materiale",
+    "rarita": "comune",
+    "pila": 20,
+    "prezzo": 3,
+    "colore": "#6fbf5a",
+    "forma": "erba"
+  },
+  "pergamena_arco_lungo": {
+    "id": "pergamena_arco_lungo",
+    "nome": "Pergamena: Arco lungo",
+    "descrizione": "Insegna a Bruno a forgiare: Arco lungo. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 100,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "arco_lungo"
+    }
+  },
+  "lettera_bruno": {
+    "id": "lettera_bruno",
+    "nome": "Lettera di Bruno",
+    "descrizione": "Una lettera sigillata per Ugo, il fratello di Bruno, rifugiato nelle Colline Grigie.",
+    "tipo": "missione",
+    "rarita": "comune",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#efe6cc",
+    "forma": "lettera"
+  },
+  "chiave_cripta": {
+    "id": "chiave_cripta",
+    "nome": "Chiave della cripta",
+    "descrizione": "Una chiave di ferro annerito. La sindaca Berta la custodiva in municipio da molto tempo.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#b8862a",
+    "forma": "chiave"
+  },
+  "mappa_cavaliere": {
+    "id": "mappa_cavaliere",
+    "nome": "Mappa del cavaliere",
+    "descrizione": "«Nelle Colline Grigie, dove le rocce fanno angolo, il muro non è un muro.» Usala dallo zaino per guardarla.",
+    "tipo": "pergamena",
+    "rarita": "non_comune",
+    "pila": 1,
+    "prezzo": 60,
+    "colore": "#e8d9b0",
+    "forma": "mappa",
+    "effetto": {
+      "tipo": "mappa",
+      "quest": "tesoro_cavaliere"
+    }
+  },
+  "chiave_ossa": {
+    "id": "chiave_ossa",
+    "nome": "Chiave d'ossa",
+    "descrizione": "Una chiave fatta di ossa intrecciate. Apre la porta d'ossa, in fondo alle sale della cripta.",
+    "tipo": "missione",
+    "rarita": "non_comune",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#e6e2d3",
+    "forma": "chiave"
+  },
+  "chiave_piccola": {
+    "id": "chiave_piccola",
+    "nome": "Chiave piccola",
+    "descrizione": "Apre un forziere chiuso a chiave, e si consuma. Anche Volpe sa aprirli, senza chiave.",
+    "tipo": "missione",
+    "rarita": "comune",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#c0c0c8",
+    "forma": "chiave"
+  },
+  "pagina_diario": {
+    "id": "pagina_diario",
+    "nome": "Pagina di diario",
+    "descrizione": "«…la riporterò indietro. Lia, te lo prometto. Il re sarà il primo guardiano.» Firmato: O.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#d8c8a0",
+    "forma": "lettera"
+  },
+  "zanna_troll": {
+    "id": "zanna_troll",
+    "nome": "Zanna del troll",
+    "descrizione": "Dura come la pietra. Con il cristallo della miniera, Bruno potrebbe farne un'arma leggendaria.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 120,
+    "colore": "#e8e0c8",
+    "forma": "osso"
+  },
+  "pergamena_ascia_troll": {
+    "id": "pergamena_ascia_troll",
+    "nome": "Pergamena: Ascia del troll",
+    "descrizione": "Insegna a Bruno a forgiare: Ascia del troll. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 200,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "ascia_troll"
+    }
+  },
+  "chiave_torre": {
+    "id": "chiave_torre",
+    "nome": "Chiave della torre",
+    "descrizione": "Ferro nero con un sigillo viola. Apre la porta che sale verso la cima della torre.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#b46bff",
+    "forma": "chiave"
+  },
+  "ossidiana_nera": {
+    "id": "ossidiana_nera",
+    "nome": "Ossidiana nera",
+    "descrizione": "Il cuore del rito di Orvald. Fredda, nonostante tutto. Bruno saprebbe che farne.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 150,
+    "colore": "#2a2030",
+    "forma": "cristallo"
+  },
+  "pergamena_bastone_orvald": {
+    "id": "pergamena_bastone_orvald",
+    "nome": "Pergamena: Bastone di Orvald",
+    "descrizione": "Insegna a Bruno a forgiare: Bastone di Orvald. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 220,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "bastone_orvald"
+    }
+  }
+}

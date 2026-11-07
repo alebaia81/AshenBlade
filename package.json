@@ -1,0 +1,23 @@
+{
+  "name": "rpg-borgo-quercia",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Gioco di ruolo fantasy 2D nel browser (vedi docs/design.md)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && cp dist/gioco.html dist/index.html",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "phaser": "^4.2.1"
+  }
+}

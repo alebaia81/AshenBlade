@@ -1,0 +1,180 @@
+{
+  "corazza_cuoio": {
+    "id": "corazza_cuoio",
+    "nome": "Corazza di cuoio",
+    "descrizione": "Semplice ma meglio di niente.",
+    "pezzo": "corazza",
+    "rarita": "comune",
+    "prezzo": 37,
+    "armatura": 1,
+    "effetti": []
+  },
+  "stivali_cuoio": {
+    "id": "stivali_cuoio",
+    "nome": "Stivali di cuoio",
+    "descrizione": "Comodi per camminare nel bosco.",
+    "pezzo": "stivali",
+    "rarita": "comune",
+    "prezzo": 25,
+    "armatura": 1,
+    "effetti": []
+  },
+  "elmo_ferro": {
+    "id": "elmo_ferro",
+    "nome": "Elmo di ferro",
+    "descrizione": "Un elmo da guardia del villaggio.",
+    "pezzo": "elmo",
+    "rarita": "non_comune",
+    "prezzo": 60,
+    "armatura": 1,
+    "effetti": []
+  },
+  "guanti_ferro": {
+    "id": "guanti_ferro",
+    "nome": "Guanti di ferro",
+    "descrizione": "Proteggono mani e polsi.",
+    "pezzo": "guanti",
+    "rarita": "non_comune",
+    "prezzo": 60,
+    "armatura": 1,
+    "effetti": []
+  },
+  "corazza_ferro": {
+    "id": "corazza_ferro",
+    "nome": "Corazza di ferro",
+    "descrizione": "Piastre di ferro sul petto.",
+    "pezzo": "corazza",
+    "rarita": "non_comune",
+    "prezzo": 90,
+    "armatura": 2,
+    "effetti": []
+  },
+  "elmo_acciaio": {
+    "id": "elmo_acciaio",
+    "nome": "Elmo d’acciaio",
+    "descrizione": "Acciaio buono, lavorato da un fabbro esperto.",
+    "pezzo": "elmo",
+    "rarita": "rara",
+    "prezzo": 140,
+    "armatura": 2,
+    "effetti": []
+  },
+  "corazza_maglia": {
+    "id": "corazza_maglia",
+    "nome": "Cotta di maglia",
+    "descrizione": "Anelli d’acciaio intrecciati.",
+    "pezzo": "corazza",
+    "rarita": "rara",
+    "prezzo": 210,
+    "armatura": 3,
+    "effetti": []
+  },
+  "guanti_acciaio": {
+    "id": "guanti_acciaio",
+    "nome": "Guanti d’acciaio",
+    "descrizione": "Rigidi ma robusti.",
+    "pezzo": "guanti",
+    "rarita": "rara",
+    "prezzo": 140,
+    "armatura": 2,
+    "effetti": []
+  },
+  "stivali_acciaio": {
+    "id": "stivali_acciaio",
+    "nome": "Stivali d’acciaio",
+    "descrizione": "Pesanti, proteggono bene.",
+    "pezzo": "stivali",
+    "rarita": "rara",
+    "prezzo": 140,
+    "armatura": 2,
+    "effetti": []
+  },
+  "elmo_corona": {
+    "id": "elmo_corona",
+    "nome": "Elmo della corona di ferro",
+    "descrizione": "Leggendario: +1 COS.",
+    "pezzo": "elmo",
+    "rarita": "leggendaria",
+    "prezzo": 350,
+    "armatura": 2,
+    "effetti": [],
+    "bonus": {
+      "COS": 1
+    }
+  },
+  "guanti_titano": {
+    "id": "guanti_titano",
+    "nome": "Guanti del titano",
+    "descrizione": "Leggendari: +1 FOR.",
+    "pezzo": "guanti",
+    "rarita": "leggendaria",
+    "prezzo": 350,
+    "armatura": 2,
+    "effetti": [],
+    "bonus": {
+      "FOR": 1
+    }
+  },
+  "stivali_vento": {
+    "id": "stivali_vento",
+    "nome": "Stivali del vento",
+    "descrizione": "Esotici: due capriole di fila prima della ricarica.",
+    "pezzo": "stivali",
+    "rarita": "esotica",
+    "prezzo": 700,
+    "armatura": 1,
+    "effetti": [
+      "doppia_capriola"
+    ]
+  },
+  "corazza_spine": {
+    "id": "corazza_spine",
+    "nome": "Corazza di spine",
+    "descrizione": "Esotica: chi ti colpisce subisce il 30% del danno.",
+    "pezzo": "corazza",
+    "rarita": "esotica",
+    "prezzo": 1050,
+    "armatura": 2,
+    "effetti": [
+      "spine"
+    ]
+  },
+  "elmo_veggente": {
+    "id": "elmo_veggente",
+    "nome": "Elmo del veggente",
+    "descrizione": "Esotico: i muri segreti vicini brillano.",
+    "pezzo": "elmo",
+    "rarita": "esotica",
+    "prezzo": 700,
+    "armatura": 1,
+    "effetti": [
+      "veggente"
+    ]
+  },
+  "guanti_predatore": {
+    "id": "guanti_predatore",
+    "nome": "Guanti del predatore",
+    "descrizione": "Esotici: ogni colpo critico ti cura di 2 punti vita.",
+    "pezzo": "guanti",
+    "rarita": "esotica",
+    "prezzo": 700,
+    "armatura": 1,
+    "effetti": [
+      "predatore"
+    ]
+  },
+  "corazza_quercia": {
+    "id": "corazza_quercia",
+    "nome": "Corazza della Quercia",
+    "descrizione": "Leggendaria: corteccia della Quercia Antica intrecciata nel cuoio. +1 COS, +1 SAG.",
+    "pezzo": "corazza",
+    "rarita": "leggendaria",
+    "prezzo": 500,
+    "armatura": 5,
+    "effetti": [],
+    "bonus": {
+      "COS": 1,
+      "SAG": 1
+    }
+  }
+}

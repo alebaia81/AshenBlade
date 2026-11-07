@@ -1,0 +1,234 @@
+{
+  "re_scheletro": {
+    "nome": "Re Scheletro",
+    "comportamento": "inseguitore",
+    "vita": 110,
+    "armatura": 2,
+    "danno": "1d10",
+    "velocita": 32,
+    "raggioVista": 100,
+    "raggioAbbandono": 600,
+    "dimensione": 22,
+    "colore": "#e8dcb0",
+    "storditoMs": 60,
+    "pausaDopoAttaccoMs": 1100,
+    "esperienza": 200,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "frammento_corona",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "elmo_corona",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "pagina_diario",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "lama_vuoto",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      60,
+      90
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": []
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Il Re Scheletro chiama i suoi servitori!",
+        "attacchi": [
+          {
+            "tipo": "evoca",
+            "nemico": "scheletro",
+            "quanti": 3,
+            "massimo": 4,
+            "ricaricaMs": 9000
+          }
+        ]
+      }
+    ]
+  },
+  "troll_caverne": {
+    "nome": "Troll delle Caverne",
+    "comportamento": "inseguitore",
+    "vita": 220,
+    "armatura": 3,
+    "danno": "2d6",
+    "velocita": 30,
+    "raggioVista": 110,
+    "raggioAbbandono": 700,
+    "dimensione": 26,
+    "colore": "#6a7a5a",
+    "storditoMs": 40,
+    "pausaDopoAttaccoMs": 1200,
+    "esperienza": 400,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "zanna_troll",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "guanti_titano",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "cristallo_miniera",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "corazza_spine",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      100,
+      150
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": [
+          {
+            "tipo": "carica",
+            "ricaricaMs": 5000,
+            "miraMs": 800,
+            "velocita": 230,
+            "durataMs": 900,
+            "stordimentoMs": 1600
+          }
+        ]
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Il Troll ruggisce: la volta della caverna trema!",
+        "attacchi": [
+          {
+            "tipo": "carica",
+            "ricaricaMs": 6000,
+            "miraMs": 700,
+            "velocita": 240,
+            "durataMs": 900,
+            "stordimentoMs": 1400
+          },
+          {
+            "tipo": "crollo_massi",
+            "ricaricaMs": 7000,
+            "quanti": 5,
+            "preavvisoMs": 1100,
+            "raggio": 12,
+            "danno": "1d8"
+          }
+        ]
+      }
+    ]
+  },
+  "negromante": {
+    "nome": "Il Negromante",
+    "comportamento": "tiratore",
+    "vita": 300,
+    "armatura": 2,
+    "danno": "1d10",
+    "velocita": 40,
+    "raggioVista": 110,
+    "raggioAbbandono": 700,
+    "dimensione": 20,
+    "colore": "#9a6ad0",
+    "storditoMs": 40,
+    "pausaDopoAttaccoMs": 800,
+    "esperienza": 800,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "ossidiana_nera",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "corazza_quercia",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "arco_rimbalzo",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      200,
+      300
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": [
+          {
+            "tipo": "teletrasporto",
+            "ricaricaMs": 6000,
+            "raggio": 112,
+            "distanzaMin": 64
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 4000,
+            "colpi": 3,
+            "ventaglioGradi": 40,
+            "velocita": 150,
+            "gittata": 200,
+            "dimensione": 3,
+            "colore": "#b46bff",
+            "danno": "1d8"
+          }
+        ]
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Il Negromante chiama le ombre di chi morì nella febbre…",
+        "attacchi": [
+          {
+            "tipo": "teletrasporto",
+            "ricaricaMs": 5000,
+            "raggio": 112,
+            "distanzaMin": 64
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 3500,
+            "colpi": 5,
+            "ventaglioGradi": 70,
+            "velocita": 160,
+            "gittata": 200,
+            "dimensione": 3,
+            "colore": "#b46bff",
+            "danno": "1d8"
+          },
+          {
+            "tipo": "evoca",
+            "nemico": "ombra",
+            "quanti": 3,
+            "massimo": 5,
+            "ricaricaMs": 10000
+          }
+        ]
+      }
+    ],
+    "finale": true,
+    "tiro": {
+      "distanzaMin": 60,
+      "distanzaMax": 120,
+      "ricaricaMs": 1500,
+      "velocita": 150,
+      "gittata": 180,
+      "dimensione": 3,
+      "colore": "#b46bff"
+    }
+  }
+}

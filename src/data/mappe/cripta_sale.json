@@ -1,0 +1,152 @@
+{
+  "id": "cripta_sale",
+  "nome": "Cripta dei Non Morti – le sale",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1a20",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#808090" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#33333c",
+      "tessera": "muro_pietra"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#4a4750",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#7c7c8c" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    "c": {
+      "tipo": "arrivo",
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cimitero",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "d": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cripta_tomba",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "P": {
+      "tipo": "porta",
+      "aspetto": "legno",
+      "chiave": "chiave_ossa",
+      "nome": "la porta d'ossa",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#4a4750",
+      "coloreMuro": "#33333c",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#7c7c8c" },
+      "tesseraMuro": "muro_pietra"
+    },
+    "Z": {
+      "tipo": "nemico",
+      "nemico": "zombie",
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "scheletro",
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "V": {
+      "tipo": "nemico",
+      "nemico": "pipistrello",
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "x": {
+      "tipo": "forziere",
+      "contenuto": [
+        "chiave_piccola",
+        "pozione_vita"
+      ],
+      "monete": 10,
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "k": {
+      "tipo": "forziere",
+      "contenuto": [
+        "chiave_ossa"
+      ],
+      "monete": 15,
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "L": {
+      "tipo": "forziere",
+      "chiusoCon": "chiave_piccola",
+      "contenuto": [
+        "pozione_forza",
+        "pozione_vita",
+        "pozione_mana"
+      ],
+      "monete": 40,
+      "colore": "#55525a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#8c8c9c" }
+    },
+    "E": {
+      "tipo": "forziere",
+      "contenuto": [
+        "elmo_veggente"
+      ],
+      "monete": 30,
+      "colore": "#4a4750",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#7c7c8c" }
+    }
+  },
+  "griglia": [
+    "###############n##############",
+    "#KKKKKKKKKKKKK:a:KKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKK#",
+    "#K.....KKKKKKK:::KKKKKK.....K#",
+    "#K.k...KKKKKKK:::KKKKKK...L.K#",
+    "#K.....K..............K.V...K#",
+    "#K..S..K..............K.....K#",
+    "#K.....K..K..V.....K..K..V..K#",
+    "#K...S......Z....Z..........K#",
+    "#K.....K..K........K..K.....K#",
+    "#KKKKKKK............x.KKKMKKK#",
+    "#KKKKKKK..............KK,,,KK#",
+    "#KKKKKKKKKKKKKKPKKKKKKKK,E,KK#",
+    "#KKKKKKKKKKKKKK:KKKKKKKK,,,KK#",
+    "#KKKKKKKKKKKKKK:KKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKKK:KKKKKKKKKKKKK#",
+    "#KKKKKKKKKKK...c...KKKKKKKKKK#",
+    "#KKKKKKKKKKK.......KKKKKKKKKK#",
+    "#KKKKKKKKKKK...d...KKKKKKKKKK#",
+    "#KKKKKKKKKKKKKKKKKKKKKKKKKKKK#",
+    "##############################"
+  ]
+}

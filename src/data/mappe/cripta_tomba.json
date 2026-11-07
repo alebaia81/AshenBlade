@@ -1,0 +1,72 @@
+{
+  "id": "cripta_tomba",
+  "nome": "Cripta dei Non Morti – la tomba del re",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1a20",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#808090" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#3a3540",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#c0b0a0" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#4e4858",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#888098" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cripta_sale",
+      "arrivo": "c",
+      "tessera": "scale"
+    },
+    "B": {
+      "tipo": "barriera",
+      "boss": "re_scheletro",
+      "colore": "#6a6470",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#a4a4b4" }
+    },
+    "R": {
+      "tipo": "nemico",
+      "nemico": "re_scheletro",
+      "colore": "#4e4858",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#888098" }
+    }
+  },
+  "griglia": [
+    "############n###########",
+    "#KKKKKKKKKK:a:KKKKKKKKK#",
+    "#KKKKKKKKKK:::KKKKKKKKK#",
+    "#KKKKKKKKKK:::KKKKKKKKK#",
+    "#KKKKKKKKKK:::KKKKKKKKK#",
+    "#KKKKKKKKKKBBBKKKKKKKKK#",
+    "#K....................K#",
+    "#K....................K#",
+    "#K....................K#",
+    "#K...K............K...K#",
+    "#K....................K#",
+    "#K....................K#",
+    "#K..........R.........K#",
+    "#K....................K#",
+    "#K...K............K...K#",
+    "#K....................K#",
+    "#K........KKKKK.......K#",
+    "#K........KKKKK.......K#",
+    "#KKKKKKKKKKKKKKKKKKKKKK#",
+    "########################"
+  ]
+}

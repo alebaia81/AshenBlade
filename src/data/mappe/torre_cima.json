@@ -1,0 +1,73 @@
+{
+  "id": "torre_cima",
+  "nome": "Torre del Negromante – la cima",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#120e18",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#8878a8" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#2e2838",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#b0a0d0" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#3e3450",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9088b0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "torre_piani",
+      "arrivo": "c",
+      "tessera": "scale"
+    },
+    "B": {
+      "tipo": "barriera",
+      "boss": "negromante",
+      "colore": "#5a5268",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#b0a8c8" }
+    },
+    "N": {
+      "tipo": "nemico",
+      "nemico": "negromante",
+      "colore": "#3e3450",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9088b0" }
+    }
+  },
+  "griglia": [
+    "#############n############",
+    "#KKKKKKKKKKK:a:KKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKK#",
+    "#KKKKKKKKKKKBBBKKKKKKKKKK#",
+    "#K......................K#",
+    "#K......................K#",
+    "#K......................K#",
+    "#K....K............K....K#",
+    "#K......................K#",
+    "#K......................K#",
+    "#K...........N..........K#",
+    "#K......................K#",
+    "#K......................K#",
+    "#K....K............K....K#",
+    "#K......................K#",
+    "#K......................K#",
+    "#K......................K#",
+    "##########################"
+  ]
+}

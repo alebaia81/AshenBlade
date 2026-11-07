@@ -1,0 +1,110 @@
+{
+  "corrado": {
+    "id": "corrado",
+    "nome": "Corrado",
+    "classe": "guerriero",
+    "descrizione": "Ex soldato burbero e protettivo. Si mette sempre tra te e il pericolo.",
+    "colore": "#3f6fb5",
+    "vita": 30,
+    "velocita": 78,
+    "danno": "1d6",
+    "portata": 14,
+    "ricaricaMs": 900,
+    "prezzo": 80,
+    "bonus": {
+      "tipo": "armatura",
+      "valore": 1,
+      "descrizione": "+1 alla tua armatura"
+    },
+    "abilita": {
+      "id": "para_colpo",
+      "nome": "Para un colpo",
+      "descrizione": "Il prossimo colpo che subiresti lo para lui.",
+      "ricaricaMs": 15000
+    }
+  },
+  "elisa": {
+    "id": "elisa",
+    "nome": "Elisa",
+    "classe": "mago",
+    "descrizione": "Studentessa fuggita dall'accademia, curiosa e un po' sbadata. Tira dardi magici da lontano.",
+    "colore": "#8a55c8",
+    "vita": 18,
+    "velocita": 76,
+    "danno": "1d4",
+    "portata": 90,
+    "ricaricaMs": 1100,
+    "prezzo": 100,
+    "proiettile": {
+      "velocita": 160,
+      "gittata": 110,
+      "dimensione": 2.5,
+      "colore": "#c9a0ff",
+      "costoMana": 0
+    },
+    "bonus": {
+      "tipo": "rigenerazione_mana",
+      "valore": 0.25,
+      "descrizione": "+25% rigenerazione del mana (chi non ha mana: i suoi dardi fanno +1)"
+    },
+    "abilita": {
+      "id": "scudo_magico",
+      "nome": "Scudo magico",
+      "descrizione": "Uno scudo che assorbe 10 danni per 8 secondi.",
+      "ricaricaMs": 25000,
+      "quantita": 10,
+      "durataMs": 8000
+    }
+  },
+  "volpe": {
+    "id": "volpe",
+    "nome": "Nives \"Volpe\"",
+    "classe": "ladro",
+    "descrizione": "Ironica, conosce ogni serratura della valle. Colpisce veloce.",
+    "colore": "#c8743a",
+    "vita": 22,
+    "velocita": 86,
+    "danno": "1d4",
+    "portata": 12,
+    "ricaricaMs": 600,
+    "prezzo": 100,
+    "bonus": {
+      "tipo": "critico",
+      "valore": 0.05,
+      "descrizione": "+5% probabilità di critico"
+    },
+    "abilita": {
+      "id": "segnala_tesori",
+      "nome": "Fiuto per i tesori",
+      "descrizione": "Apre il forziere chiuso a chiave più vicino; se non ce n'è, per 6 secondi fa brillare forzieri e muri segreti entro 10 tessere.",
+      "ricaricaMs": 30000,
+      "durataMs": 6000,
+      "raggio": 160
+    }
+  },
+  "agata": {
+    "id": "agata",
+    "nome": "Sorella Agata",
+    "classe": "chierico",
+    "descrizione": "Allieva di frate Anselmo, calma e testarda. Ti tiene in piedi.",
+    "colore": "#d8c870",
+    "vita": 26,
+    "velocita": 76,
+    "danno": "1d4",
+    "portata": 13,
+    "ricaricaMs": 1000,
+    "prezzo": 80,
+    "bonus": {
+      "tipo": "cura_nel_tempo",
+      "valore": 1,
+      "descrizione": "1 punto vita ogni 5 secondi"
+    },
+    "abilita": {
+      "id": "cura_eroe",
+      "nome": "Preghiera di cura",
+      "descrizione": "Ti cura di 8 punti vita.",
+      "ricaricaMs": 20000,
+      "quantita": 8
+    }
+  }
+}

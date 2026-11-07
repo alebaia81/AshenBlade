@@ -1,0 +1,288 @@
+{
+  "lupi_dario": {
+    "id": "lupi_dario",
+    "nome": "I lupi di Dario",
+    "tipo": "secondaria",
+    "daChi": "dario",
+    "descrizione": "I lupi del bosco attaccano il gregge di Dario ogni notte. Ne ha già perse tre, di pecore.",
+    "passi": [
+      {
+        "descrizione": "Sconfiggi 4 lupi nel bosco",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "lupo",
+          "quantita": 4
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 40,
+      "esperienza": 60,
+      "oggetti": [
+        {
+          "id": "pozione_forza",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "erbe_anselmo": {
+    "id": "erbe_anselmo",
+    "nome": "Le erbe di frate Anselmo",
+    "tipo": "secondaria",
+    "daChi": "anselmo",
+    "descrizione": "Gli unguenti della cappella sono finiti, e i feriti aumentano. Le erbe medicinali crescono nei cespugli del bosco.",
+    "passi": [
+      {
+        "descrizione": "Raccogli 5 erbe medicinali nel bosco",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "erba_medicinale",
+          "quantita": 5
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 30,
+      "esperienza": 40,
+      "oggetti": [
+        {
+          "id": "pozione_vita",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "carbone_bruno": {
+    "id": "carbone_bruno",
+    "nome": "Il carbone di Bruno",
+    "tipo": "secondaria",
+    "daChi": "bruno",
+    "descrizione": "Il magazzino di Bruno è quasi vuoto. Il carbone si trova nelle vene scure della Radura e del bosco.",
+    "passi": [
+      {
+        "descrizione": "Porta 5 pezzi di carbone a Bruno",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "carbone",
+          "quantita": 5
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 10,
+      "esperienza": 30,
+      "oggetti": [
+        {
+          "id": "pergamena_arco_lungo",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "atto1_cimitero": {
+    "id": "atto1_cimitero",
+    "nome": "Atto I: il cimitero sulla collina",
+    "tipo": "principale",
+    "daChi": "berta",
+    "descrizione": "I morti escono dalla cripta del cimitero, in fondo al sentiero del bosco. La sindaca Berta vuole sapere com'è la situazione. Solo guardare, per ora.",
+    "passi": [
+      {
+        "descrizione": "Raggiungi il cimitero sulla collina, in fondo al sentiero del bosco",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "cimitero"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 50,
+      "esperienza": 100,
+      "oggetti": [
+        {
+          "id": "chiave_cripta",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "lettera_bruno": {
+    "id": "lettera_bruno",
+    "nome": "La lettera di Bruno",
+    "tipo": "secondaria",
+    "daChi": "bruno",
+    "richiede": [
+      "carbone_bruno"
+    ],
+    "descrizione": "Ugo, il fratello di Bruno, è scappato nelle Colline Grigie quando sono arrivati i morti. Bruno non riesce a dirgli le cose a voce.",
+    "passi": [
+      {
+        "descrizione": "Porta la lettera a Ugo, nelle Colline Grigie (a sud della Radura)",
+        "obiettivo": {
+          "tipo": "consegna",
+          "oggetto": "lettera_bruno",
+          "a": "ugo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 30,
+      "esperienza": 50,
+      "oggetti": [
+        {
+          "id": "pozione_resistenza",
+          "quantita": 1
+        }
+      ]
+    },
+    "concludeDa": "ugo",
+    "oggettiAllInizio": [
+      {
+        "id": "lettera_bruno",
+        "quantita": 1
+      }
+    ]
+  },
+  "tesoro_cavaliere": {
+    "id": "tesoro_cavaliere",
+    "nome": "La mappa del cavaliere",
+    "tipo": "secondaria",
+    "daChi": "gemma",
+    "descrizione": "Gemma giura che la mappa è autentica: porta al tesoro di un vecchio cavaliere. Dice così di tutte le sue mappe.",
+    "passi": [
+      {
+        "descrizione": "Trova il tesoro segnato con la X, nelle Colline Grigie",
+        "obiettivo": {
+          "tipo": "trova",
+          "forziere": "colline:3:2"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 0,
+      "esperienza": 80
+    },
+    "siAccettaCon": "mappa_cavaliere",
+    "automatica": true
+  },
+  "atto1_cripta": {
+    "id": "atto1_cripta",
+    "nome": "Atto I: la Cripta dei Non Morti",
+    "tipo": "principale",
+    "daChi": "berta",
+    "richiede": [
+      "atto1_cimitero"
+    ],
+    "descrizione": "La chiave di Berta apre il cancello della cripta. Laggiù qualcuno risveglia i morti della valle: bisogna scendere e fermarlo. Livello consigliato: 3–5.",
+    "passi": [
+      {
+        "descrizione": "Entra nella Cripta dei Non Morti (il cancello del cimitero)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "cripta_sale"
+        }
+      },
+      {
+        "descrizione": "Trova la tomba del re e sconfiggi chi la custodisce",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "re_scheletro",
+          "quantita": 1
+        }
+      },
+      {
+        "descrizione": "Mostra a frate Anselmo la pagina di diario trovata nella tomba",
+        "obiettivo": {
+          "tipo": "consegna",
+          "oggetto": "pagina_diario",
+          "a": "anselmo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 100,
+      "esperienza": 250
+    },
+    "concludeDa": "anselmo",
+    "prossimo": "Atto II: la Miniera dei Goblin (chiedi a Berta)"
+  },
+  "atto2_miniera": {
+    "id": "atto2_miniera",
+    "nome": "Atto II: la Miniera dei Goblin",
+    "tipo": "principale",
+    "daChi": "berta",
+    "richiede": [
+      "atto1_cripta"
+    ],
+    "descrizione": "Orvald cerca l'ossidiana nera della miniera. I goblin sono scesi nelle gallerie, e qualcuno dice che laggiù c'è qualcosa di molto più grosso. La strada nelle Colline Grigie è di nuovo libera. Livello consigliato: 6–8.",
+    "passi": [
+      {
+        "descrizione": "Entra nella Miniera dei Goblin (a est, nelle Colline Grigie)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "miniera_gallerie"
+        }
+      },
+      {
+        "descrizione": "Trova chi scava l'ossidiana per Orvald, in fondo alla miniera",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "troll_caverne",
+          "quantita": 1
+        }
+      },
+      {
+        "descrizione": "Torna a Borgo Quercia",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "borgo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 150,
+      "esperienza": 400
+    },
+    "concludeDa": "rosalba",
+    "prossimo": "Atto III: la Torre del Negromante (chiedi a nonna Rosalba)"
+  },
+  "atto3_torre": {
+    "id": "atto3_torre",
+    "nome": "Atto III: la Torre del Negromante",
+    "tipo": "principale",
+    "daChi": "rosalba",
+    "richiede": [
+      "atto2_miniera"
+    ],
+    "descrizione": "Orvald ha tutto ciò che gli serve, e la luna nera è vicina. La sua torre sta oltre la Brughiera, a ovest delle Colline Grigie. Livello consigliato: 9–11.",
+    "passi": [
+      {
+        "descrizione": "Attraversa la Brughiera della Torre (a ovest delle Colline Grigie)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "brughiera"
+        }
+      },
+      {
+        "descrizione": "Entra nella Torre del Negromante",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "torre_piani"
+        }
+      },
+      {
+        "descrizione": "Ferma Orvald, in cima alla torre",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "negromante",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 300,
+      "esperienza": 600
+    },
+    "concludeDa": "berta"
+  }
+}

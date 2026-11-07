@@ -1,0 +1,159 @@
+{
+  "id": "radura",
+  "nome": "Radura di Borgo Quercia",
+  "legenda": {
+    "f": {
+      "tipo": "vena",
+      "materiale": "minerale_ferro",
+      "quantita": [
+        1,
+        2
+      ],
+      "colore": "#7d7d7d",
+      "tessera": "mattoni"
+    },
+    "k": {
+      "tipo": "vena",
+      "materiale": "carbone",
+      "quantita": [
+        1,
+        2
+      ],
+      "colore": "#7d7d7d",
+      "tessera": "mattoni"
+    },
+    "v": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "borgo",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "c": {
+      "tipo": "arrivo",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "#": {
+      "tipo": "muro",
+      "colore": "#23401f",
+      "tessera": ["erba", "pino"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2e5a28",
+      "tessera": ["erba", "albero"]
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#3a6ea5",
+      "tessera": ["#3a6ea5", { "immagine": "onde", "alfa": 0.25 }]
+    },
+    "=": {
+      "tipo": "muro",
+      "colore": "#7d7d7d",
+      "tessera": "mattoni"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#78a856",
+      "tessera": "erba_ciuffi"
+    },
+    "@": {
+      "tipo": "partenza",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "1": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "bosco",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "slime",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_forza",
+        "borsa",
+        "arco",
+        "corazza_cuoio"
+      ],
+      "monete": 15,
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "P": {
+      "tipo": "muro",
+      "colore": "#8a6a3a",
+      "tessera": ["erba", "staccionata"]
+    },
+    "w": {
+      "tipo": "muro",
+      "colore": "#ece6d6",
+      "tessera": ["erba", "pecora"]
+    },
+    "D": {
+      "tipo": "abitante",
+      "abitante": "dario",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "colline",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "d": {
+      "tipo": "arrivo",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    }
+  },
+  "griglia": [
+    "########################################",
+    "#.,......,................=............#",
+    "#....T.........T..........=.....,.....T#",
+    "#.,,T,.............S......=,....,...X..#",
+    "#...@.......T..,........T.=............#",
+    "#,T...,...........,T.,...T=....S.....T.#",
+    "#.....,....,..............f,...........#",
+    "#...,..........T..........=....,.......#",
+    "#......................T.,=............#",
+    "#...........,.S.......,...=....,....T..#",
+    "#........,..............,.=..T.........#",
+    "#.......T.................=............#",
+    "vc.....T.........T.....,........T.....b1",
+    "#.....,.T.S.....T.........=..T.........#",
+    "#.........................=............#",
+    "#.,.T....~~...,........T..=............#",
+    "#T.....~~~~~~,T.........,.=....,..,....#",
+    "#.,.,.~~~~~~~~,...........=........,...#",
+    "#.....~~~~~~~~......S.....=............#",
+    "#...,,,~~~~~~.............k...,.,S..,..#",
+    "#........~~,...,..........=....PPPPPPPP#",
+    "#..............T....T..,..=.,D,P.w..w,.#",
+    "#..,...........,.........,=....P...w...#",
+    "#.....,...T.,...d.....,...=....P..w..w.#",
+    "################u#######################"
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "_nota": "Musica ed effetti generati dal codice (fase 9c). Note: C D E F G A B più l'ottava (C4 = Do centrale), # per i diesis; ':n' = battiti; '-' = pausa; '[ … ]*n' = ripeti n volte. Ogni brano ricomincia da capo quando finisce. Effetti: pezzi che scivolano dalla frequenza 'da' alla frequenza 'a' (Hz) in 'durata' secondi; 'rumore' è un fruscio.",
+  "brani": {
+    "villaggio": {
+      "bpm": 104,
+      "voci": [
+        {
+          "onda": "square",
+          "volume": 0.11,
+          "note": "E4:1 G4:1 C5:1 G4:1  A4:1 G4:1 E4:2  F4:1 A4:1 D5:1 A4:1  G4:3 -:1  E4:1 G4:1 C5:1 E5:1  D5:1 C5:1 A4:2  G4:1 E4:1 D4:1 G4:1  C4:3 -:1"
+        },
+        {
+          "onda": "triangle",
+          "volume": 0.3,
+          "note": "C3:2 G2:2  F2:2 C3:2  D3:2 A2:2  G2:2 G2:2  C3:2 G2:2  F2:2 F2:2  G2:2 G2:2  C3:2 C3:2"
+        }
+      ]
+    },
+    "esplorazione": {
+      "bpm": 120,
+      "voci": [
+        {
+          "onda": "square",
+          "volume": 0.1,
+          "note": "A4:1.5 E4:0.5 A4:1 B4:1  C5:1.5 B4:0.5 A4:2  G4:1.5 D4:0.5 G4:1 A4:1  B4:3 -:1  A4:1.5 E4:0.5 A4:1 B4:1  C5:1 D5:1 E5:2  D5:1 C5:1 B4:1 G4:1  A4:3 -:1"
+        },
+        {
+          "onda": "triangle",
+          "volume": 0.3,
+          "note": "[A2:1 A2:1 E3:1 A2:1  F2:1 F2:1 C3:1 F2:1  G2:1 G2:1 D3:1 G2:1  E2:1 E2:1 B2:1 E2:1]*2"
+        }
+      ]
+    },
+    "dungeon": {
+      "bpm": 80,
+      "voci": [
+        {
+          "onda": "triangle",
+          "volume": 0.22,
+          "note": "D4:2 F4:2  E4:2 A3:2  D4:2 F4:1 G4:1  A4:4  A#4:2 A4:2  G4:2 E4:2  F4:2 E4:1 C#4:1  D4:4"
+        },
+        {
+          "onda": "sine",
+          "volume": 0.3,
+          "note": "D2:4 A1:4 D2:4 F2:4 A#1:4 C2:4 A1:4 D2:4"
+        }
+      ]
+    },
+    "boss": {
+      "bpm": 150,
+      "voci": [
+        {
+          "onda": "square",
+          "volume": 0.1,
+          "note": "[E4:0.5 E4:0.5 G4:0.5 E4:0.5 A4:0.5 E4:0.5 B4:1  E4:0.5 E4:0.5 G4:0.5 E4:0.5 D5:0.5 C5:0.5 B4:1  C5:0.5 B4:0.5 A4:0.5 G4:0.5 A4:0.5 B4:0.5 E4:1  F#4:0.5 G4:0.5 A4:0.5 B4:0.5 D#4:2]*2"
+        },
+        {
+          "onda": "sawtooth",
+          "volume": 0.07,
+          "note": "[[E2:0.5 E3:0.5]*8 [C2:0.5 C3:0.5]*4 [B1:0.5 B2:0.5]*4]*2"
+        }
+      ]
+    }
+  },
+  "zone": {
+    "menu": "villaggio",
+    "boss": "boss",
+    "borgo": "villaggio",
+    "radura": "esplorazione",
+    "bosco": "esplorazione",
+    "cimitero": "esplorazione",
+    "colline": "esplorazione",
+    "brughiera": "esplorazione",
+    "cripta_sale": "dungeon",
+    "cripta_tomba": "dungeon",
+    "miniera_gallerie": "dungeon",
+    "miniera_tana": "dungeon",
+    "torre_piani": "dungeon",
+    "torre_cima": "dungeon"
+  },
+  "effetti": {
+    "clic": [{ "onda": "square", "da": 900, "a": 900, "durata": 0.025, "volume": 0.08 }],
+    "colpo": [{ "onda": "square", "da": 360, "a": 120, "durata": 0.07, "volume": 0.22 }, { "onda": "rumore", "da": 1800, "a": 600, "durata": 0.05, "volume": 0.15 }],
+    "sconfitto": [{ "onda": "square", "da": 440, "a": 880, "durata": 0.06, "volume": 0.18 }, { "onda": "square", "da": 660, "a": 1320, "durata": 0.08, "volume": 0.18, "ritardo": 0.06 }],
+    "ferito": [{ "onda": "sawtooth", "da": 240, "a": 70, "durata": 0.18, "volume": 0.25 }],
+    "sconfitta": [{ "onda": "triangle", "da": 392, "a": 392, "durata": 0.25, "volume": 0.3 }, { "onda": "triangle", "da": 330, "a": 330, "durata": 0.25, "volume": 0.3, "ritardo": 0.25 }, { "onda": "triangle", "da": 262, "a": 130, "durata": 0.6, "volume": 0.3, "ritardo": 0.5 }],
+    "capriola": [{ "onda": "rumore", "da": 600, "a": 2400, "durata": 0.14, "volume": 0.18 }],
+    "magia": [{ "onda": "sine", "da": 500, "a": 1400, "durata": 0.16, "volume": 0.2 }, { "onda": "triangle", "da": 1000, "a": 2000, "durata": 0.1, "volume": 0.1, "ritardo": 0.04 }],
+    "raccolta": [{ "onda": "square", "da": 988, "a": 988, "durata": 0.06, "volume": 0.15 }, { "onda": "square", "da": 1319, "a": 1319, "durata": 0.12, "volume": 0.15, "ritardo": 0.06 }],
+    "forziere": [{ "onda": "triangle", "da": 523, "a": 523, "durata": 0.08, "volume": 0.25 }, { "onda": "triangle", "da": 659, "a": 659, "durata": 0.08, "volume": 0.25, "ritardo": 0.08 }, { "onda": "triangle", "da": 784, "a": 784, "durata": 0.16, "volume": 0.25, "ritardo": 0.16 }],
+    "porta": [{ "onda": "rumore", "da": 500, "a": 150, "durata": 0.3, "volume": 0.25 }, { "onda": "square", "da": 160, "a": 120, "durata": 0.08, "volume": 0.12 }],
+    "bip": [{ "onda": "square", "da": 1046, "a": 1046, "durata": 0.07, "volume": 0.15 }, { "onda": "square", "da": 1568, "a": 1568, "durata": 0.1, "volume": 0.15, "ritardo": 0.09 }],
+    "livello": [{ "onda": "square", "da": 523, "a": 523, "durata": 0.09, "volume": 0.15 }, { "onda": "square", "da": 659, "a": 659, "durata": 0.09, "volume": 0.15, "ritardo": 0.09 }, { "onda": "square", "da": 784, "a": 784, "durata": 0.09, "volume": 0.15, "ritardo": 0.18 }, { "onda": "square", "da": 1046, "a": 1046, "durata": 0.25, "volume": 0.15, "ritardo": 0.27 }],
+    "boss": [{ "onda": "sawtooth", "da": 90, "a": 45, "durata": 0.8, "volume": 0.3 }, { "onda": "rumore", "da": 300, "a": 80, "durata": 0.8, "volume": 0.2 }]
+  }
+}

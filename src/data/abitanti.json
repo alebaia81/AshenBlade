@@ -1,0 +1,50 @@
+{
+  "berta": {
+    "id": "berta",
+    "nome": "Sindaca Berta",
+    "colore": "#7a4fa0",
+    "dialogo": "berta"
+  },
+  "anselmo": {
+    "id": "anselmo",
+    "nome": "Frate Anselmo",
+    "colore": "#7a6a50",
+    "dialogo": "anselmo"
+  },
+  "gemma": {
+    "id": "gemma",
+    "nome": "Gemma",
+    "colore": "#d0507a",
+    "dialogo": "gemma"
+  },
+  "tobia": {
+    "id": "tobia",
+    "nome": "Tobia l'oste",
+    "colore": "#c08040",
+    "dialogo": "tobia"
+  },
+  "bruno": {
+    "id": "bruno",
+    "nome": "Bruno il fabbro",
+    "colore": "#505860",
+    "dialogo": "bruno"
+  },
+  "rosalba": {
+    "id": "rosalba",
+    "nome": "Nonna Rosalba",
+    "colore": "#c8c8d8",
+    "dialogo": "rosalba"
+  },
+  "dario": {
+    "id": "dario",
+    "nome": "Dario il pastore",
+    "colore": "#8a6a3a",
+    "dialogo": "dario"
+  },
+  "ugo": {
+    "id": "ugo",
+    "nome": "Ugo",
+    "colore": "#5a6a7a",
+    "dialogo": "ugo"
+  }
+}
