@@ -12,6 +12,7 @@ import type { Vettore } from '../../systems/tipi';
 import type { GruppoNemici } from './GruppoNemici';
 import { mostraNumero } from './numeriDanno';
 import { suoni } from '../../audio/Suoni';
+import { mostraVignetteDanno, scuotiSchermo } from './feedbackVisivo';
 
 /** Un colpo che arriva da lontano: chi lo manda, quanto fa, da dove arriva. */
 export type ColpoDaLontano = (nemico: Nemico, dado: string, da: Vettore) => void;
@@ -69,7 +70,12 @@ export function gestisciContatti(
     mostraNumero(scena, eroe.x, eroe.y, danno, 'eroe');
     // La Corazza di spine rimanda il danno solo a chi ti ha toccato, non a chi tira da lontano.
     if (contatto) dopoColpoSubito(nemico, danno);
-    scena.cameras.main.shake(120, 0.004); // il tremolio fa "sentire" il colpo
+    // Feedback danno subito: vignette rossa sui bordi dello schermo
+    mostraVignetteDanno(scena);
+    // Screen shake disattivato sui colpi normali dei mob; attivo solo sui colpi dei boss (se abilitato nelle opzioni)
+    if (nemico.definizione.fasi) {
+      scuotiSchermo(scena, 150, 0.005);
+    }
     if (esito === 'ferito') suoni.effetto('ferito'); // la sconfitta ha il suo suono, nella scena
     if (esito === 'sconfitto') quandoSconfitto();
   };

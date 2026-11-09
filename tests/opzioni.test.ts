@@ -14,8 +14,9 @@ describe('opzioni', () => {
 
   it('si ricordano', () => {
     const a = archivioFinto();
-    scriviOpzioni(a, { ...OPZIONI_PREDEFINITE, salvataggioAutomatico: false });
+    scriviOpzioni(a, { ...OPZIONI_PREDEFINITE, salvataggioAutomatico: false, scuotimentoSchermo: false });
     expect(leggiOpzioni(a).salvataggioAutomatico).toBe(false);
+    expect(leggiOpzioni(a).scuotimentoSchermo).toBe(false);
   });
 
   it('testo rovinato o valori del tipo sbagliato: si usano i predefiniti', () => {

@@ -71,6 +71,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
   private effetti!: Phaser.GameObjects.Text;
   private dischetto!: Pulsante;
   private minimappa!: Minimappa;
+  private vignetteDanno!: Phaser.GameObjects.Image;
 
   constructor(private readonly dati: DatiGioco) {
     super(SCENA_INTERFACCIA);
@@ -214,6 +215,54 @@ export class ScenaInterfaccia extends Phaser.Scene {
       // Puliamo l'ascoltatore quando la scena si chiude, per non lasciarne di "orfani".
       this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.registry.events.off(evento, ascoltatore));
     }
+
+    this.creaVignetteDanno();
+  }
+
+  private creaVignetteDanno(): void {
+    const CHIAVE_TEX = 'texture-vignette-danno';
+    if (!this.textures.exists(CHIAVE_TEX)) {
+      const canvas = this.textures.createCanvas(CHIAVE_TEX, 480, 270);
+      if (canvas) {
+        const ctx = canvas.context;
+        const grad = ctx.createRadialGradient(240, 135, 110, 240, 135, 275);
+        grad.addColorStop(0, 'rgba(255, 0, 0, 0)');
+        grad.addColorStop(0.5, 'rgba(255, 0, 0, 0.05)');
+        grad.addColorStop(0.8, 'rgba(220, 20, 20, 0.35)');
+        grad.addColorStop(1, 'rgba(180, 0, 0, 0.85)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 480, 270);
+        ctx.strokeStyle = 'rgba(200, 10, 10, 0.6)';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(0, 0, 480, 270);
+        canvas.refresh();
+      }
+    }
+
+    this.vignetteDanno = this.add
+      .image(LARGHEZZA_SCHERMO / 2, ALTEZZA_SCHERMO / 2, CHIAVE_TEX)
+      .setDisplaySize(LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO)
+      .setDepth(999)
+      .setAlpha(0);
+
+    const ascoltaDanno = () => this.mostraVignetteDanno();
+    this.registry.events.on('vignette_danno', ascoltaDanno);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.registry.events.off('vignette_danno', ascoltaDanno);
+    });
+  }
+
+  /** Vignette rossa sui bordi dello schermo quando l'eroe subisce danno. */
+  mostraVignetteDanno(): void {
+    if (!this.vignetteDanno) return;
+    this.vignetteDanno.setAlpha(0.85);
+    this.tweens.killTweensOf(this.vignetteDanno);
+    this.tweens.add({
+      targets: this.vignetteDanno,
+      alpha: 0,
+      duration: 350,
+      ease: 'Quad.easeOut',
+    });
   }
 
   /** Il dischetto in pixel art (sprite.json); se manca, quello a forme delle fasi precedenti. */

@@ -13,6 +13,7 @@ import { alleSpalle } from '../../systems/geometria';
 import type { DefinizioneArma, Vettore } from '../../systems/tipi';
 import { mostraNumero } from './numeriDanno';
 import { suoni } from '../../audio/Suoni';
+import { scuotiSchermo } from './feedbackVisivo';
 
 export interface Colpo {
   dado: string;
@@ -71,6 +72,9 @@ export class Combattimento {
     suoni.effetto('colpo');
     const evidenziato = esito.critico || dietro;
     mostraNumero(this.scena, posizione.x, posizione.y, dietro ? `${esito.danno} alle spalle!` : esito.danno, evidenziato ? 'critico' : 'normale');
+    if (esito.critico) {
+      scuotiSchermo(this.scena, 120, 0.005);
+    }
 
     this.effettiDopoIlColpo(nemico, colpo, esito.danno, esito.critico, sconfitto, adesso);
     if (sconfitto) this.quandoSconfitto(nemico);

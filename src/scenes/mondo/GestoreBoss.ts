@@ -14,6 +14,7 @@ import type { Griglia } from '../../systems/percorso';
 import type { DefinizioneNemico, Vettore } from '../../systems/tipi';
 import type { ColpoDaLontano } from './gestisciContatti';
 import type { GruppoNemici } from './GruppoNemici';
+import { scuotiSchermo } from './feedbackVisivo';
 
 /** Ciò che serve al boss del mondo intorno (fase 8b): dov'è l'eroe e come colpirlo da lontano. */
 export interface AmbienteBoss {
@@ -189,7 +190,7 @@ export class GestoreBoss {
     // Scatto: contro un muro si stordisce (è il momento di colpirlo); altrimenti si ferma a fine corsa.
     if (this.nemico.controUnMuro && adesso > c.fino - c.attacco.durataMs + 100) {
       this.nemico.fermaPer(adesso, c.attacco.stordimentoMs);
-      this.scena.cameras.main.shake(200, 0.006);
+      scuotiSchermo(this.scena, 200, 0.006);
       this.avvisa(`${this.nemico.definizione.nome} sbatte contro la roccia!`);
       this.carica = null;
     } else if (adesso >= c.fino) {

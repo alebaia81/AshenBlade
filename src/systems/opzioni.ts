@@ -13,9 +13,17 @@ export interface Opzioni {
   /** Fase 9c: volume della musica e degli effetti, da 0 (muto) a 1. */
   volumeMusica: number;
   volumeEffetti: number;
+  /** Scuotimento della telecamera su colpi critici ed eventi boss. */
+  scuotimentoSchermo: boolean;
 }
 
-export const OPZIONI_PREDEFINITE: Readonly<Opzioni> = { salvataggioAutomatico: true, mostraIntroduzione: true, volumeMusica: 0.5, volumeEffetti: 0.7 };
+export const OPZIONI_PREDEFINITE: Readonly<Opzioni> = {
+  salvataggioAutomatico: true,
+  mostraIntroduzione: true,
+  volumeMusica: 0.5,
+  volumeEffetti: 0.7,
+  scuotimentoSchermo: true,
+};
 
 const CHIAVE = 'quercia-opzioni';
 

@@ -86,4 +86,17 @@ describe('aTiro (armi a distanza)', () => {
   it('con un muro in mezzo: no', () => {
     expect(aTiro(g, { x: 8, y: 24 }, { x: 120, y: 24 }, 150, 16)).toBe(false);
   });
+
+  it('calcola esattamente la soglia utile di gittata (85%)', () => {
+    // Gittata 100 -> soglia utile = 85 px
+    expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 84, y: 8 }, 100, 16)).toBe(true);
+    expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 86, y: 8 }, 100, 16)).toBe(false);
+  });
+
+  it('in diagonale verifica sia distanza euclidea che linea di vista', () => {
+    // Distanza ~70.7 px <= 85 px
+    expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 50, y: 8 + 20 }, 100, 16)).toBe(true);
+    // Distanza ~108 px > 85 px
+    expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 80, y: 8 + 70 }, 100, 16)).toBe(false);
+  });
 });

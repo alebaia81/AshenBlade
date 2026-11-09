@@ -39,7 +39,17 @@ export interface Interagibile {
 type Obiettivo =
   | { tipo: 'punto'; destinazione: Vettore; punti: Vettore[]; indice: number }
   | { tipo: 'interagisci'; bersaglio: Interagibile; punti: Vettore[]; indice: number }
-  | { tipo: 'nemico'; nemico: Nemico; punti: Vettore[]; indice: number; ricalcolo: number };
+  | { tipo: 'nemico'; nemico: Nemico; punti: Vettore[]; indice: number; ricalcolo: number }
+  | {
+      tipo: 'avvicina_tiro';
+      punto: Vettore;
+      nemico?: Nemico;
+      gittata: number;
+      punti: Vettore[];
+      indice: number;
+      ricalcolo: number;
+      quandoPronto: () => void;
+    };
 
 const FERMO: Vettore = { x: 0, y: 0 };
 
@@ -65,9 +75,13 @@ export class GuidaEroe {
   // ---- eventi del mouse (chiamati dalla scena) ----
 
   /** Clic sinistro: su un nemico lo si attacca, altrimenti si cammina fin lì. */
-  premiSinistro(punto: Vettore, adesso: number): 'nemico' | 'interagibile' | 'terreno' {
+  premiSinistro(punto: Vettore, adesso: number, forzaFermo = false): 'nemico' | 'interagibile' | 'terreno' {
     this.tenuto = true;
     this.cursore = punto;
+    if (forzaFermo) {
+      this.annulla();
+      return 'terreno';
+    }
     const interagibile = this.interagibileSotto(punto);
     if (interagibile) {
       this.obiettivo = { tipo: 'interagisci', bersaglio: interagibile, punti: this.percorsoVerso(interagibile.posizione, false), indice: 0 };
@@ -122,6 +136,20 @@ export class GuidaEroe {
     };
     this.schivataRichiesta = null;
 
+    // Tasto Shift (Force Stand): movimento bloccato, orientamento verso cursore e attacco sul posto
+    if (tastiera.fermo) {
+      this.annulla();
+      const eroe = { x: this.eroe.x, y: this.eroe.y };
+      const verso = direzioneVerso(eroe, this.cursore);
+      return {
+        ...comandi,
+        movimento: FERMO,
+        guarda: verso,
+        mira: this.cursore,
+        attacca: tastiera.attacca || this.tenuto,
+      };
+    }
+
     // La tastiera ha la precedenza: se la usi per camminare, il mouse si "dimentica" l'obiettivo.
     const conTastiera = calcolaVelocita(tastiera.movimento, 1);
     if (conTastiera.x !== 0 || conTastiera.y !== 0) {
@@ -133,6 +161,7 @@ export class GuidaEroe {
 
     const obiettivo = this.obiettivo;
     if (obiettivo.tipo === 'nemico') return this.versoNemico(obiettivo, comandi, adesso);
+    if (obiettivo.tipo === 'avvicina_tiro') return this.versoAvvicinaTiro(obiettivo, comandi, adesso);
     if (obiettivo.tipo === 'interagisci') {
       const b = obiettivo.bersaglio;
       // Abbastanza vicini: si interagisce (si apre il forziere) e l'obiettivo è raggiunto.
@@ -165,6 +194,25 @@ export class GuidaEroe {
   /** I punti ancora da raggiungere: la modalità sviluppatore li disegna. */
   percorsoRimasto(): Vettore[] {
     return this.obiettivo ? this.obiettivo.punti.slice(this.obiettivo.indice) : [];
+  }
+
+  /** Avvicina l'eroe fino alla gittata utile di un attacco a distanza, poi esegue l'azione. */
+  avvicinatiESpara(
+    punto: Vettore,
+    nemico: Nemico | undefined,
+    gittata: number,
+    quandoPronto: () => void,
+  ): void {
+    this.obiettivo = {
+      tipo: 'avvicina_tiro',
+      punto,
+      nemico,
+      gittata,
+      punti: [],
+      indice: 0,
+      ricalcolo: 0,
+      quandoPronto,
+    };
   }
 
   // ---- funzioni interne ----
@@ -201,6 +249,42 @@ export class GuidaEroe {
     // Con un ostacolo in mezzo si usa A*, ricalcolando quando serve o quando finisce il tratto.
     if (adesso >= o.ricalcolo || o.indice >= o.punti.length) {
       o.punti = this.percorsoVerso({ x: o.nemico.forma.x, y: o.nemico.forma.y }, false);
+      o.indice = 0;
+      o.ricalcolo = adesso + RICALCOLO_NEMICO_MS;
+    }
+    return { ...comandi, movimento: this.passo(adesso) };
+  }
+
+  private versoAvvicinaTiro(
+    o: Extract<Obiettivo, { tipo: 'avvicina_tiro' }>,
+    comandi: ComandiEroe,
+    adesso: number,
+  ): ComandiEroe {
+    if (o.nemico && !o.nemico.vivo) {
+      this.obiettivo = null;
+      return comandi;
+    }
+    const eroe = { x: this.eroe.x, y: this.eroe.y };
+    const bersaglio = o.nemico
+      ? { x: o.nemico.forma.x, y: o.nemico.forma.y }
+      : o.punto;
+
+    const pronto = aTiro(this.griglia, eroe, bersaglio, o.gittata, TESSERA);
+    if (pronto) {
+      this.obiettivo = null;
+      o.quandoPronto();
+      return { ...comandi, movimento: FERMO, guarda: direzioneVerso(eroe, bersaglio), mira: bersaglio };
+    }
+
+    const mezzo = this.eroe.lato / 2;
+    if (liberoTra(this.griglia, eroe, bersaglio, mezzo, TESSERA)) {
+      const d = Math.hypot(bersaglio.x - eroe.x, bersaglio.y - eroe.y);
+      const movimento = d > 0 ? { x: (bersaglio.x - eroe.x) / d, y: (bersaglio.y - eroe.y) / d } : FERMO;
+      return { ...comandi, movimento, guarda: direzioneVerso(eroe, bersaglio) };
+    }
+
+    if (adesso >= o.ricalcolo || o.indice >= o.punti.length) {
+      o.punti = this.percorsoVerso(bersaglio, false);
       o.indice = 0;
       o.ricalcolo = adesso + RICALCOLO_NEMICO_MS;
     }

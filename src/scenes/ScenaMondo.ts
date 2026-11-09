@@ -47,6 +47,7 @@ import { Cartello } from '../entities/Cartello';
 import { Porta } from '../entities/Porta';
 import { Barriera } from '../entities/Barriera';
 import { GestoreBoss } from './mondo/GestoreBoss';
+import { scuotiSchermo, mostraVignetteDanno } from './mondo/feedbackVisivo';
 import { apriConChiave, apriPorta, portaAperta } from '../systems/porte';
 import type { Nemico } from '../entities/Nemico';
 import { creaStatoAbilita, frazioneRicarica, puòUsare, usa, type StatoAbilita } from '../systems/abilita';
@@ -69,7 +70,7 @@ import {
   type SpazioEquipaggiamento,
 } from '../systems/equipaggiamento';
 import { areaDiColpo, direzioneDa, intersecano } from '../systems/geometria';
-import { direzioneVerso } from '../systems/mira';
+import { aTiro, direzioneVerso } from '../systems/mira';
 import { attivi, bonus, rimanente } from '../systems/effettiTemporanei';
 import { aggiungi, conta, togli } from '../systems/inventario';
 import { cellaDaPixel, centroCella } from '../systems/coordinate';
@@ -269,7 +270,7 @@ export class ScenaMondo extends Phaser.Scene {
           this.dati.nemici,
           (t) => {
             mostraAvviso(this, t);
-            this.cameras.main.shake(200, 0.004);
+            this.scuotiSchermo(200, 0.004);
           },
           {
             eroe: () => ({ x: this.eroe.x, y: this.eroe.y }),
@@ -342,7 +343,11 @@ export class ScenaMondo extends Phaser.Scene {
     // E: abilità di classe verso il cursore (scorciatoia del pulsante nella barra).
     this.input.keyboard?.on('keydown-E', () => this.usaAbilita(this.nelMondo(this.input.activePointer)));
     // K: arma secondaria verso il cursore.
-    this.input.keyboard?.on('keydown-K', () => this.usaSecondaria(this.nelMondo(this.input.activePointer)));
+    this.input.keyboard?.on('keydown-K', () => {
+      const p = this.nelMondo(this.input.activePointer);
+      const fermo = Boolean(this.comandi?.leggi().fermo);
+      this.usaSecondaria(p, fermo);
+    });
     // Q: abilità del compagno (scorciatoia del suo pulsante nella barra).
     this.input.keyboard?.on('keydown-Q', () => this.usaAbilitaCompagno());
     // Esc: il menu di pausa. Arriva qui solo se nessun pannello è aperto (con un
@@ -747,6 +752,16 @@ export class ScenaMondo extends Phaser.Scene {
     scriviPartita(this, aggiungiMonete(this.partita, quantita));
   }
 
+  /** Vibrazione della visuale, attiva solo se abilitata nelle opzioni di gioco. */
+  scuotiSchermo(durataMs = 120, intensita = 0.004): void {
+    scuotiSchermo(this, durataMs, intensita);
+  }
+
+  /** Segnala all'interfaccia di mostrare la vignette rossa sui bordi per danno subito. */
+  mostraVignetteDanno(): void {
+    mostraVignetteDanno(this);
+  }
+
   /** Va in una mappa precisa, al suo punto d'ingresso (sviluppatore e prove nel browser). */
   vaiA(idMappa: string): void {
     const destinazione = this.dati.mappe[idMappa];
@@ -852,7 +867,7 @@ export class ScenaMondo extends Phaser.Scene {
   }
 
   /** Usa l'arma secondaria (a distanza o da mischia) verso un punto del mondo. */
-  usaSecondaria(punto: Vettore): void {
+  usaSecondaria(punto: Vettore, forzaFermo = false): void {
     this.mira = null;
     if (this.inTransizione || this.eroe.sconfitto || !this.scene.isActive()) return;
     const arma = this.armaSecondaria;
@@ -866,6 +881,36 @@ export class ScenaMondo extends Phaser.Scene {
       mostraNumero(this, this.eroe.x, this.eroe.y - 8, 'non ancora!', 'avviso');
       return;
     }
+    const tiro = arma.proiettile;
+    if (tiro && this.eroe.mana.attuale < tiro.costoMana) {
+      mostraNumero(this, this.eroe.x, this.eroe.y - 8, 'mana!', 'avviso');
+      return;
+    }
+
+    const da = { x: this.eroe.x, y: this.eroe.y };
+    const nemico = this.guida.nemicoSotto(punto);
+    const bersaglio = nemico ? { x: nemico.forma.x, y: nemico.forma.y } : punto;
+
+    // Se è un'arma a distanza ed è fuori gittata utile (e non c'è Shift / Force Stand),
+    // l'eroe si avvicina automaticamente fino alla massima gittata utile prima di scoccare.
+    if (tiro && !forzaFermo) {
+      const pronto = aTiro(this.griglia, da, bersaglio, tiro.gittata, TESSERA);
+      if (!pronto) {
+        this.guida.avvicinatiESpara(bersaglio, nemico ?? undefined, tiro.gittata, () => {
+          const puntoAttuale = nemico && nemico.vivo ? { x: nemico.forma.x, y: nemico.forma.y } : bersaglio;
+          this.eseguiTiroSecondaria(arma, puntoAttuale);
+        });
+        return;
+      }
+    }
+
+    this.eseguiTiroSecondaria(arma, bersaglio);
+  }
+
+  private eseguiTiroSecondaria(arma: DefinizioneArma, punto: Vettore): void {
+    if (this.inTransizione || this.eroe.sconfitto || !this.scene.isActive()) return;
+    const adesso = this.time.now;
+    if (!this.eroe.libero || adesso < this.secondariaPronta) return;
     const tiro = arma.proiettile;
     if (tiro) {
       if (this.eroe.mana.attuale < tiro.costoMana) {
@@ -1353,7 +1398,7 @@ export class ScenaMondo extends Phaser.Scene {
     m.apri();
     suoni.effetto('porta');
     scriviPartita(this, apriMuro(this.partita, m.chiave));
-    this.cameras.main.shake(150, 0.003);
+    this.scuotiSchermo(150, 0.003);
     mostraAvviso(this, 'Un passaggio segreto!');
   }
 
@@ -1521,12 +1566,15 @@ export class ScenaMondo extends Phaser.Scene {
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (this.inTransizione || this.sopraInterfaccia(p)) return;
       const punto = this.nelMondo(p);
+      const shiftPremuto = Boolean(
+        p.event?.shiftKey || this.comandi?.leggi().fermo
+      );
       // Col mirino attivo il clic sinistro sceglie il bersaglio (abilità o arma secondaria), il destro annulla.
       if (this.mira) {
         if (p.leftButtonDown()) {
           this.segnaleClic(punto, 0xff8c32);
           if (this.mira === 'abilita') this.usaAbilita(punto);
-          else this.usaSecondaria(punto);
+          else this.usaSecondaria(punto, shiftPremuto);
         } else this.mira = null;
         return;
       }
@@ -1534,7 +1582,7 @@ export class ScenaMondo extends Phaser.Scene {
         this.guida.premiDestro(punto);
         this.segnaleClic(punto, 0x8fd3ff);
       } else if (p.leftButtonDown()) {
-        const cosa = this.guida.premiSinistro(punto, this.time.now);
+        const cosa = this.guida.premiSinistro(punto, this.time.now, shiftPremuto);
         this.segnaleClic(punto, cosa === 'nemico' ? 0xff6b6b : 0xffffff);
       }
     });
@@ -1680,7 +1728,7 @@ export class ScenaMondo extends Phaser.Scene {
       const p = this.partita;
       if (!p.bossSconfitti.includes(nemico.definizione.id)) scriviPartita(this, { ...p, bossSconfitti: [...p.bossSconfitti, nemico.definizione.id] });
       this.boss?.sconfitto();
-      this.cameras.main.shake(400, 0.008);
+      this.scuotiSchermo(400, 0.008);
       mostraAvviso(this, `${nemico.definizione.nome} è sconfitto!`);
       // Il Negromante (fase 8c): dopo un attimo, le pagine del finale con il mondo in pausa.
       if (nemico.definizione.finale) this.time.delayedCall(1500, () => this.apriFinale());
