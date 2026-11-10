@@ -98,7 +98,11 @@ export function dopoIlCaricamento(p: Partita, adesso: number): Partita {
     fino: e.fino + adesso,
     ...(e.prossimoColpo !== undefined ? { prossimoColpo: e.prossimoColpo + adesso } : {}),
   }));
-  const ripresa = { ...p, effetti };
+  const ripresa: Partita = {
+    ...p,
+    effetti,
+    tascaMissioni: Array.isArray(p.tascaMissioni) ? p.tascaMissioni : [],
+  };
   // Salvata nell'istante della sconfitta? Si riparte come dopo una sconfitta: vita piena.
   return p.vita.attuale <= 0 ? guarisci(ripresa) : ripresa;
 }
@@ -203,6 +207,7 @@ function controllaForma(d: DatiGrezzi): EsitoLettura {
     quest: {},
     porteAperte: [],
     bossSconfitti: [],
+    tascaMissioni: [],
     ...p,
   } as unknown as Partita;
   return {

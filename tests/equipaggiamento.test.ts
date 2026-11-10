@@ -3,6 +3,7 @@ import {
   armaturaTotale,
   bonusCaratteristiche,
   conBonus,
+  confrontaConAttuale,
   creaEquipaggiamento,
   effettiEquipaggiati,
   equipaggia,
@@ -178,5 +179,50 @@ describe('numeri dell’equipaggiamento', () => {
   it('effetti: per categoria (armi o armature)', () => {
     expect(effettiEquipaggiati(pieno, catalogo, 'armatura')).toEqual(['doppia_capriola']);
     expect(effettiEquipaggiati(pieno, catalogo, 'arma').sort()).toEqual(['rimbalzo', 'risucchio_vita']);
+  });
+});
+
+describe('confrontaConAttuale', () => {
+  const armi = {
+    spada_ferro: {
+      id: 'spada_ferro', nome: 'Spada di ferro', slot: 'primaria', tipo: 'spada',
+      caratteristica: 'FOR', bonusCritico: 0,
+    },
+    spadone_acciaio: {
+      id: 'spadone_acciaio', nome: 'Spadone d’acciaio', slot: 'primaria', tipo: 'ascia',
+      caratteristica: 'FOR', bonusCritico: 0.05,
+    },
+  } as unknown as Record<string, any>;
+
+  const armature = {
+    elmo_ferro: { id: 'elmo_ferro', nome: 'Elmo di ferro', pezzo: 'elmo', armatura: 1, bonus: {} },
+    elmo_corona: { id: 'elmo_corona', nome: 'Corona d’oro', pezzo: 'elmo', armatura: 2, bonus: { FOR: 1, COS: 2 } },
+  } as unknown as Record<string, any>;
+
+  const car = { FOR: 12, DES: 10, COS: 10, INT: 10, SAG: 10, CAR: 10 };
+  const equip = { ...creaEquipaggiamento('spada_ferro'), elmo: 'elmo_ferro' };
+
+  it('confronta arma con l’arma attualmente impugnata', () => {
+    const diff = confrontaConAttuale('spadone_acciaio', equip, armi, armature, car);
+    expect(diff).not.toBeNull();
+    if (diff && diff.tipo === 'arma') {
+      expect(diff.nomeAttuale).toBe('Spada di ferro');
+      expect(diff.deltaDanno).toBeGreaterThan(0);
+      expect(diff.deltaCritico).toBe(5); // 0.05 = 5%
+    }
+  });
+
+  it('confronta armatura con il pezzo attualmente indossato', () => {
+    const diff = confrontaConAttuale('elmo_corona', equip, armi, armature, car);
+    expect(diff).not.toBeNull();
+    if (diff && diff.tipo === 'armatura') {
+      expect(diff.nomeAttuale).toBe('Elmo di ferro');
+      expect(diff.deltaArmatura).toBe(1); // 2 - 1 = 1
+      expect(diff.deltaBonus).toEqual({ FOR: 1, COS: 2 });
+    }
+  });
+
+  it('restituisce null se l’oggetto non è né arma né armatura', () => {
+    expect(confrontaConAttuale('pozione_cura', equip, armi, armature, car)).toBeNull();
   });
 });

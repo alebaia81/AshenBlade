@@ -2,14 +2,17 @@ import { describe, expect, it } from 'vitest';
 import datiLivelli from '../src/data/livelli.json';
 import {
   aggiungiEsperienza,
+  aggiungiTascaMissioni,
   apriForziere,
   assegnaPuntoPartita,
   caratteristicheTotali,
+  contaTotale,
   creaPartita,
   forziereAperto,
   guarisci,
   indossa,
   togliIndossato,
+  togliTascaMissioni,
   usaOggetto,
 } from '../src/systems/partita';
 import { aggiungi, conta } from '../src/systems/inventario';
@@ -270,5 +273,40 @@ describe('pergamene', () => {
     const due = usaOggetto(uno.partita, i, cat, 0);
     expect(due.partita).toBe(uno.partita);
     expect(due.messaggio).toMatch(/già/);
+  });
+});
+
+describe('tascaMissioni', () => {
+  it('la nuova partita ha tascaMissioni vuota', () => {
+    const p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    expect(p.tascaMissioni).toEqual([]);
+  });
+
+  it('aggiungiTascaMissioni inserisce e accumula oggetti senza pesare sullo zaino', () => {
+    let p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    p = aggiungiTascaMissioni(p, 'chiave_cripta', 1);
+    p = aggiungiTascaMissioni(p, 'chiave_piccola', 2);
+    p = aggiungiTascaMissioni(p, 'chiave_piccola', 1);
+
+    expect(p.tascaMissioni).toEqual([
+      { id: 'chiave_cripta', quantita: 1 },
+      { id: 'chiave_piccola', quantita: 3 },
+    ]);
+  });
+
+  it('togliTascaMissioni scala la quantità corretta e rimuove se zero', () => {
+    let p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    p = aggiungiTascaMissioni(p, 'chiave_piccola', 2);
+    p = togliTascaMissioni(p, 'chiave_piccola', 1);
+    expect(p.tascaMissioni).toEqual([{ id: 'chiave_piccola', quantita: 1 }]);
+    p = togliTascaMissioni(p, 'chiave_piccola', 1);
+    expect(p.tascaMissioni).toEqual([]);
+  });
+
+  it('contaTotale calcola la somma tra zaino e tasca missioni', () => {
+    let p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    p = { ...p, inventario: aggiungi(p.inventario, 'chiave_piccola', 1, 99).inventario };
+    p = aggiungiTascaMissioni(p, 'chiave_piccola', 2);
+    expect(contaTotale(p, 'chiave_piccola')).toBe(3);
   });
 });

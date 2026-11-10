@@ -207,3 +207,37 @@ describe('quest della mappa del tesoro (fase 7b)', () => {
     expect(segnoSopra('gemma', trovato.quest, tesoro, inv)).toBeNull();
   });
 });
+
+describe('tascaMissioni con le quest', () => {
+  it('consegna un oggetto presente in tascaMissioni parlando con l’abitante', () => {
+    const qAttiva: Quests = { lettera: { stato: 'attiva', passo: 0, conteggio: 0 } };
+    const statoIniziale = {
+      quest: qAttiva,
+      inventario: creaInventario(4),
+      monete: 0,
+      tascaMissioni: [{ id: 'lettera', quantita: 1 }],
+    };
+
+    const res = registraEvento(statoIniziale, { tipo: 'parlato', abitante: 'ugo' }, catalogo);
+    expect(res.stato.quest['lettera']?.passo).toBe(1);
+    expect(res.stato.tascaMissioni).toEqual([]);
+  });
+
+  it('riconosce lo stato pronta e conclude usando oggetti in tascaMissioni', () => {
+    const qAttiva: Quests = { erbe: { stato: 'attiva', passo: 0, conteggio: 0 } };
+    const stato = {
+      quest: qAttiva,
+      inventario: creaInventario(4),
+      monete: 0,
+      tascaMissioni: [{ id: 'erba', quantita: 5 }],
+    };
+
+    expect(statoDi('erbe', qAttiva, catalogo, stato.inventario, stato.tascaMissioni)).toBe('pronta');
+    const esito = concludi(stato, 'erbe', catalogo, 0);
+    expect(esito.ok).toBe(true);
+    if (esito.ok) {
+      expect(esito.stato.quest['erbe']?.stato).toBe('conclusa');
+      expect(esito.stato.tascaMissioni).toEqual([]);
+    }
+  });
+});

@@ -54,11 +54,11 @@ export class ScenaRegistro extends Phaser.Scene {
 
   /** Le quest iniziate, nell'ordine del registro. */
   elenco(): { d: DefinizioneQuest; stato: StatoVisibile }[] {
-    const { quest, inventario } = leggiPartita(this);
+    const { quest, inventario, tascaMissioni } = leggiPartita(this);
     return Object.keys(quest)
       .flatMap((id) => {
         const d = this.dati.quest[id];
-        return d ? [{ d, stato: statoDi(id, quest, this.dati.quest, inventario) }] : [];
+        return d ? [{ d, stato: statoDi(id, quest, this.dati.quest, inventario, tascaMissioni) }] : [];
       })
       .sort((a, b) => {
         const principale = Number(b.d.tipo === 'principale' && b.stato !== 'conclusa') - Number(a.d.tipo === 'principale' && a.stato !== 'conclusa');
@@ -107,7 +107,7 @@ export class ScenaRegistro extends Phaser.Scene {
 
   /** A destra: storia, passi, ricompensa. I passi futuri restano nascosti (sorprese della trama). */
   private dettagli(d: DefinizioneQuest, stato: StatoVisibile): void {
-    const { quest, inventario } = leggiPartita(this);
+    const { quest, inventario, tascaMissioni } = leggiPartita(this);
     const q = quest[d.id]!;
     const x = this.sinistra + 400;
     const larghezza = 470;
@@ -124,7 +124,7 @@ export class ScenaRegistro extends Phaser.Scene {
     d.passi.forEach((passo, i) => {
       if (i < q.passo || stato === 'conclusa') scrivi(`✔ ${passo.descrizione}`, { color: GRIGIO }, 4);
       else if (i === q.passo) {
-        const p = progresso(d, q, inventario);
+        const p = progresso(d, q, inventario, tascaMissioni);
         scrivi(`▸ ${passo.descrizione}${p ? `   ${p.fatti} / ${p.servono}` : ''}`, { color: '#ffffff', fontStyle: 'bold' }, 4);
       }
     });

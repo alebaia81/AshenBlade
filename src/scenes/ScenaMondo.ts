@@ -92,15 +92,18 @@ import {
 } from '../systems/mappa';
 import {
   aggiungiEsperienza,
+  aggiungiTascaMissioni,
   apriForziere,
   apriMuro,
   caratteristicheTotali,
+  contaTotale,
   forziereAperto,
   guarisci,
   indossa,
   invertiArmi,
   muroAperto,
   togliIndossato,
+  togliTascaMissioni,
   usaOggetto,
   type Partita,
 } from '../systems/partita';
@@ -217,6 +220,7 @@ export class ScenaMondo extends Phaser.Scene {
 
   /** create costruisce la scena una volta: come il "mount" di un componente. */
   create(): void {
+    this.bonificaInventarioEMissioni();
     const livello = creaTilemap(this, this.mappa, this.dati.sprite);
     this.livello = livello;
 
@@ -508,7 +512,7 @@ export class ScenaMondo extends Phaser.Scene {
     // Un avviso alla volta: il più recente è il più utile ("fatto! Torna da…").
     if (avvisi.length > 0) mostraAvviso(this, avvisi.at(-1)!);
     // Le quest "automatiche" (la mappa del tesoro) si chiudono qui, senza tornare da nessuno.
-    for (const id of automatichePronte(this.partita.quest, this.dati.quest, this.partita.inventario)) this.concludiQuest(id);
+    for (const id of automatichePronte(this.partita.quest, this.dati.quest, this.partita.inventario, this.partita.tascaMissioni)) this.concludiQuest(id);
   }
 
   /**
@@ -530,8 +534,8 @@ export class ScenaMondo extends Phaser.Scene {
   }
 
   private aggiornaSegni(): void {
-    const { quest, inventario } = this.partita;
-    for (const a of this.abitanti) a.impostaSegno(segnoSopra(a.definizione.id, quest, this.dati.quest, inventario));
+    const { quest, inventario, tascaMissioni } = this.partita;
+    for (const a of this.abitanti) a.impostaSegno(segnoSopra(a.definizione.id, quest, this.dati.quest, inventario, tascaMissioni));
   }
 
   /** Una cella che cambia con la storia: la sua condizione è vera adesso? */
@@ -541,13 +545,13 @@ export class ScenaMondo extends Phaser.Scene {
     if (c.boss) return p.bossSconfitti.includes(c.boss);
     if (!c.quest) return false;
     const stati = ([] as string[]).concat(c.stato ?? 'conclusa');
-    return stati.includes(statoDi(c.quest, p.quest, this.dati.quest, p.inventario));
+    return stati.includes(statoDi(c.quest, p.quest, this.dati.quest, p.inventario, p.tascaMissioni));
   }
 
   /** Il dialogo chiede: questa risposta si vede? */
   condizioneVera(c: Condizione): boolean {
-    const { quest, inventario } = this.partita;
-    return ([] as string[]).concat(c.stato).includes(statoDi(c.quest, quest, this.dati.quest, inventario));
+    const { quest, inventario, tascaMissioni } = this.partita;
+    return ([] as string[]).concat(c.stato).includes(statoDi(c.quest, quest, this.dati.quest, inventario, tascaMissioni));
   }
 
   /**
@@ -1303,14 +1307,14 @@ export class ScenaMondo extends Phaser.Scene {
     this.physics.add.collider(this.nemici.gruppo, forme);
   }
 
-  /** Clic su una porta: si apre se nello zaino c'è la sua chiave (che resta: è "di missione"). */
+  /** Clic su una porta: si apre se nello zaino o nella tasca missioni c'è la sua chiave (che resta: è "di missione"). */
   private tentaPorta(porta: Porta): void {
     this.eroe.girati(porta.posizione);
     const nomeChiave = this.dati.oggetti[porta.serveChiave]?.nome ?? porta.serveChiave;
-    const esito = apriConChiave(this.partita.inventario, { chiave: porta.serveChiave, consuma: false });
+    const possiede = contaTotale(this.partita, porta.serveChiave) > 0;
     // "Chiuso a chiave: la porta d'ossa" invece di "La porta è chiusa": così il testo
     // va bene sia per "il cancello" sia per "la porta", senza accordare il genere.
-    if (!esito.ok) {
+    if (!possiede) {
       mostraAvviso(this, `Chiuso a chiave: ${porta.nome}. Serve: ${nomeChiave}`);
       return;
     }
@@ -1322,7 +1326,7 @@ export class ScenaMondo extends Phaser.Scene {
 
   private leggiCartello(c: Cartello): void {
     this.eroe.girati(c.posizione);
-    mostraAvviso(this, c.testo((id) => conta(this.partita.inventario, id) > 0));
+    mostraAvviso(this, c.testo((id) => contaTotale(this.partita, id) > 0));
   }
 
   // ---- persone del villaggio e dialoghi ----
@@ -1412,13 +1416,23 @@ export class ScenaMondo extends Phaser.Scene {
   private apriForziere(f: Forziere, scassinatore = false): void {
     if (f.aperto) return;
     if (f.chiusoCon) {
-      const esito = apriConChiave(this.partita.inventario, { chiave: f.chiusoCon, consuma: true }, { scassinatore });
-      if (!esito.ok) {
-        mostraAvviso(this, `Chiuso a chiave. Serve: ${this.dati.oggetti[f.chiusoCon]?.nome ?? f.chiusoCon} (o un ladro esperto)`);
-        return;
+      if (scassinatore) {
+        mostraAvviso(this, 'Volpe fa scattare la serratura!');
+      } else {
+        const inTasca = (this.partita.tascaMissioni ?? []).some((p) => p.id === f.chiusoCon && p.quantita > 0);
+        if (inTasca) {
+          scriviPartita(this, togliTascaMissioni(this.partita, f.chiusoCon, 1));
+          mostraAvviso(this, 'La chiave piccola gira nella serratura');
+        } else {
+          const esito = apriConChiave(this.partita.inventario, { chiave: f.chiusoCon, consuma: true }, { scassinatore });
+          if (!esito.ok) {
+            mostraAvviso(this, `Chiuso a chiave. Serve: ${this.dati.oggetti[f.chiusoCon]?.nome ?? f.chiusoCon} (o un ladro esperto)`);
+            return;
+          }
+          if (esito.inventario !== this.partita.inventario) scriviPartita(this, { ...this.partita, inventario: esito.inventario });
+          mostraAvviso(this, esito.come === 'volpe' ? 'Volpe fa scattare la serratura!' : 'La chiave piccola gira nella serratura');
+        }
       }
-      if (esito.inventario !== this.partita.inventario) scriviPartita(this, { ...this.partita, inventario: esito.inventario });
-      mostraAvviso(this, esito.come === 'volpe' ? 'Volpe fa scattare la serratura!' : 'La chiave piccola gira nella serratura');
     }
     f.apri();
     suoni.effetto('forziere');
@@ -1450,6 +1464,49 @@ export class ScenaMondo extends Phaser.Scene {
     return true;
   }
 
+  /** Sposta gli oggetti missione/chiavi nella tasca dedicata (peso 0) e rimuove lettere di quest già concluse. */
+  private bonificaInventarioEMissioni(): void {
+    const p = this.partita;
+    let modificato = false;
+    let tasca = Array.isArray(p.tascaMissioni) ? [...p.tascaMissioni] : [];
+    const spazi = [...p.inventario.spazi];
+
+    for (let i = 0; i < spazi.length; i++) {
+      const pila = spazi[i];
+      if (!pila) continue;
+      const def = this.dati.oggetti[pila.id];
+      if (def && def.tipo === 'missione') {
+        // Se la quest è già conclusa (es. pagina_diario per atto1_cripta), scarta il duplicato
+        if (pila.id === 'pagina_diario' && p.quest['atto1_cripta']?.stato === 'conclusa') {
+          spazi[i] = null;
+          modificato = true;
+          continue;
+        }
+        const idx = tasca.findIndex((t) => t.id === pila.id);
+        if (idx >= 0) tasca[idx]!.quantita += pila.quantita;
+        else tasca.push({ id: pila.id, quantita: pila.quantita });
+        spazi[i] = null;
+        modificato = true;
+      }
+    }
+
+    if (p.quest['atto1_cripta']?.stato === 'conclusa') {
+      const primaLunghezza = tasca.length;
+      tasca = tasca.filter((t) => t.id !== 'pagina_diario');
+      if (tasca.length !== primaLunghezza) modificato = true;
+    }
+
+    if (!Array.isArray(p.tascaMissioni)) modificato = true;
+
+    if (modificato) {
+      scriviPartita(this, {
+        ...p,
+        inventario: { ...p.inventario, spazi },
+        tascaMissioni: tasca,
+      });
+    }
+  }
+
   /** Prova a mettere oggetti nello zaino. Restituisce quanti NON sono entrati. */
   private raccogli(id: string, quantita: number): number {
     const definizione = this.dati.oggetti[id];
@@ -1460,6 +1517,16 @@ export class ScenaMondo extends Phaser.Scene {
       suoni.effetto('raccolta');
       scriviPartita(this, aggiungiMonete(p, quantita));
       mostraNumero(this, this.eroe.x, this.eroe.y - 10, `+${quantita} monete`, 'esperienza');
+      return 0;
+    }
+    // Oggetti di missione (chiavi, lettere): vanno nella tasca delle missioni a peso 0!
+    if (definizione.tipo === 'missione') {
+      suoni.effetto('raccolta');
+      const aggiornata = aggiungiTascaMissioni(p, id, quantita);
+      scriviPartita(this, aggiornata);
+      mostraNumero(this, this.eroe.x, this.eroe.y - 10, `+${quantita} ${definizione.nome} (Missioni)`, 'esperienza');
+      const avvisi = avvisiRaccolta(this.partita.quest, this.dati.quest, p.inventario, id);
+      if (avvisi.length > 0) mostraAvviso(this, avvisi.at(-1)!);
       return 0;
     }
     const esito = aggiungi(p.inventario, id, quantita, definizione.pila);
@@ -1740,7 +1807,15 @@ export class ScenaMondo extends Phaser.Scene {
       if (nemico.definizione.finale) this.time.delayedCall(1500, () => this.apriFinale());
     }
     // Bottino: ogni voce della tabella del nemico ha la sua probabilità.
-    const bottino = tiraBottino(nemico.definizione.bottino, casualeVero);
+    // Non droppa duplicati di oggetti missione/lettere se già posseduti o se la quest è conclusa.
+    const bottino = tiraBottino(nemico.definizione.bottino, casualeVero).filter((voce) => {
+      const def = this.dati.oggetti[voce.id];
+      if (def?.tipo === 'missione') {
+        if (voce.id === 'pagina_diario' && this.partita.quest['atto1_cripta']?.stato === 'conclusa') return false;
+        if (contaTotale(this.partita, voce.id) > 0) return false;
+      }
+      return true;
+    });
     const monete = moneteDelNemico(nemico.definizione.monete, casualeVero);
     if (monete > 0) bottino.push({ id: 'monete', quantita: monete });
     if (bottino.length > 0) this.oggettiATerra.lascia(bottino, { x: nemico.forma.x, y: nemico.forma.y });

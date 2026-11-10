@@ -1,16 +1,18 @@
 // Lo zaino. Come la scheda, si apre sopra il mondo che resta in pausa.
-// A sinistra la griglia degli spazi, a destra i dettagli dell'oggetto sotto
-// il mouse (o selezionato), i pulsanti Usa / Getta / Preferiti e, in basso,
-// la riga della BARRA DEI PREFERITI: ci si trascinano pozioni e armi.
-// Clic: seleziona. Clic destro: usa al volo (pozioni) o impugna (armi).
-// Le armature qui si guardano soltanto: si indossano dalla scheda (design §8).
+// A sinistra la griglia degli spazi con le schede di filtro (Tutti, Equip, Pozioni, Missioni),
+// a destra i dettagli dell'oggetto sotto il mouse (o selezionato), anteprima con confronto
+// delle statistiche (+/- danno, critico, armatura, bonus), i pulsanti Usa / Indossa / Getta / Preferiti
+// e, in basso, la riga della BARRA DEI PREFERITI.
+// Clic: seleziona. Clic destro: usa al volo (pozioni) o impugna/indossa (armi/armature).
 
 import { èDiMissione } from '../systems/oggetti';
 import * as Phaser from 'phaser';
 import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, LARGHEZZA_SCHERMO, SCENA_INVENTARIO, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
+import { confrontaConAttuale } from '../systems/equipaggiamento';
+import type { Pila } from '../systems/inventario';
 import { colorePerRarita } from '../systems/oggetti';
-import type { Partita } from '../systems/partita';
+import { caratteristicheTotali, type Partita } from '../systems/partita';
 import { cosaFa, NUMERO_PREFERITI } from '../systems/preferiti';
 import { righeOggetto } from './interfaccia/descrizioni';
 import { disegnaOggetto } from './interfaccia/iconeOggetti';
@@ -31,11 +33,24 @@ const numero = (colore: string) => parseInt(colore.replace('#', ''), 16);
 /** Cosa si sta trascinando: un oggetto dello zaino o uno spazio della barra. */
 type Trascinamento = { da: 'zaino'; id: string } | { da: 'barra'; id: string; indice: number };
 
+type CategoriaInventario = 'tutto' | 'equip' | 'consumabili' | 'missione';
+
+interface SlotGriglia {
+  pila: Pila | null;
+  indiceZaino: number | null;
+  daTasca: boolean;
+  indiceTasca?: number;
+}
+
 export class ScenaInventario extends Phaser.Scene {
+  private categoria: CategoriaInventario = 'tutto';
   private selezionato: number | null = null;
-  private sopra: number | null = null;
+  private selezionatoTasca: number | null = null;
+  private sopraSlot: SlotGriglia | null = null;
+
   /** Tutto ciò che si ridisegna a ogni cambiamento sta qui dentro e si svuota ogni volta. */
   private griglia!: Phaser.GameObjects.Container;
+  private confrontoContainer!: Phaser.GameObjects.Container;
   private titolo!: Phaser.GameObjects.Text;
   private dettagli!: Phaser.GameObjects.Text;
   private nomeOggetto!: Phaser.GameObjects.Text;
@@ -46,6 +61,12 @@ export class ScenaInventario extends Phaser.Scene {
   private altroSlot!: Pulsante;
   private scambiaArmiBtn!: Pulsante;
   private inMano!: Phaser.GameObjects.Text;
+
+  private tabTutto!: Pulsante;
+  private tabEquip!: Pulsante;
+  private tabConsumabili!: Pulsante;
+  private tabMissioni!: Pulsante;
+
   private sinistra = 0;
   private alto = 0;
   private destra = 0;
@@ -60,8 +81,10 @@ export class ScenaInventario extends Phaser.Scene {
   }
 
   create(): void {
+    this.categoria = 'tutto';
     this.selezionato = null;
-    this.sopra = null;
+    this.selezionatoTasca = null;
+    this.sopraSlot = null;
     this.trascinamento = null;
     this.fantasma = null;
     const cx = LARGHEZZA_SCHERMO / 2;
@@ -74,26 +97,55 @@ export class ScenaInventario extends Phaser.Scene {
     // Velo modale: assorbe i clic, come nella scheda.
     this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x1b2230, 0.97).setStrokeStyle(2, 0x9aa7b8);
-    this.titolo = this.add.text(this.sinistra + 24, this.alto + 16, '', { ...STILE_TITOLO, fontSize: '20px' });
-    this.inMano = this.add.text(this.sinistra + 24, this.alto + 44, '', { ...STILE_TESTO, fontSize: '13px', color: '#c8c8c8' });
+
+    this.titolo = this.add.text(this.sinistra + 24, this.alto + 14, '', { ...STILE_TITOLO, fontSize: '18px' });
+
+    // Schede di filtro categorie
+    this.tabTutto = new Pulsante(this, this.sinistra + 50, this.alto + 42, {
+      larghezza: 52,
+      altezza: 22,
+      testo: 'Tutti',
+      dimensioneTesto: 12,
+      alClic: () => this.cambiaCategoria('tutto'),
+    });
+    this.tabEquip = new Pulsante(this, this.sinistra + 108, this.alto + 42, {
+      larghezza: 56,
+      altezza: 22,
+      testo: 'Equip',
+      dimensioneTesto: 12,
+      alClic: () => this.cambiaCategoria('equip'),
+    });
+    this.tabConsumabili = new Pulsante(this, this.sinistra + 171, this.alto + 42, {
+      larghezza: 62,
+      altezza: 22,
+      testo: 'Pozioni',
+      dimensioneTesto: 12,
+      alClic: () => this.cambiaCategoria('consumabili'),
+    });
+    this.tabMissioni = new Pulsante(this, this.sinistra + 244, this.alto + 42, {
+      larghezza: 76,
+      altezza: 22,
+      testo: 'Missioni',
+      dimensioneTesto: 12,
+      alClic: () => this.cambiaCategoria('missione'),
+    });
+
     this.griglia = this.add.container(0, 0);
 
-    this.nomeOggetto = this.add.text(destra, this.alto + 64, '', { ...STILE_TITOLO, fontSize: '18px', wordWrap: { width: 380 } });
-    this.dettagli = this.add.text(destra, this.alto + 90, '', { ...STILE_TESTO, fontSize: '13px', wordWrap: { width: 380 }, lineSpacing: 3 });
-    this.esito = this.add.text(destra, this.alto + 314, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffe680', wordWrap: { width: 380 } });
-    const pulsante = (dx: number, testo: string, alClic: () => void) =>
-      new Pulsante(this, destra + dx, this.alto + 288, { larghezza: 110, altezza: 36, testo, alClic });
-    this.usa = pulsante(60, 'Usa', () => this.usaSelezionato());
-    this.getta = pulsante(190, 'Getta', () => this.gettaSelezionato());
-    this.aiPreferiti = pulsante(320, 'Preferiti', () => this.mettiNeiPreferiti());
-    this.altroSlot = new Pulsante(this, destra + 88, this.alto + 248, {
+    // Pannello dettagli e confronto a destra
+    this.inMano = this.add.text(destra, this.alto + 14, '', { ...STILE_TESTO, fontSize: '12px', color: '#c8c8c8' });
+    this.nomeOggetto = this.add.text(destra, this.alto + 38, '', { ...STILE_TITOLO, fontSize: '18px', wordWrap: { width: 380 } });
+    this.dettagli = this.add.text(destra, this.alto + 64, '', { ...STILE_TESTO, fontSize: '13px', wordWrap: { width: 380 }, lineSpacing: 2 });
+    this.confrontoContainer = this.add.container(destra, this.alto + 148);
+
+    this.altroSlot = new Pulsante(this, destra + 88, this.alto + 236, {
       larghezza: 165,
       altezza: 28,
       testo: 'Come primaria (1ª)',
       dimensioneTesto: 13,
       alClic: () => this.impugnaInAltroSlot(),
     });
-    this.scambiaArmiBtn = new Pulsante(this, destra + 275, this.alto + 248, {
+    this.scambiaArmiBtn = new Pulsante(this, destra + 275, this.alto + 236, {
       larghezza: 145,
       altezza: 28,
       testo: 'Scambia 1ª ↔ 2ª',
@@ -103,20 +155,29 @@ export class ScenaInventario extends Phaser.Scene {
         this.ridisegna();
       },
     });
-    this.add.text(destra, this.alto + 342, 'Barra dei preferiti: trascina qui pozioni e armi (fuori per toglierle)', {
+
+    const pulsante = (dx: number, testo: string, alClic: () => void) =>
+      new Pulsante(this, destra + dx, this.alto + 274, { larghezza: 110, altezza: 34, testo, alClic });
+    this.usa = pulsante(60, 'Usa', () => this.usaSelezionato());
+    this.getta = pulsante(190, 'Getta', () => this.gettaSelezionato());
+    this.aiPreferiti = pulsante(320, 'Preferiti', () => this.mettiNeiPreferiti());
+
+    this.esito = this.add.text(destra, this.alto + 312, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffe680', wordWrap: { width: 380 } });
+    this.add.text(destra, this.alto + 338, 'Barra dei preferiti: trascina qui pozioni e armi (fuori per toglierle)', {
       ...STILE_TESTO,
       fontSize: '12px',
       color: '#9aa7b8',
     });
+
     new Pulsante(this, cx + PANNELLO.larghezza / 2 - 90, this.alto + PANNELLO.altezza - 34, {
       larghezza: 150,
       altezza: 40,
       testo: 'Chiudi (I)',
       alClic: () => this.chiudi(),
     });
-    this.add.text(this.sinistra + 24, this.alto + PANNELLO.altezza - 46, 'Clic: seleziona · Clic destro: usa o impugna · Trascina: nei preferiti', {
+    this.add.text(this.sinistra + 24, this.alto + PANNELLO.altezza - 34, 'Clic: seleziona · Clic destro: usa / indossa · Trascina: nei preferiti', {
       ...STILE_TESTO,
-      fontSize: '13px',
+      fontSize: '12px',
       color: '#9aa7b8',
     });
 
@@ -132,6 +193,15 @@ export class ScenaInventario extends Phaser.Scene {
 
   private get mondo(): ScenaMondo {
     return this.scene.get(SCENA_MONDO) as ScenaMondo;
+  }
+
+  private cambiaCategoria(cat: CategoriaInventario): void {
+    this.categoria = cat;
+    this.selezionato = null;
+    this.selezionatoTasca = null;
+    this.sopraSlot = null;
+    this.esito.setText('');
+    this.ridisegna();
   }
 
   /** Centro dello spazio "i" della riga dei preferiti. */
@@ -150,14 +220,7 @@ export class ScenaInventario extends Phaser.Scene {
 
   // ---- trascinamento ----
 
-  /**
-   * Il trascinamento di Phaser funziona a eventi, come il drag & drop HTML:
-   * dragstart (si parte), drag (il mouse si muove), dragend (si lascia).
-   * Gli eventi arrivano alla scena per qualunque oggetto "draggable": qui
-   * decidiamo cosa fare in base a cosa si sta trascinando.
-   */
   private preparaTrascinamento(): void {
-    // Sotto i 6 pixel di movimento è un clic, non un trascinamento.
     this.input.dragDistanceThreshold = 6;
     this.input.on('dragstart', (p: Phaser.Input.Pointer, oggetto: Phaser.GameObjects.GameObject) => {
       const dati = oggetto.getData('trascina') as Trascinamento | undefined;
@@ -180,60 +243,150 @@ export class ScenaInventario extends Phaser.Scene {
         const errore = this.mondo.impostaPreferito(destinazione, t.id);
         this.esito.setText(errore ?? `${this.dati.oggetti[t.id]?.nome ?? t.id} nello spazio ${destinazione + 1} dei preferiti`);
       } else if (t.da === 'barra') {
-        // Trascinato fuori dalla barra: il collegamento sparisce (l'oggetto resta nello zaino).
         this.mondo.rimuoviPreferito(t.indice);
         this.esito.setText(`Spazio ${t.indice + 1} dei preferiti svuotato`);
       }
       this.ridisegna();
     });
-    // Arriva DOPO i "pointerup" dei singoli oggetti: azzera il segnale del trascinamento.
     this.input.on('pointerup', () => (this.appenaTrascinato = false));
   }
 
   // ---- disegno ----
 
+  private preparaSlotDaMostrare(partita: Partita): SlotGriglia[] {
+    const inv = partita.inventario;
+    const cat = this.categoria;
+
+    if (cat === 'missione') {
+      const tasca = partita.tascaMissioni ?? [];
+      const slots: SlotGriglia[] = tasca.map((pila, idx) => ({
+        pila,
+        indiceZaino: null,
+        daTasca: true,
+        indiceTasca: idx,
+      }));
+      while (slots.length < 12) {
+        slots.push({ pila: null, indiceZaino: null, daTasca: true });
+      }
+      return slots;
+    }
+
+    if (cat === 'equip') {
+      const slots: SlotGriglia[] = [];
+      inv.spazi.forEach((pila, i) => {
+        if (!pila) return;
+        const def = this.dati.oggetti[pila.id];
+        if (def && (def.tipo === 'arma' || def.tipo === 'armatura')) {
+          slots.push({ pila, indiceZaino: i, daTasca: false });
+        }
+      });
+      while (slots.length < 12) {
+        slots.push({ pila: null, indiceZaino: null, daTasca: false });
+      }
+      return slots;
+    }
+
+    if (cat === 'consumabili') {
+      const slots: SlotGriglia[] = [];
+      inv.spazi.forEach((pila, i) => {
+        if (!pila) return;
+        const def = this.dati.oggetti[pila.id];
+        if (def && (def.tipo === 'pozione' || def.tipo === 'pergamena' || def.effetto !== undefined)) {
+          slots.push({ pila, indiceZaino: i, daTasca: false });
+        }
+      });
+      while (slots.length < 12) {
+        slots.push({ pila: null, indiceZaino: null, daTasca: false });
+      }
+      return slots;
+    }
+
+    // Default 'tutto': mostra gli spazi completi dello zaino
+    return inv.spazi.map((pila, i) => ({
+      pila,
+      indiceZaino: i,
+      daTasca: false,
+    }));
+  }
+
   private ridisegna(): void {
-    // Durante un trascinamento non si distrugge l'oggetto trascinato: si ridisegna alla fine.
     if (this.trascinamento) return;
     const partita = leggiPartita(this);
     const inv = partita.inventario;
     const occupati = inv.spazi.filter((s) => s !== null).length;
-    this.titolo.setText(`Zaino — ${occupati} / ${inv.capacita} spazi`);
+    const nMissioni = (partita.tascaMissioni ?? []).length;
 
-    // Svuotare e ricostruire la griglia è semplice e, con 24 spazi al massimo, velocissimo.
+    // Aggiorna stato e aspetto schede
+    this.tabTutto.impostaSelezionato(this.categoria === 'tutto');
+    this.tabEquip.impostaSelezionato(this.categoria === 'equip');
+    this.tabConsumabili.impostaSelezionato(this.categoria === 'consumabili');
+    this.tabMissioni.impostaTesto(nMissioni > 0 ? `Miss. (${nMissioni})` : 'Missioni');
+    this.tabMissioni.impostaSelezionato(this.categoria === 'missione');
+
+    if (this.categoria === 'missione') {
+      this.titolo.setText(`Missioni & Chiavi — ${nMissioni} oggetti (Peso 0)`);
+    } else if (this.categoria === 'equip') {
+      this.titolo.setText(`Equipaggiamento nello zaino`);
+    } else if (this.categoria === 'consumabili') {
+      this.titolo.setText(`Pozioni e consumabili nello zaino`);
+    } else {
+      this.titolo.setText(`Zaino — ${occupati} / ${inv.capacita} spazi`);
+    }
+
     this.griglia.removeAll(true);
-    inv.spazi.forEach((pila, i) => {
-      const x = this.sinistra + 24 + (i % COLONNE) * DISTANZA + SPAZIO / 2;
-      const y = this.alto + 66 + Math.floor(i / COLONNE) * DISTANZA + SPAZIO / 2;
+    const slots = this.preparaSlotDaMostrare(partita);
+
+    slots.forEach((slot, visualIndex) => {
+      const x = this.sinistra + 24 + (visualIndex % COLONNE) * DISTANZA + SPAZIO / 2;
+      const y = this.alto + 68 + Math.floor(visualIndex / COLONNE) * DISTANZA + SPAZIO / 2;
+      const pila = slot.pila;
       const definizione = pila ? this.dati.oggetti[pila.id] : undefined;
       const bordo = definizione ? numero(colorePerRarita(definizione.rarita)) : 0x4a5568;
-      const sfondo = this.add.rectangle(x, y, SPAZIO, SPAZIO, i === this.selezionato ? 0x3e4a5c : 0x10141c);
-      sfondo.setStrokeStyle(i === this.selezionato ? 3 : 2, bordo);
-      sfondo.setInteractive({ useHandCursor: pila !== null, draggable: pila !== null });
-      if (pila) sfondo.setData('trascina', { da: 'zaino', id: pila.id } satisfies Trascinamento);
+
+      const èSelezionato = slot.daTasca
+        ? (this.selezionatoTasca !== null && slot.indiceTasca === this.selezionatoTasca)
+        : (this.selezionato !== null && slot.indiceZaino === this.selezionato);
+
+      const sfondo = this.add.rectangle(x, y, SPAZIO, SPAZIO, èSelezionato ? 0x3e4a5c : 0x10141c);
+      sfondo.setStrokeStyle(èSelezionato ? 3 : 2, bordo);
+
+      const interattivo = pila !== null;
+      sfondo.setInteractive({ useHandCursor: interattivo, draggable: interattivo && !slot.daTasca });
+      if (pila && !slot.daTasca) sfondo.setData('trascina', { da: 'zaino', id: pila.id } satisfies Trascinamento);
+
       sfondo.on('pointerover', () => {
-        this.sopra = i;
+        this.sopraSlot = slot;
         this.mostraDettagli(partita);
       });
       sfondo.on('pointerout', () => {
-        this.sopra = null;
+        this.sopraSlot = null;
         this.mostraDettagli(partita);
       });
-      // Il clic destro agisce subito; il sinistro seleziona al RILASCIO, così un
-      // trascinamento non diventa anche una selezione.
+
       sfondo.on('pointerdown', (p: Phaser.Input.Pointer) => {
         if (!pila || !p.rightButtonDown()) return;
-        this.selezionato = i;
+        if (slot.daTasca) return;
+        this.selezionato = slot.indiceZaino;
+        this.selezionatoTasca = null;
         this.esito.setText('');
         this.usaSelezionato();
       });
+
       sfondo.on('pointerup', (p: Phaser.Input.Pointer) => {
         if (!pila || this.appenaTrascinato || p.rightButtonReleased()) return;
-        this.selezionato = i;
+        if (slot.daTasca) {
+          this.selezionatoTasca = slot.indiceTasca ?? null;
+          this.selezionato = null;
+        } else {
+          this.selezionato = slot.indiceZaino;
+          this.selezionatoTasca = null;
+        }
         this.esito.setText('');
         this.ridisegna();
       });
+
       this.griglia.add(sfondo);
+
       if (pila && definizione) {
         const icona = this.add.graphics({ x, y });
         disegnaOggetto(icona, definizione, 40);
@@ -241,13 +394,16 @@ export class ScenaInventario extends Phaser.Scene {
         if (pila.quantita > 1) this.griglia.add(this.numeroAngolo(x + SPAZIO / 2 - 4, y + SPAZIO / 2 - 2, String(pila.quantita), 14));
       }
     });
+
     this.disegnaPreferiti(partita);
-    // La selezione non deve puntare a uno spazio rimasto vuoto.
+
+    // Ripulisci selezioni se l'oggetto non esiste più
     if (this.selezionato !== null && !inv.spazi[this.selezionato]) this.selezionato = null;
+    if (this.selezionatoTasca !== null && !(partita.tascaMissioni ?? [])[this.selezionatoTasca]) this.selezionatoTasca = null;
+
     this.mostraDettagli(partita);
   }
 
-  /** La riga dei preferiti: uguale alla barra in basso, ma qui si trascina. */
   private disegnaPreferiti(partita: Partita): void {
     const tipoDi = (id: string) => this.dati.oggetti[id]?.tipo;
     for (let i = 0; i < NUMERO_PREFERITI; i++) {
@@ -259,7 +415,6 @@ export class ScenaInventario extends Phaser.Scene {
       if (azione.tipo === 'vuoto') continue;
       sfondo.setInteractive({ useHandCursor: true, draggable: true });
       sfondo.setData('trascina', { da: 'barra', id: azione.id, indice: i } satisfies Trascinamento);
-      // Clic destro su uno spazio della barra: lo svuota (alternativa al trascinare fuori).
       sfondo.on('pointerdown', (p: Phaser.Input.Pointer) => p.rightButtonDown() && this.mondo.rimuoviPreferito(i));
       const definizione = this.dati.oggetti[azione.id];
       if (definizione) {
@@ -274,7 +429,6 @@ export class ScenaInventario extends Phaser.Scene {
     }
   }
 
-  /** Un numerino con il bordo nero in un angolo (quantità o tasto). */
   private numeroAngolo(x: number, y: number, testo: string, dimensione: number, origine = 1): Phaser.GameObjects.Text {
     return this.add
       .text(x, y, testo, { ...STILE_TESTO, fontSize: `${dimensione}px`, fontStyle: 'bold', stroke: '#000000', strokeThickness: 3 })
@@ -283,9 +437,23 @@ export class ScenaInventario extends Phaser.Scene {
 
   /** Dettagli dell'oggetto sotto il mouse, altrimenti di quello selezionato. */
   private mostraDettagli(partita: Partita): void {
-    const indice = this.sopra ?? this.selezionato;
-    const pila = indice !== null ? partita.inventario.spazi[indice] : null;
+    let pila: Pila | null = null;
+    let daTasca = false;
+
+    if (this.sopraSlot?.pila) {
+      pila = this.sopraSlot.pila;
+      daTasca = this.sopraSlot.daTasca;
+    } else if (this.selezionato !== null && partita.inventario.spazi[this.selezionato]) {
+      pila = partita.inventario.spazi[this.selezionato] ?? null;
+      daTasca = false;
+    } else if (this.selezionatoTasca !== null && (partita.tascaMissioni ?? [])[this.selezionatoTasca]) {
+      pila = (partita.tascaMissioni ?? [])[this.selezionatoTasca]!;
+      daTasca = true;
+    }
+
     const definizione = pila ? this.dati.oggetti[pila.id] : undefined;
+    this.confrontoContainer.removeAll(true);
+
     if (!pila || !definizione) {
       this.nomeOggetto.setText('');
       this.dettagli.setText(partita.inventario.spazi.some((s) => s) ? 'Passa il mouse su un oggetto.' : 'Lo zaino è vuoto.');
@@ -293,30 +461,102 @@ export class ScenaInventario extends Phaser.Scene {
       this.nomeOggetto.setText(definizione.nome).setColor(colorePerRarita(definizione.rarita));
       const righe = righeOggetto(pila.id, this.dati);
       if (pila.quantita > 1) righe.push('', `Quantità: ${pila.quantita}`);
-      if (definizione.tipo === 'armatura') righe.push('', 'Si indossa dalla scheda del personaggio (C).');
+      if (daTasca || definizione.tipo === 'missione') {
+        righe.push('', 'Oggetto di missione: peso 0 (non occupa spazio nello zaino).');
+      }
       this.dettagli.setText(righe.join('\n'));
+
+      // Anteprima e confronto statistiche se equipaggiabile
+      const confronto = confrontaConAttuale(
+        pila.id,
+        partita.equipaggiamento,
+        this.dati.armi,
+        this.dati.armature,
+        caratteristicheTotali(partita, this.dati.indossabili),
+      );
+
+      if (confronto) {
+        let dy = 0;
+        const txtHeader = this.add.text(0, dy, `Confronto con: ${confronto.nomeAttuale}`, {
+          ...STILE_TESTO,
+          fontSize: '12px',
+          color: '#ffd23f',
+          fontStyle: 'bold',
+        });
+        this.confrontoContainer.add(txtHeader);
+        dy += 18;
+
+        if (confronto.tipo === 'arma') {
+          const { deltaDanno, deltaCritico } = confronto;
+          const strDanno = deltaDanno > 0 ? `▲ +${deltaDanno} Danno` : deltaDanno < 0 ? `▼ ${deltaDanno} Danno` : '= Stesso Danno';
+          const colDanno = deltaDanno > 0 ? '#5fd35f' : deltaDanno < 0 ? '#ff6b6b' : '#9aa7b8';
+          const tD = this.add.text(0, dy, strDanno, { ...STILE_TESTO, fontSize: '13px', color: colDanno, fontStyle: 'bold' });
+          this.confrontoContainer.add(tD);
+          dy += 16;
+
+          if (deltaCritico !== 0) {
+            const strCrit = deltaCritico > 0 ? `▲ +${deltaCritico}% Critico` : `▼ ${deltaCritico}% Critico`;
+            const colCrit = deltaCritico > 0 ? '#5fd35f' : '#ff6b6b';
+            const tC = this.add.text(0, dy, strCrit, { ...STILE_TESTO, fontSize: '13px', color: colCrit });
+            this.confrontoContainer.add(tC);
+            dy += 16;
+          }
+        } else {
+          const { deltaArmatura, deltaBonus } = confronto;
+          const strArm = deltaArmatura > 0 ? `▲ +${deltaArmatura} Difesa` : deltaArmatura < 0 ? `▼ ${deltaArmatura} Difesa` : '= Stessa Difesa';
+          const colArm = deltaArmatura > 0 ? '#5fd35f' : deltaArmatura < 0 ? '#ff6b6b' : '#9aa7b8';
+          const tA = this.add.text(0, dy, strArm, { ...STILE_TESTO, fontSize: '13px', color: colArm, fontStyle: 'bold' });
+          this.confrontoContainer.add(tA);
+          dy += 16;
+
+          for (const [stat, val] of Object.entries(deltaBonus)) {
+            if (!val) continue;
+            const strB = val > 0 ? `▲ +${val} ${stat.toUpperCase()}` : `▼ ${val} ${stat.toUpperCase()}`;
+            const colB = val > 0 ? '#5fd35f' : '#ff6b6b';
+            const tB = this.add.text(0, dy, strB, { ...STILE_TESTO, fontSize: '12px', color: colB });
+            this.confrontoContainer.add(tB);
+            dy += 16;
+          }
+        }
+      }
     }
-    const selezione = this.selezionato !== null ? partita.inventario.spazi[this.selezionato] : null;
-    const tipo = selezione ? this.dati.oggetti[selezione.id]?.tipo : undefined;
-    // Lo stesso pulsante fa cose diverse a seconda dell'oggetto: bevi la pozione, impugna l'arma.
-    this.usa.impostaTesto(tipo === 'arma' ? 'Impugna' : 'Usa');
-    const usabile = selezione ? tipo === 'arma' || this.dati.oggetti[selezione.id]?.effetto !== undefined : false;
-    this.usa.impostaAttivo(usabile);
-    // Per le armi si può anche scegliere esplicitamente l'altro slot (primaria o secondaria), o scambiare le due impugnate.
-    if (selezione && tipo === 'arma') {
-      const slotPredefinito = this.dati.armi[selezione.id]?.slot ?? 'primaria';
-      const altro = slotPredefinito === 'primaria' ? 'secondaria' : 'primaria';
-      this.altroSlot.impostaTesto(altro === 'primaria' ? 'Come primaria (1ª)' : 'Come secondaria (2ª)');
-      this.altroSlot.setVisible(true).impostaAttivo(true);
+
+    // Gestione pulsanti d'azione (in base alla selezione effettiva)
+    const selZaino = this.selezionato !== null ? partita.inventario.spazi[this.selezionato] : null;
+    const selTasca = this.selezionatoTasca !== null ? (partita.tascaMissioni ?? [])[this.selezionatoTasca] : null;
+
+    if (selTasca) {
+      this.usa.impostaTesto('Usa').impostaAttivo(false);
+      this.getta.impostaAttivo(false);
+      this.aiPreferiti.impostaAttivo(false);
+      this.altroSlot.setVisible(false).impostaAttivo(false);
+    } else if (selZaino) {
+      const tipo = this.dati.oggetti[selZaino.id]?.tipo;
+      const usabile = tipo === 'arma' || tipo === 'armatura' || this.dati.oggetti[selZaino.id]?.effetto !== undefined;
+      const etichettaUsa = tipo === 'arma' ? 'Impugna' : tipo === 'armatura' ? 'Indossa' : 'Usa';
+      this.usa.impostaTesto(etichettaUsa).impostaAttivo(usabile);
+
+      if (tipo === 'arma') {
+        const slotPredefinito = this.dati.armi[selZaino.id]?.slot ?? 'primaria';
+        const altro = slotPredefinito === 'primaria' ? 'secondaria' : 'primaria';
+        this.altroSlot.impostaTesto(altro === 'primaria' ? 'Come primaria (1ª)' : 'Come secondaria (2ª)');
+        this.altroSlot.setVisible(true).impostaAttivo(true);
+      } else {
+        this.altroSlot.setVisible(false).impostaAttivo(false);
+      }
+
+      this.getta.impostaAttivo(!èDiMissione(this.dati.oggetti[selZaino.id]));
+      this.aiPreferiti.impostaAttivo(tipo === 'pozione' || tipo === 'arma');
     } else {
+      this.usa.impostaTesto('Usa').impostaAttivo(false);
+      this.getta.impostaAttivo(false);
+      this.aiPreferiti.impostaAttivo(false);
       this.altroSlot.setVisible(false).impostaAttivo(false);
     }
+
     this.scambiaArmiBtn.setVisible(!!partita.equipaggiamento.secondaria).impostaAttivo(!!partita.equipaggiamento.secondaria);
-    // Lettere e chiavi delle quest non si gettano: si perderebbero per sempre.
-    this.getta.impostaAttivo(!!selezione && !èDiMissione(this.dati.oggetti[selezione.id]));
-    this.aiPreferiti.impostaAttivo(tipo === 'pozione' || tipo === 'arma');
     const nome = (id: string | null) => (id ? (this.dati.oggetti[id]?.nome ?? id) : 'nessuna');
-    this.inMano.setText(`In mano (1ª): ${nome(partita.equipaggiamento.primaria)} · Secondaria (2ª): ${nome(partita.equipaggiamento.secondaria)}`);
+    this.inMano.setText(`In mano (1ª): ${nome(partita.equipaggiamento.primaria)} · 2ª: ${nome(partita.equipaggiamento.secondaria)}`);
   }
 
   private impugnaInAltroSlot(): void {
@@ -333,17 +573,18 @@ export class ScenaInventario extends Phaser.Scene {
   private usaSelezionato(): void {
     if (this.selezionato === null) return;
     const pila = leggiPartita(this).inventario.spazi[this.selezionato];
-    const tipo = pila ? this.dati.oggetti[pila.id]?.tipo : undefined;
-    if (tipo === 'armatura') {
-      this.esito.setText('Le armature si indossano dalla scheda del personaggio (C).');
-      return;
+    if (!pila) return;
+    const tipo = this.dati.oggetti[pila.id]?.tipo;
+    let messaggio: string | null = null;
+    if (tipo === 'arma' || tipo === 'armatura') {
+      messaggio = this.mondo.indossaDaZaino(this.selezionato);
+    } else {
+      messaggio = this.mondo.usaOggettoInventario(this.selezionato);
     }
-    const messaggio = tipo === 'arma' ? this.mondo.indossaDaZaino(this.selezionato) : this.mondo.usaOggettoInventario(this.selezionato);
     this.esito.setText(messaggio ?? '');
     this.ridisegna();
   }
 
-  /** Pulsante "Preferiti": l'oggetto selezionato va nel primo spazio libero della barra. */
   private mettiNeiPreferiti(): void {
     if (this.selezionato === null) return;
     const partita = leggiPartita(this);

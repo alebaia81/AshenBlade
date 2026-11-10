@@ -8,7 +8,7 @@
 // (attiva o conclusa, a che passo, quanti nemici). "Disponibile" e "pronta"
 // sono valori DERIVATI: si calcolano ogni volta dai dati e dallo zaino.
 
-import { conta, togliPerId, type Inventario } from './inventario';
+import { conta, togliPerId, type Inventario, type Pila } from './inventario';
 import { effettoCarisma } from './negozio';
 
 export type Obiettivo =
@@ -83,24 +83,27 @@ export type EventoQuest =
 interface Diario {
   quest: Quests;
   inventario: Inventario;
+  tascaMissioni?: Pila[];
 }
 
 export const chiConclude = (d: DefinizioneQuest) => d.concludeDa ?? d.daChi;
 
 /** "Pronta": tutti i passi fatti, oppure l'ultimo è "raccogli" e nello zaino c'è tutto. */
-function èPronta(d: DefinizioneQuest, q: StatoQuest, inv: Inventario): boolean {
+function èPronta(d: DefinizioneQuest, q: StatoQuest, inv: Inventario, tasca?: Pila[]): boolean {
   if (q.stato !== 'attiva') return false;
   if (q.passo >= d.passi.length) return true;
   const o = d.passi[q.passo]!.obiettivo;
-  return q.passo === d.passi.length - 1 && o.tipo === 'raccogli' && conta(inv, o.oggetto) >= o.quantita;
+  if (q.passo !== d.passi.length - 1 || o.tipo !== 'raccogli') return false;
+  const tot = conta(inv, o.oggetto) + (tasca?.reduce((acc, p) => acc + (p.id === o.oggetto ? p.quantita : 0), 0) ?? 0);
+  return tot >= o.quantita;
 }
 
-export function statoDi(id: string, quests: Quests, catalogo: CatalogoQuest, inv: Inventario): StatoVisibile {
+export function statoDi(id: string, quests: Quests, catalogo: CatalogoQuest, inv: Inventario, tasca?: Pila[]): StatoVisibile {
   const d = catalogo[id];
   if (!d) return 'non_disponibile';
   const q = quests[id];
   if (q?.stato === 'conclusa') return 'conclusa';
-  if (q) return èPronta(d, q, inv) ? 'pronta' : 'attiva';
+  if (q) return èPronta(d, q, inv, tasca) ? 'pronta' : 'attiva';
   const requisiti = (d.richiede ?? []).every((r) => quests[r]?.stato === 'conclusa');
   return requisiti ? 'disponibile' : 'non_disponibile';
 }
@@ -114,10 +117,13 @@ export function accetta(quests: Quests, id: string, catalogo: CatalogoQuest): Qu
 }
 
 /** Il progresso del passo in corso, se è un passo "che si conta". */
-export function progresso(d: DefinizioneQuest, q: StatoQuest, inv: Inventario): { fatti: number; servono: number } | null {
+export function progresso(d: DefinizioneQuest, q: StatoQuest, inv: Inventario, tasca?: Pila[]): { fatti: number; servono: number } | null {
   const o = d.passi[q.passo]?.obiettivo;
   if (o?.tipo === 'elimina') return { fatti: q.conteggio, servono: o.quantita };
-  if (o?.tipo === 'raccogli') return { fatti: Math.min(conta(inv, o.oggetto), o.quantita), servono: o.quantita };
+  if (o?.tipo === 'raccogli') {
+    const tot = conta(inv, o.oggetto) + (tasca?.reduce((acc, p) => acc + (p.id === o.oggetto ? p.quantita : 0), 0) ?? 0);
+    return { fatti: Math.min(tot, o.quantita), servono: o.quantita };
+  }
   return null;
 }
 
@@ -133,6 +139,7 @@ export function registraEvento<T extends Diario>(
   nomeDi: (abitante: string) => string = (a) => a,
 ): { stato: T; avvisi: string[] } {
   let { quest, inventario } = s;
+  let tascaMissioni = s.tascaMissioni ? [...s.tascaMissioni] : undefined;
   const avvisi: string[] = [];
   for (const [id, q] of Object.entries(s.quest)) {
     const d = catalogo[id];
@@ -150,6 +157,19 @@ export function registraEvento<T extends Diario>(
       if (dopo) {
         inventario = dopo;
         avanza = true;
+      } else if (tascaMissioni && tascaMissioni.some((p) => p.id === o.oggetto && p.quantita > 0)) {
+        let daTogliere = 1;
+        const nuovaTasca: Pila[] = [];
+        for (const p of tascaMissioni) {
+          if (p.id === o.oggetto && daTogliere > 0) {
+            daTogliere--;
+            if (p.quantita > 1) nuovaTasca.push({ ...p, quantita: p.quantita - 1 });
+          } else {
+            nuovaTasca.push({ ...p });
+          }
+        }
+        tascaMissioni = nuovaTasca;
+        avanza = true;
       }
     } else if (o.tipo === 'parla' && evento.tipo === 'parlato' && evento.abitante === o.a) avanza = true;
     else if (o.tipo === 'raggiungi' && evento.tipo === 'raggiunto' && evento.mappa === o.mappa) avanza = true;
@@ -162,17 +182,17 @@ export function registraEvento<T extends Diario>(
     if (nuovo.passo >= d.passi.length) avvisi.push(`«${d.nome}»: fatto! Torna da ${nomeDi(chiConclude(d))}`);
     else avvisi.push(`«${d.nome}»: ${d.passi[nuovo.passo]!.descrizione}`);
   }
-  return { stato: { ...s, quest, inventario }, avvisi };
+  return { stato: { ...s, quest, inventario, ...(tascaMissioni !== undefined ? { tascaMissioni } : {}) }, avvisi };
 }
 
 /** Avviso quando entra nello zaino un oggetto che una quest "raccogli" sta aspettando. */
-export function avvisiRaccolta(quests: Quests, catalogo: CatalogoQuest, inv: Inventario, idOggetto: string): string[] {
+export function avvisiRaccolta(quests: Quests, catalogo: CatalogoQuest, inv: Inventario, idOggetto: string, tasca?: Pila[]): string[] {
   const avvisi: string[] = [];
   for (const [id, q] of Object.entries(quests)) {
     const d = catalogo[id];
     const passo = d?.passi[q.passo];
     if (!d || !passo || q.stato !== 'attiva' || passo.obiettivo.tipo !== 'raccogli' || passo.obiettivo.oggetto !== idOggetto) continue;
-    const p = progresso(d, q, inv)!;
+    const p = progresso(d, q, inv, tasca)!;
     avvisi.push(`${passo.descrizione}: ${p.fatti} / ${p.servono}`);
   }
   return avvisi;
@@ -191,35 +211,59 @@ export type EsitoConclusione<T> =
 export function concludi<T extends Diario & { monete: number }>(s: T, id: string, catalogo: CatalogoQuest, modificatoreCAR: number): EsitoConclusione<T> {
   const d = catalogo[id];
   const q = s.quest[id];
-  if (!d || !q || !èPronta(d, q, s.inventario)) return { ok: false, errore: 'La quest non è ancora finita' };
+  if (!d || !q || !èPronta(d, q, s.inventario, s.tascaMissioni)) return { ok: false, errore: 'La quest non è ancora finita' };
   let inventario = s.inventario;
+  let tascaMissioni = s.tascaMissioni ? [...s.tascaMissioni] : undefined;
   const o = d.passi[q.passo]?.obiettivo;
   if (o?.tipo === 'raccogli') {
     const dopo = togliPerId(inventario, o.oggetto, o.quantita);
-    if (!dopo) return { ok: false, errore: 'Mancano degli oggetti' };
-    inventario = dopo;
+    if (dopo) {
+      inventario = dopo;
+    } else if (tascaMissioni) {
+      let daTogliere = o.quantita;
+      const nuovaTasca: Pila[] = [];
+      for (const p of tascaMissioni) {
+        if (p.id === o.oggetto && daTogliere > 0) {
+          const t = Math.min(p.quantita, daTogliere);
+          daTogliere -= t;
+          if (p.quantita > t) nuovaTasca.push({ ...p, quantita: p.quantita - t });
+        } else {
+          nuovaTasca.push({ ...p });
+        }
+      }
+      if (daTogliere > 0) return { ok: false, errore: 'Mancano degli oggetti' };
+      tascaMissioni = nuovaTasca;
+    } else {
+      return { ok: false, errore: 'Mancano degli oggetti' };
+    }
   }
   const monete = Math.round(d.ricompensa.monete * (1 + effettoCarisma(modificatoreCAR)));
   return {
     ok: true,
-    stato: { ...s, inventario, monete: s.monete + monete, quest: { ...s.quest, [id]: { stato: 'conclusa', passo: d.passi.length, conteggio: 0 } } },
+    stato: {
+      ...s,
+      inventario,
+      monete: s.monete + monete,
+      quest: { ...s.quest, [id]: { stato: 'conclusa', passo: d.passi.length, conteggio: 0 } },
+      ...(tascaMissioni !== undefined ? { tascaMissioni } : {}),
+    },
     esperienza: d.ricompensa.esperienza,
     oggetti: d.ricompensa.oggetti ?? [],
   };
 }
 
 /** Le quest "automatiche" pronte: la scena le conclude subito. */
-export function automatichePronte(quests: Quests, catalogo: CatalogoQuest, inv: Inventario): string[] {
-  return Object.keys(quests).filter((id) => catalogo[id]?.automatica && statoDi(id, quests, catalogo, inv) === 'pronta');
+export function automatichePronte(quests: Quests, catalogo: CatalogoQuest, inv: Inventario, tasca?: Pila[]): string[] {
+  return Object.keys(quests).filter((id) => catalogo[id]?.automatica && statoDi(id, quests, catalogo, inv, tasca) === 'pronta');
 }
 
 /** "!" = ha una quest per te; "?" = torna qui, è pronta; "?attiva" = in corso (? grigio). */
 export type Segno = '!' | '?' | '?attiva' | null;
 
-export function segnoSopra(abitante: string, quests: Quests, catalogo: CatalogoQuest, inv: Inventario): Segno {
+export function segnoSopra(abitante: string, quests: Quests, catalogo: CatalogoQuest, inv: Inventario, tasca?: Pila[]): Segno {
   let segno: Segno = null;
   for (const d of Object.values(catalogo)) {
-    const stato = statoDi(d.id, quests, catalogo, inv);
+    const stato = statoDi(d.id, quests, catalogo, inv, tasca);
     const q = quests[d.id];
     const passo = q ? d.passi[q.passo]?.obiettivo : undefined;
     // Un passo "consegna" o "parla" verso questa persona: è lei che aspetti.

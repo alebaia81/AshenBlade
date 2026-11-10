@@ -4,8 +4,11 @@
 // da mostrare al giocatore. La regola delicata è il LIMITE DELLE ESOTICHE.
 
 import type { Caratteristiche, NomeCaratteristica } from './caratteristiche';
+import { dannoBaseArma } from './combattimento';
 import type { Inventario } from './inventario';
 import type { Rarita } from './oggetti';
+import { modificatoreArma, probabilitaCriticoDi } from './personaggio';
+import type { DefinizioneArma, DefinizioneArmatura } from './tipi';
 
 export const PEZZI_ARMATURA = ['elmo', 'corazza', 'guanti', 'stivali'] as const;
 export type PezzoArmatura = (typeof PEZZI_ARMATURA)[number];
@@ -175,4 +178,81 @@ export function effettiEquipaggiati(
   return indossati(e, catalogo)
     .filter((v) => v.categoria === categoria)
     .flatMap((v) => v.effetti);
+}
+
+export interface ConfrontoArma {
+  tipo: 'arma';
+  spazio: 'primaria' | 'secondaria';
+  nomeAttuale: string;
+  deltaDanno: number;
+  deltaCritico: number;
+}
+
+export interface ConfrontoArmatura {
+  tipo: 'armatura';
+  pezzo: PezzoArmatura;
+  nomeAttuale: string;
+  deltaArmatura: number;
+  deltaBonus: Partial<Caratteristiche>;
+}
+
+export type ConfrontoEquipaggiamento = ConfrontoArma | ConfrontoArmatura;
+
+/**
+ * Calcola la differenza statistica tra un oggetto selezionato nello zaino e ciò che
+ * è attualmente equipaggiato nello slot corrispondente.
+ */
+export function confrontaConAttuale(
+  idOggetto: string,
+  equip: Equipaggiamento,
+  armi: Record<string, DefinizioneArma>,
+  armature: Record<string, DefinizioneArmatura>,
+  caratteristiche: Caratteristiche,
+): ConfrontoEquipaggiamento | null {
+  const arma = armi[idOggetto];
+  if (arma) {
+    const slot = arma.slot;
+    const attualeId = equip[slot];
+    const attuale = attualeId ? armi[attualeId] : null;
+    const dannoNuovo = dannoBaseArma(arma, arma.potenziamento ?? 0) + modificatoreArma(arma, caratteristiche);
+    const dannoAttuale = attuale ? dannoBaseArma(attuale, attuale.potenziamento ?? 0) + modificatoreArma(attuale, caratteristiche) : 0;
+    const critNuovo = Math.round(probabilitaCriticoDi(arma, caratteristiche) * 100);
+    const critAttuale = attuale ? Math.round(probabilitaCriticoDi(attuale, caratteristiche) * 100) : 0;
+    return {
+      tipo: 'arma',
+      spazio: slot,
+      nomeAttuale: attuale ? attuale.nome : 'Nessuna',
+      deltaDanno: dannoNuovo - dannoAttuale,
+      deltaCritico: critNuovo - critAttuale,
+    };
+  }
+
+  const armatura = armature[idOggetto];
+  if (armatura) {
+    const pezzo = armatura.pezzo;
+    const attualeId = equip[pezzo];
+    const attuale = attualeId ? armature[attualeId] : null;
+    const deltaArmatura = armatura.armatura - (attuale?.armatura ?? 0);
+    const deltaBonus: Partial<Caratteristiche> = {};
+    const tutteLeStat = new Set([
+      ...Object.keys(armatura.bonus ?? {}),
+      ...Object.keys(attuale?.bonus ?? {}),
+    ]) as Set<NomeCaratteristica>;
+    for (const stat of tutteLeStat) {
+      const valNuovo = armatura.bonus?.[stat] ?? 0;
+      const valAttuale = attuale?.bonus?.[stat] ?? 0;
+      if (valNuovo !== valAttuale) {
+        deltaBonus[stat] = valNuovo - valAttuale;
+      }
+    }
+    return {
+      tipo: 'armatura',
+      pezzo,
+      nomeAttuale: attuale ? attuale.nome : 'Nessuno',
+      deltaArmatura,
+      deltaBonus,
+    };
+  }
+
+  return null;
 }

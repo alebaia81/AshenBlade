@@ -17,7 +17,7 @@ import {
   type EsitoEquipaggiamento,
   type SpazioEquipaggiamento,
 } from './equipaggiamento';
-import { aggiungi, amplia, creaInventario, togli, type Inventario } from './inventario';
+import { aggiungi, amplia, conta, creaInventario, togli, type Inventario, type Pila } from './inventario';
 import { impara } from './crafting';
 import { livelloDa } from './livelli';
 import { creaPreferiti, type Preferiti } from './preferiti';
@@ -61,6 +61,8 @@ export interface Partita {
   porteAperte: string[];
   /** I boss sconfitti: non ricompaiono più (§11). */
   bossSconfitti: string[];
+  /** Tasca separata per chiavi e oggetti di missione: peso 0, non consumano slot dello zaino. */
+  tascaMissioni: Pila[];
 }
 
 export function creaPartita(nome: string, classe: DefinizioneClasse, puntiLiberi: readonly NomeCaratteristica[]): Partita {
@@ -89,6 +91,7 @@ export function creaPartita(nome: string, classe: DefinizioneClasse, puntiLiberi
     quest: {},
     porteAperte: [],
     bossSconfitti: [],
+    tascaMissioni: [],
   };
 }
 
@@ -286,3 +289,38 @@ export function muroAperto(p: Partita, chiave: string): boolean {
 export function apriMuro(p: Partita, chiave: string): Partita {
   return muroAperto(p, chiave) ? p : { ...p, muriAperti: [...p.muriAperti, chiave] };
 }
+
+
+/** Inserisce un oggetto nella tasca delle missioni (peso 0, mai pieno). */
+export function aggiungiTascaMissioni(p: Partita, id: string, quantita = 1): Partita {
+  const tasca = (p.tascaMissioni ?? []).map((voce) => ({ ...voce }));
+  const indice = tasca.findIndex((v) => v.id === id);
+  if (indice >= 0) tasca[indice]!.quantita += quantita;
+  else tasca.push({ id, quantita });
+  return { ...p, tascaMissioni: tasca };
+}
+
+/** Rimuove una certa quantità da tascaMissioni (se presente). */
+export function togliTascaMissioni(p: Partita, id: string, quantita = 1): Partita {
+  let restano = quantita;
+  const tasca: Pila[] = [];
+  for (const v of p.tascaMissioni ?? []) {
+    if (v.id === id && restano > 0) {
+      const tolti = Math.min(v.quantita, restano);
+      restano -= tolti;
+      const rimasti = v.quantita - tolti;
+      if (rimasti > 0) tasca.push({ id: v.id, quantita: rimasti });
+    } else {
+      tasca.push({ ...v });
+    }
+  }
+  return { ...p, tascaMissioni: tasca };
+}
+
+/** Conta quante copie ci sono dell'oggetto considerando sia lo zaino che la tasca missioni. */
+export function contaTotale(p: Partita, id: string): number {
+  const nelloZaino = conta(p.inventario, id);
+  const inTasca = (p.tascaMissioni ?? []).reduce((acc, v) => acc + (v.id === id ? v.quantita : 0), 0);
+  return nelloZaino + inTasca;
+}
+
