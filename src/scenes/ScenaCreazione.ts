@@ -21,6 +21,13 @@ import { aggiungiImmagine, aspettoDi } from './grafica';
 
 const LUNGHEZZA_MASSIMA_NOME = 16;
 
+const NOMI_CASUALI: Record<string, string[]> = {
+  guerriero: ['Arturo', 'Valerio', 'Gareth', 'Brenno', 'Elena', 'Rolando', 'Kaelen'],
+  mago: ['Alden', 'Morrigan', 'Elion', 'Selene', 'Ignis', 'Miriel', 'Eldrin'],
+  ladro: ['Dario', 'Nives', 'Vipera', 'Silas', 'Lia', 'Corvo', 'Zefiro'],
+  chierico: ['Benedetto', 'Lucia', 'Anselmo', 'Clara', 'Gideon', 'Mirella', 'Franca'],
+};
+
 export class ScenaCreazione extends Phaser.Scene {
   private classe!: DefinizioneClasse;
   /** Caratteristiche su cui sono stati messi i punti liberi. */
@@ -116,14 +123,59 @@ export class ScenaCreazione extends Phaser.Scene {
     this.campoNome = this.add.rectangle(100, 470, 330, 40, 0x10141c).setOrigin(0, 0).setStrokeStyle(2, 0x9aa7b8);
     this.campoNome.setInteractive({ useHandCursor: true });
     this.testoNome = this.add.text(112, 480, '', { ...STILE_TESTO, fontSize: '18px' });
-    this.campoNome.on('pointerdown', (_: unknown, __: unknown, ___: unknown, evento: Phaser.Types.Input.EventData) => {
+
+    // Pulsanti touch e rapidi: Scrivi (apre il campo nativo dello smartphone) e Casuale (dice roll)
+    new Pulsante(this, 488, 490, {
+      larghezza: 96,
+      altezza: 38,
+      testo: '✏️ Scrivi',
+      dimensioneTesto: 13,
+      alClic: () => this.richiediNomeTouch(),
+    });
+
+    new Pulsante(this, 600, 490, {
+      larghezza: 104,
+      altezza: 38,
+      testo: '🎲 Casuale',
+      dimensioneTesto: 13,
+      alClic: () => this.generaNomeCasuale(),
+    });
+
+    this.campoNome.on('pointerdown', (pointer: Phaser.Input.Pointer, _lx: number, _ly: number, evento: Phaser.Types.Input.EventData) => {
       evento.stopPropagation(); // il clic sul campo non deve "spegnerlo" subito dopo
-      this.impostaNomeAttivo(true);
+      const èTouch = (pointer.event as PointerEvent)?.pointerType === 'touch' || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (èTouch) {
+        this.richiediNomeTouch();
+      } else {
+        this.impostaNomeAttivo(true);
+      }
     });
     // Un clic in qualunque altro punto toglie il "fuoco" al campo, come in una pagina web.
     this.input.on('pointerdown', () => this.impostaNomeAttivo(false));
     // Cursore lampeggiante: un timer che si ripete, invece di setInterval.
     this.time.addEvent({ delay: 500, loop: true, callback: () => this.aggiornaNome() });
+  }
+
+  private richiediNomeTouch(): void {
+    const attuale = this.nome || NOME_PREDEFINITO;
+    const inserito = window.prompt('Inserisci il nome del personaggio (max 16 caratteri):', attuale);
+    if (inserito !== null) {
+      const pulito = inserito.trim().slice(0, LUNGHEZZA_MASSIMA_NOME);
+      if (pulito.length > 0) {
+        this.nome = pulito;
+      }
+      this.impostaNomeAttivo(false);
+      this.aggiornaNome();
+    }
+  }
+
+  private generaNomeCasuale(): void {
+    const lista = NOMI_CASUALI[this.classe?.id] ?? NOMI_CASUALI['guerriero']!;
+    const candidati = lista.filter((n) => n !== this.nome);
+    const scelto = candidati[Math.floor(Math.random() * candidati.length)] ?? lista[0]!;
+    this.nome = scelto;
+    this.impostaNomeAttivo(false);
+    this.aggiornaNome();
   }
 
   // ---- azioni ----
@@ -146,7 +198,7 @@ export class ScenaCreazione extends Phaser.Scene {
 
   private iniziaPartita(): void {
     if (this.scelte.length !== PUNTI_LIBERI) return;
-    scriviPartita(this, creaPartita(this.nome, this.classe, this.scelte));
+    scriviPartita(this, creaPartita(this.nome || NOME_PREDEFINITO, this.classe, this.scelte));
     // start ferma questa scena e avvia il mondo; "nuovaPartita" fa salvare subito nello slot scelto.
     this.scene.start(SCENA_MONDO, { nuovaPartita: true });
   }
@@ -212,8 +264,10 @@ export class ScenaCreazione extends Phaser.Scene {
 
   private aggiornaNome(): void {
     const lampeggio = this.nomeAttivo && Math.floor(this.time.now / 500) % 2 === 0 ? '|' : '';
+    const èTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const invito = èTouch ? 'tocca per scrivere' : 'clicca per scrivere';
     if (this.nome === '' && !this.nomeAttivo) {
-      this.testoNome.setText(`${NOME_PREDEFINITO} (clicca per scrivere)`).setColor('#6f7a88');
+      this.testoNome.setText(`${NOME_PREDEFINITO} (${invito})`).setColor('#6f7a88');
     } else {
       this.testoNome.setText(this.nome + lampeggio).setColor('#ffffff');
     }
