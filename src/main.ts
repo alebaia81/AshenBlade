@@ -45,6 +45,9 @@ try {
     // pixelArt: niente sfocature quando si ingrandisce (importante con lo zoom ×3).
     pixelArt: true,
     roundPixels: true,
+    input: {
+      activePointers: 3,
+    },
     scale: {
       // FIT: adatta il gioco alla finestra mantenendo le proporzioni 16:9.
       mode: Phaser.Scale.FIT,
@@ -85,6 +88,13 @@ try {
   // Rendiamo il gioco raggiungibile dalla console del browser (F12): utile per
   // curiosare (es. gioco.scene.getScene('Mondo')) e per le verifiche automatiche.
   (window as unknown as { gioco: Phaser.Game }).gioco = gioco;
+
+  window.addEventListener('resize', () => {
+    gioco.scale.refresh();
+  });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => gioco.scale.refresh(), 200);
+  });
 
   // Il gioco è partito: togliamo la scritta di caricamento e lo segnaliamo
   // al controllo di avvio scritto in gioco.html.

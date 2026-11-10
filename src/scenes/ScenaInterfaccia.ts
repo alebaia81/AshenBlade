@@ -36,6 +36,7 @@ import {
 import { disegnaOggetto } from './interfaccia/iconeOggetti';
 import { Minimappa } from './interfaccia/Minimappa';
 import { Pulsante } from './interfaccia/Pulsante';
+import { ControlliTouch } from './interfaccia/ControlliTouch';
 import { LATO_SPAZIO, SpazioBarra } from './interfaccia/SpazioBarra';
 import type { ScenaMondo } from './ScenaMondo';
 import { leggiPartita, mostraAvviso, type Avviso } from './statoCondiviso';
@@ -127,6 +128,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
 
     this.creaBarraBassa(mondo);
     this.minimappa = new Minimappa(this);
+    new ControlliTouch(this);
     // Monete: un'icona e il numero, sotto le barre.
     const yMonete = ESPERIENZA.y + 20;
     const iconaMonete = this.add.graphics({ x: 22, y: yMonete });

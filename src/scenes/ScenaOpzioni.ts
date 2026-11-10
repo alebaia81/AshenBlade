@@ -40,8 +40,8 @@ export class ScenaOpzioni extends Phaser.Scene {
     const cx = LARGHEZZA_SCHERMO / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.6).setInteractive();
-    this.add.rectangle(cx, cy, 620, 490, 0x1b2230, 0.98).setStrokeStyle(2, 0x9aa7b8);
-    this.add.text(cx, cy - 215, 'Opzioni', { ...STILE_TITOLO, fontSize: '24px' }).setOrigin(0.5);
+    this.add.rectangle(cx, cy, 620, 516, 0x1b2230, 0.98).setStrokeStyle(2, 0x9aa7b8);
+    this.add.text(cx, cy - 228, 'Opzioni', { ...STILE_TITOLO, fontSize: '24px' }).setOrigin(0.5);
 
     const archivio = archivioDelBrowser();
     let opzioni = leggiOpzioni(archivio);
@@ -86,12 +86,12 @@ export class ScenaOpzioni extends Phaser.Scene {
     });
 
     // Scuotimento schermo: vibrazione telecamera su colpi critici ed eventi boss
-    const yScuotimento = 378;
+    const yScuotimento = 372;
     this.add.text(cx - 270, yScuotimento - 14, 'Scuotimento schermo', { ...STILE_TESTO, fontSize: '18px', fontStyle: 'bold' });
     this.add.text(cx - 270, yScuotimento + 10, 'vibrazione della visuale su colpi critici e boss', { ...STILE_TESTO, fontSize: '13px', color: '#9aa7b8' });
     const pulsanteScuotimento = new Pulsante(this, cx + 220, yScuotimento, {
       larghezza: 110,
-      altezza: 38,
+      altezza: 34,
       testo: opzioni.scuotimentoSchermo ? 'Sì' : 'No',
       alClic: () => {
         opzioni = { ...opzioni, scuotimentoSchermo: !opzioni.scuotimentoSchermo };
@@ -100,13 +100,28 @@ export class ScenaOpzioni extends Phaser.Scene {
       },
     });
 
+    // Controlli touch: levetta e tasti per smartphone e tablet
+    const yTouch = 418;
+    this.add.text(cx - 270, yTouch - 14, 'Controlli touch', { ...STILE_TESTO, fontSize: '18px', fontStyle: 'bold' });
+    this.add.text(cx - 270, yTouch + 10, 'levetta e pulsanti per smartphone e tablet', { ...STILE_TESTO, fontSize: '13px', color: '#9aa7b8' });
+    const pulsanteTouch = new Pulsante(this, cx + 220, yTouch, {
+      larghezza: 110,
+      altezza: 34,
+      testo: opzioni.controlliTouch ? 'Sì' : 'No',
+      alClic: () => {
+        opzioni = { ...opzioni, controlliTouch: !opzioni.controlliTouch };
+        scriviOpzioni(archivio, opzioni);
+        pulsanteTouch.impostaTesto(opzioni.controlliTouch ? 'Sì' : 'No');
+      },
+    });
+
     // Schermo intero: non si ricorda (il browser lo permette solo dopo un clic).
-    const yIntero = 432;
+    const yIntero = 464;
     this.add.text(cx - 270, yIntero - 14, 'Schermo intero', { ...STILE_TESTO, fontSize: '18px', fontStyle: 'bold' });
     this.add.text(cx - 270, yIntero + 10, 'come il tasto F11 del browser', { ...STILE_TESTO, fontSize: '13px', color: '#9aa7b8' });
     const intero = new Pulsante(this, cx + 220, yIntero, {
       larghezza: 110,
-      altezza: 38,
+      altezza: 34,
       testo: this.scale.isFullscreen ? 'Sì' : 'No',
       alClic: () => {
         if (this.scale.isFullscreen) this.scale.stopFullscreen();
@@ -116,7 +131,7 @@ export class ScenaOpzioni extends Phaser.Scene {
       },
     });
 
-    new Pulsante(this, cx, 485, { larghezza: 180, altezza: 36, testo: 'Chiudi (Esc)', alClic: () => this.chiudi() });
+    new Pulsante(this, cx, 506, { larghezza: 180, altezza: 34, testo: 'Chiudi (Esc)', alClic: () => this.chiudi() });
     this.input.keyboard?.on('keydown-ESC', () => this.chiudi());
   }
 

@@ -15,6 +15,8 @@ export interface Opzioni {
   volumeEffetti: number;
   /** Scuotimento della telecamera su colpi critici ed eventi boss. */
   scuotimentoSchermo: boolean;
+  /** Mostra levetta virtuale e pulsanti touch per smartphone e tablet. */
+  controlliTouch: boolean;
 }
 
 export const OPZIONI_PREDEFINITE: Readonly<Opzioni> = {
@@ -23,6 +25,7 @@ export const OPZIONI_PREDEFINITE: Readonly<Opzioni> = {
   volumeMusica: 0.5,
   volumeEffetti: 0.7,
   scuotimentoSchermo: true,
+  controlliTouch: true,
 };
 
 const CHIAVE = 'quercia-opzioni';

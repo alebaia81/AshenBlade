@@ -2,15 +2,107 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Ashen Blade: L'Ombra della Quercia</title>
     <style>
-      html, body { margin: 0; height: 100%; background: #111; }
-      #gioco { width: 100%; height: 100%; }
-      #avvio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-        color: #ccc; font: 18px sans-serif; text-align: center; padding: 2rem; }
-      #errore { display: none; position: fixed; inset: 0; padding: 2rem; overflow: auto;
-        background: #300; color: #fdd; font: 16px monospace; white-space: pre-wrap; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        height: 100dvh;
+        background: #000000;
+        overflow: hidden;
+        touch-action: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #gioco {
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      #gioco canvas {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+      #avvio {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font: 18px sans-serif;
+        text-align: center;
+        padding: 2rem;
+        background: #0e121a;
+        z-index: 1000;
+      }
+      #errore {
+        display: none;
+        position: fixed;
+        inset: 0;
+        padding: 2rem;
+        overflow: auto;
+        background: #300;
+        color: #fdd;
+        font: 16px monospace;
+        white-space: pre-wrap;
+        z-index: 2000;
+      }
+      #avviso-rotazione {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1500;
+        background: #0e121a;
+        color: #e2e8f0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      #avviso-rotazione svg {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 1.25rem;
+        animation: ruota-telefono 2s infinite ease-in-out;
+      }
+      @keyframes ruota-telefono {
+        0%, 20% { transform: rotate(0deg); }
+        50%, 70% { transform: rotate(90deg); }
+        90%, 100% { transform: rotate(0deg); }
+      }
+      /* Mostra l'avviso di rotazione se lo schermo è in verticale su smartphone/tablet stretti */
+      @media screen and (orientation: portrait) and (max-width: 800px) {
+        #avviso-rotazione {
+          display: flex;
+        }
+      }
     </style>
     <!--
       Script "classico" (non modulo), eseguito prima del gioco. Serve a diagnosticare
@@ -19,6 +111,9 @@
     -->
     <script>
       (function () {
+        window.addEventListener('contextmenu', function (e) {
+          e.preventDefault();
+        });
         function mostra(titolo, dettaglio) {
           var riquadro = document.getElementById('errore');
           if (!riquadro || riquadro.style.display === 'block') return;
@@ -47,6 +142,16 @@
   <body>
     <div id="avvio">Caricamento del gioco…<br /><br />
       <small>Se questa scritta resta per sempre, il browser sta bloccando JavaScript per i file aperti dal disco.</small>
+    </div>
+    <div id="avviso-rotazione">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffd23f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+        <line x1="12" y1="18" x2="12.01" y2="18" />
+      </svg>
+      <h2 style="font-size: 20px; color: #ffd23f; margin-bottom: 8px;">Ruota lo smartphone</h2>
+      <p style="font-size: 14px; max-width: 290px; line-height: 1.4; color: #94a3b8;">
+        Ashen Blade è pensato per essere giocato a schermo orizzontale. Ruota il tuo dispositivo per iniziare.
+      </p>
     </div>
     <div id="gioco"></div>
     <div id="errore"></div>
