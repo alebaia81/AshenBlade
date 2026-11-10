@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { casualeFisso } from '../src/systems/casuale';
-import { calcolaDanno, probabilitaCritico } from '../src/systems/combattimento';
+import { calcolaDanno, dannoBaseArma, probabilitaCritico } from '../src/systems/combattimento';
 
 // calcolaDanno usa i numeri casuali in quest'ordine:
 // 1) uno per decidere il critico, 2) uno per ogni dado.
@@ -62,5 +62,62 @@ describe('calcolaDanno', () => {
     expect(normale.danno).toBe(4 * 2);
     const critico = calcolaDanno({ ...base, moltiplicatore: 2 }, casualeFisso([CRITICO, 0.5]));
     expect(critico.danno).toBe(4 * 2 * 2);
+  });
+});
+
+describe('dannoBaseArma e progressione deterministica a livelli (Liv. 1 - 5)', () => {
+  it('progressione Spada (Tabella 5.2): 10, 12, 15, 17, 20', () => {
+    const spada = { tipo: 'spada' };
+    expect(dannoBaseArma(spada, 0)).toBe(10); // Livello 1 (base)
+    expect(dannoBaseArma(spada, 1)).toBe(12); // Livello 2 (rinforzata)
+    expect(dannoBaseArma(spada, 2)).toBe(15); // Livello 3 (affilata)
+    expect(dannoBaseArma(spada, 3)).toBe(17); // Livello 4 (magistrale)
+    expect(dannoBaseArma(spada, 4)).toBe(20); // Livello 5 (maxata)
+  });
+
+  it('progressione Arco (Tabella 5.2): 8, 10, 13, 15, 18', () => {
+    const arco = { tipo: 'arco' };
+    expect(dannoBaseArma(arco, 0)).toBe(8);  // Livello 1
+    expect(dannoBaseArma(arco, 1)).toBe(10); // Livello 2
+    expect(dannoBaseArma(arco, 2)).toBe(13); // Livello 3
+    expect(dannoBaseArma(arco, 3)).toBe(15); // Livello 4
+    expect(dannoBaseArma(arco, 4)).toBe(18); // Livello 5
+  });
+});
+
+describe('calcolaDanno deterministico (§5 combat_design_spec)', () => {
+  const colpoDeterministico = {
+    dannoBase: 10, // Spada Livello 1
+    dado: '1d8',
+    modificatore: 2, // FOR +2
+    bonus: 0,
+    armatura: 0,
+    probabilitaCritico: 0.05,
+  };
+
+  it('danno = dannoBase + modificatore (senza dadi)', () => {
+    const r = calcolaDanno(colpoDeterministico, casualeFisso([NO_CRITICO]));
+    expect(r.danno).toBe(10 + 2);
+    expect(r.critico).toBe(false);
+  });
+
+  it('cleave splash damage (70% al bersaglio secondario)', () => {
+    const splash = calcolaDanno({ ...colpoDeterministico, moltiplicatore: 0.7 }, casualeFisso([NO_CRITICO]));
+    // (10 + 2) * 0.7 = 8.4 -> 8
+    expect(splash.danno).toBe(8);
+  });
+
+  it('critico con danno deterministico (raddoppio base)', () => {
+    const crit = calcolaDanno(colpoDeterministico, casualeFisso([CRITICO]));
+    expect(crit.danno).toBe((10 + 2) * 2);
+    expect(crit.critico).toBe(true);
+  });
+
+  it('riduzione dell’armatura con minimo garantito di 1', () => {
+    const conArmatura = calcolaDanno({ ...colpoDeterministico, armatura: 4 }, casualeFisso([NO_CRITICO]));
+    expect(conArmatura.danno).toBe(12 - 4);
+
+    const corazzato = calcolaDanno({ ...colpoDeterministico, armatura: 99 }, casualeFisso([NO_CRITICO]));
+    expect(corazzato.danno).toBe(1);
   });
 });

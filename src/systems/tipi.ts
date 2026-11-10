@@ -142,6 +142,8 @@ export interface DefinizioneArma {
   /** Prezzo pieno in monete. */
   prezzo: number;
   dado: string;
+  /** Danno base deterministico (fase 5 / combat design spec). */
+  dannoBase?: number;
   caratteristica: NomeCaratteristica;
   effetti: string[];
   /** Quanto si allunga davanti all'eroe, in pixel di mondo. */

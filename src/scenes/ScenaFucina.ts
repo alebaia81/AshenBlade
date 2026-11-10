@@ -11,6 +11,7 @@ import type { DatiGioco } from '../data/caricaDati';
 import { cosaManca, crea, ricetteConosciute, type Ricetta } from '../systems/crafting';
 import { colorePerRarita } from '../systems/oggetti';
 import { costoPotenziamento, livelloDi, MASSIMO_POTENZIAMENTO, potenzia, type DoveArma } from '../systems/potenziamento';
+import { dannoBaseArma } from '../systems/combattimento';
 import { righeOggetto } from './interfaccia/descrizioni';
 import { disegnaOggetto } from './interfaccia/iconeOggetti';
 import { Pulsante } from './interfaccia/Pulsante';
@@ -218,7 +219,7 @@ export class ScenaFucina extends Phaser.Scene {
       });
       const icona = this.add.graphics({ x: sinistra + 44, y });
       disegnaOggetto(icona, o, 30);
-      const stato = livello >= MASSIMO_POTENZIAMENTO ? 'al massimo' : `prossimo: +${livello + 1}`;
+      const stato = livello >= MASSIMO_POTENZIAMENTO ? 'Liv. 5 (Max)' : `Liv. ${livello + 1} → Liv. ${livello + 2}`;
       this.contenuto.add([
         sfondo,
         icona,
@@ -227,7 +228,7 @@ export class ScenaFucina extends Phaser.Scene {
       ]);
     });
     const altre = armi.length - RIGHE_VISIBILI;
-    const nota = altre > 0 ? `Altre ${altre} armi nello zaino: riordinalo per vederle qui.` : 'Ogni livello dà +1 al danno. Al massimo +5.';
+    const nota = altre > 0 ? `Altre ${altre} armi nello zaino: riordinalo per vederle qui.` : 'Danno deterministico: nessun tiro di dadi, potenziamento garantito fino a Liv. 5.';
     this.contenuto.add(this.add.text(sinistra + 24, alto + PANNELLO.altezza - 46, nota, { ...STILE_TESTO, fontSize: '13px', color: '#c8b8a0' }));
     this.dettagliPotenzia(armi);
   }
@@ -245,16 +246,18 @@ export class ScenaFucina extends Phaser.Scene {
     const arma = this.dati.armi[a.id]!;
     const { base, livello } = livelloDi(a.id);
     const costo = costoPotenziamento(livello, arma.rarita, this.dati.potenziamenti);
-    const danno = (l: number) => `${arma.dado} + ${arma.caratteristica}${l > 0 ? ` + ${l}` : ''}`;
-    this.contenuto.add(this.add.text(x, alto + 72, arma.nome, { ...STILE_TITOLO, fontSize: '19px', color: colorePerRarita(arma.rarita) }));
+    const dAttuale = dannoBaseArma(arma, livello);
+    this.contenuto.add(this.add.text(x, alto + 72, `${arma.nome} (Liv. ${livello + 1})`, { ...STILE_TITOLO, fontSize: '19px', color: colorePerRarita(arma.rarita) }));
     if (!costo) {
-      this.contenuto.add(this.add.text(x, alto + 106, `Danno: ${danno(livello)}\n\nÈ già al massimo (+${MASSIMO_POTENZIAMENTO}). Bruno non può fare di meglio.`, { ...STILE_TESTO, fontSize: '14px', color: '#d8d0c0' }));
+      this.contenuto.add(this.add.text(x, alto + 106, `Danno: ${dAttuale} (base) + ${arma.caratteristica}\n\nÈ già al massimo (Liv. ${MASSIMO_POTENZIAMENTO}). Bruno non può fare di meglio.`, { ...STILE_TESTO, fontSize: '14px', color: '#d8d0c0' }));
       return;
     }
+    const dProssimo = dannoBaseArma(arma, livello + 1);
+    const incremento = dProssimo - dAttuale;
     const prossima = this.dati.armi[`${base}+${livello + 1}`]!;
     this.contenuto.add([
-      this.add.text(x, alto + 104, `Danno adesso:   ${danno(livello)}`, { ...STILE_TESTO, fontSize: '14px', color: '#d8d0c0' }),
-      this.add.text(x, alto + 126, `Diventa ${prossima.nome}:   ${danno(livello + 1)}`, { ...STILE_TESTO, fontSize: '14px', color: VERDE }),
+      this.add.text(x, alto + 104, `Danno attuale:   ${dAttuale} (base) + ${arma.caratteristica} (Liv. ${livello + 1})`, { ...STILE_TESTO, fontSize: '14px', color: '#d8d0c0' }),
+      this.add.text(x, alto + 126, `Diventa ${prossima.nome}:   Liv. ${livello + 1} → Liv. ${livello + 2}: Danno ${dAttuale} → ${dProssimo} (+${incremento})`, { ...STILE_TESTO, fontSize: '14px', color: VERDE }),
       this.add.text(x, alto + 148, `Valore: ${arma.prezzo} → ${prossima.prezzo} monete`, { ...STILE_TESTO, fontSize: '13px', color: '#9a8a7a' }),
       this.add.text(x, alto + 200, 'Servono:', { ...STILE_TESTO, fontSize: '14px', fontStyle: 'bold' }),
     ]);
@@ -288,7 +291,9 @@ export class ScenaFucina extends Phaser.Scene {
       return;
     }
     // L'arma resta nello stesso posto (stesso spazio dello zaino o in mano): la selezione non cambia.
-    this.esito.setText(`Bruno tempra la lama… Ecco: ${this.dati.armi[esito.nuovoId]!.nome}!`).setColor('#ffe680');
+    const nuovoLivello = livelloDi(esito.nuovoId).livello;
+    const dNuovo = dannoBaseArma(this.dati.armi[esito.nuovoId]!, nuovoLivello);
+    this.esito.setText(`Bruno tempra la lama… Ecco: ${this.dati.armi[esito.nuovoId]!.nome} (Liv. ${nuovoLivello + 1}, Danno ${dNuovo})!`).setColor('#ffe680');
     scriviPartita(this, esito.stato);
   }
 

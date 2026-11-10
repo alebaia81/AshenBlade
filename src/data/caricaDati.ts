@@ -125,7 +125,7 @@ export function caricaDati(): DatiGioco {
   // Ogni arma esiste anche come +1…+5: oggetti a sé, così zaino, barra e
   // negozio non devono sapere nulla dei potenziamenti (vedi systems/potenziamento.ts).
   const armi = { ...armiBase, ...varianti(armiBase) };
-  const potenziamenti = datiPotenziamenti as TabellaPotenziamenti;
+  const potenziamenti = datiPotenziamenti as unknown as TabellaPotenziamenti;
   const quest = datiQuest as unknown as CatalogoQuest;
   const classi = datiClassi as unknown as Record<string, DefinizioneClasse>;
   const soglieLivelli = datiLivelli.soglie;

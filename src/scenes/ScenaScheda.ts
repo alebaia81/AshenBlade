@@ -19,6 +19,7 @@ import {
 import { avanzamento } from '../systems/livelli';
 import { colorePerRarita } from '../systems/oggetti';
 import { assegnaPuntoPartita, caratteristicheTotali } from '../systems/partita';
+import { dannoBaseArma } from '../systems/combattimento';
 import { modificatoreArma, probabilitaCriticoDi, ricaricaSchivata } from '../systems/personaggio';
 import { righeOggetto } from './interfaccia/descrizioni';
 import { disegnaOggetto } from './interfaccia/iconeOggetti';
@@ -297,11 +298,14 @@ export class ScenaScheda extends Phaser.Scene {
     }
 
     const secondi = (ms: number) => `${(ms / 1000).toFixed(2).replace('.', ',')} s`;
+    const dBase = dannoBaseArma(arma, arma.potenziamento ?? 0);
+    const modArma = modificatoreArma(arma, car);
+    const dannoTotale = dBase + modArma;
     this.derivati.setText(
       [
         `Vita: ${partita.vita.attuale} / ${partita.vita.massima}`,
         `Arma: ${arma.nome}`,
-        `Danno: ${arma.dado} ${conSegno(modificatoreArma(arma, car) + (arma.potenziamento ?? 0))} (${arma.caratteristica}${arma.potenziamento ? ` e +${arma.potenziamento}` : ''})`,
+        `Danno: ${dannoTotale} [Base ${dBase} (Liv. ${(arma.potenziamento ?? 0) + 1}) ${conSegno(modArma)} ${arma.caratteristica}]`,
         `Critico: ${Math.round(probabilitaCriticoDi(arma, car) * 100)}%`,
         `Armatura: ${datiEroe.armatura + armaturaTotale(partita.equipaggiamento, this.dati.indossabili)}`,
         `Ricarica capriola: ${secondi(ricaricaSchivata(datiEroe.schivata.ricaricaBaseMs, car))}`,

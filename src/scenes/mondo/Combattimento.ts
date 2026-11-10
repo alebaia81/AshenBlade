@@ -7,7 +7,7 @@ import type * as Phaser from 'phaser';
 import type { Eroe } from '../../entities/Eroe';
 import type { Nemico } from '../../entities/Nemico';
 import type { Casuale } from '../../systems/casuale';
-import { calcolaDanno } from '../../systems/combattimento';
+import { calcolaDanno, dannoBaseArma } from '../../systems/combattimento';
 import { moltiplicatoreCritico, NUMERI_EFFETTI, vitaRisucchiata } from '../../systems/effettiArmi';
 import { alleSpalle } from '../../systems/geometria';
 import type { DefinizioneArma, Vettore } from '../../systems/tipi';
@@ -33,6 +33,8 @@ export interface Colpo {
   dalCompagno?: boolean;
   /** Moltiplicatore speciale del colpo (es. 1.0 per primario, 0.7 per cleave ad area). */
   moltiplicatore?: number;
+  /** Danno base deterministico (Livelli 1-5 dell'arma). */
+  dannoBase?: number;
 }
 
 export class Combattimento {
@@ -59,6 +61,7 @@ export class Combattimento {
 
     const esito = calcolaDanno(
       {
+        dannoBase: colpo.dannoBase,
         dado: colpo.dado,
         modificatore: colpo.modificatore,
         bonus: colpo.bonus ?? 0,
@@ -101,7 +104,17 @@ export class Combattimento {
 
   /** Colpo con un'arma (fendente, dardo, freccia): numeri dell'arma e caratteristiche attuali. */
   colpoArma(arma: DefinizioneArma, modificatore: number, probabilitaCritico: number, da: Vettore): Colpo {
-    return { dado: arma.dado, modificatore, probabilitaCritico, respinta: arma.respinta, da, puòEssereAlleSpalle: true, effetti: arma.effetti, bonus: arma.potenziamento ?? 0 };
+    return {
+      dannoBase: dannoBaseArma(arma, arma.potenziamento ?? 0),
+      dado: arma.dado,
+      modificatore,
+      probabilitaCritico,
+      respinta: arma.respinta,
+      da,
+      puòEssereAlleSpalle: true,
+      effetti: arma.effetti,
+      bonus: arma.potenziamento ?? 0,
+    };
   }
 
   // Il "registro" degli effetti: ogni etichetta dei dati diventa un comportamento.
