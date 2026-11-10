@@ -33,7 +33,7 @@ const numero = (colore: string) => parseInt(colore.replace('#', ''), 16);
 /** Cosa si sta trascinando: un oggetto dello zaino o uno spazio della barra. */
 type Trascinamento = { da: 'zaino'; id: string } | { da: 'barra'; id: string; indice: number };
 
-type CategoriaInventario = 'tutto' | 'equip' | 'consumabili' | 'missione';
+type CategoriaInventario = 'tutto' | 'equip' | 'consumabili' | 'materiali' | 'missione';
 
 interface SlotGriglia {
   pila: Pila | null;
@@ -65,6 +65,7 @@ export class ScenaInventario extends Phaser.Scene {
   private tabTutto!: Pulsante;
   private tabEquip!: Pulsante;
   private tabConsumabili!: Pulsante;
+  private tabMateriali!: Pulsante;
   private tabMissioni!: Pulsante;
 
   private sinistra = 0;
@@ -100,33 +101,40 @@ export class ScenaInventario extends Phaser.Scene {
 
     this.titolo = this.add.text(this.sinistra + 24, this.alto + 14, '', { ...STILE_TITOLO, fontSize: '18px' });
 
-    // Schede di filtro categorie
-    this.tabTutto = new Pulsante(this, this.sinistra + 50, this.alto + 42, {
-      larghezza: 52,
+    // Schede di filtro categorie (5 categorie: Tutti, Equip, Pozioni, Materiali, Missioni)
+    this.tabTutto = new Pulsante(this, this.sinistra + 44, this.alto + 42, {
+      larghezza: 46,
       altezza: 22,
       testo: 'Tutti',
-      dimensioneTesto: 12,
+      dimensioneTesto: 11,
       alClic: () => this.cambiaCategoria('tutto'),
     });
-    this.tabEquip = new Pulsante(this, this.sinistra + 108, this.alto + 42, {
-      larghezza: 56,
+    this.tabEquip = new Pulsante(this, this.sinistra + 94, this.alto + 42, {
+      larghezza: 48,
       altezza: 22,
       testo: 'Equip',
-      dimensioneTesto: 12,
+      dimensioneTesto: 11,
       alClic: () => this.cambiaCategoria('equip'),
     });
-    this.tabConsumabili = new Pulsante(this, this.sinistra + 171, this.alto + 42, {
-      larghezza: 62,
+    this.tabConsumabili = new Pulsante(this, this.sinistra + 148, this.alto + 42, {
+      larghezza: 54,
       altezza: 22,
       testo: 'Pozioni',
-      dimensioneTesto: 12,
+      dimensioneTesto: 11,
       alClic: () => this.cambiaCategoria('consumabili'),
     });
-    this.tabMissioni = new Pulsante(this, this.sinistra + 244, this.alto + 42, {
-      larghezza: 76,
+    this.tabMateriali = new Pulsante(this, this.sinistra + 208, this.alto + 42, {
+      larghezza: 60,
+      altezza: 22,
+      testo: 'Materiali',
+      dimensioneTesto: 11,
+      alClic: () => this.cambiaCategoria('materiali'),
+    });
+    this.tabMissioni = new Pulsante(this, this.sinistra + 272, this.alto + 42, {
+      larghezza: 62,
       altezza: 22,
       testo: 'Missioni',
-      dimensioneTesto: 12,
+      dimensioneTesto: 11,
       alClic: () => this.cambiaCategoria('missione'),
     });
 
@@ -291,7 +299,28 @@ export class ScenaInventario extends Phaser.Scene {
       inv.spazi.forEach((pila, i) => {
         if (!pila) return;
         const def = this.dati.oggetti[pila.id];
-        if (def && (def.tipo === 'pozione' || def.tipo === 'pergamena' || def.effetto !== undefined)) {
+        if (
+          def &&
+          (def.tipo === 'pozione' ||
+            def.tipo === 'pergamena' ||
+            def.tipo === 'borsa' ||
+            def.effetto !== undefined)
+        ) {
+          slots.push({ pila, indiceZaino: i, daTasca: false });
+        }
+      });
+      while (slots.length < 12) {
+        slots.push({ pila: null, indiceZaino: null, daTasca: false });
+      }
+      return slots;
+    }
+
+    if (cat === 'materiali') {
+      const slots: SlotGriglia[] = [];
+      inv.spazi.forEach((pila, i) => {
+        if (!pila) return;
+        const def = this.dati.oggetti[pila.id];
+        if (def && def.tipo === 'materiale') {
           slots.push({ pila, indiceZaino: i, daTasca: false });
         }
       });
@@ -320,6 +349,7 @@ export class ScenaInventario extends Phaser.Scene {
     this.tabTutto.impostaSelezionato(this.categoria === 'tutto');
     this.tabEquip.impostaSelezionato(this.categoria === 'equip');
     this.tabConsumabili.impostaSelezionato(this.categoria === 'consumabili');
+    this.tabMateriali.impostaSelezionato(this.categoria === 'materiali');
     this.tabMissioni.impostaTesto(nMissioni > 0 ? `Miss. (${nMissioni})` : 'Missioni');
     this.tabMissioni.impostaSelezionato(this.categoria === 'missione');
 
@@ -329,6 +359,8 @@ export class ScenaInventario extends Phaser.Scene {
       this.titolo.setText(`Equipaggiamento nello zaino`);
     } else if (this.categoria === 'consumabili') {
       this.titolo.setText(`Pozioni e consumabili nello zaino`);
+    } else if (this.categoria === 'materiali') {
+      this.titolo.setText(`Materiali e risorse da forgia`);
     } else {
       this.titolo.setText(`Zaino — ${occupati} / ${inv.capacita} spazi`);
     }

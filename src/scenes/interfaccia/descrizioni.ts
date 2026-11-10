@@ -28,7 +28,17 @@ export function righeOggetto(id: string, dati: DatiGioco): string[] {
     for (const [nome, valore] of Object.entries(armatura.bonus ?? {})) righe.push(`${nome} ${conSegno(valore)}`);
     righe.push(...armatura.effetti.map((e) => `★ ${NOMI_EFFETTI_SPECIALI[e] ?? e}`));
   }
-  if (o.tipo === 'missione') righe.push('Oggetto di una quest: non si vende e non si getta.');
+  if (o.tipo === 'materiale') {
+    righe.push('Materiale di fabbricazione (usato nella forgia per le armi)');
+  } else if (o.tipo === 'pozione') {
+    righe.push('Consumabile · Pozione');
+  } else if (o.tipo === 'pergamena') {
+    righe.push('Pergamena · Progetto di lavorazione');
+  } else if (o.tipo === 'borsa') {
+    righe.push('Borsa · Amplia gli spazi dello zaino');
+  } else if (o.tipo === 'missione') {
+    righe.push('Oggetto di missione: peso 0 (non si vende e non si perde).');
+  }
   righe.push('', o.descrizione);
   return righe;
 }
