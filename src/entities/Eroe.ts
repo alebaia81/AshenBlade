@@ -357,7 +357,38 @@ export class Eroe {
     // Si cancella e si ridisegna a ogni fotogramma: è economico e sempre aggiornato.
     this.disegno.clear();
     const area = this.areaDiColpoAttiva();
-    if (area) this.disegno.fillStyle(0xffffff, 0.45).fillRect(area.x, area.y, area.larghezza, area.altezza);
+    if (area) {
+      // Calcolo avanzamento dell'animazione d'attacco per il picco dell'arco (Cleave VFX)
+      const p =
+        this.ultimoAggiornamento !== null && this.regole.durataAttaccoMs > 0
+          ? Math.min(1, Math.max(0, (this.ultimoAggiornamento - this.stato.inizio) / this.regole.durataAttaccoMs))
+          : 0.5;
+      const alfa = Math.sin(p * Math.PI);
+      const angoloCentro =
+        verso.x === 1 ? 0 : verso.x === -1 ? Math.PI : verso.y === 1 ? Math.PI / 2 : -Math.PI / 2;
+      const semiAmpiezza = (50 * Math.PI) / 180;
+      const raggio = 32;
+
+      // Scia esterna dorata
+      this.disegno.lineStyle(3, 0xffe680, alfa * 0.85);
+      this.disegno.beginPath();
+      this.disegno.arc(this.x, this.y, raggio, angoloCentro - semiAmpiezza, angoloCentro + semiAmpiezza, false);
+      this.disegno.strokePath();
+
+      // Lama interna bianca brillante
+      this.disegno.lineStyle(1.5, 0xffffff, alfa * 0.95);
+      this.disegno.beginPath();
+      this.disegno.arc(this.x, this.y, raggio - 2, angoloCentro - semiAmpiezza * 0.85, angoloCentro + semiAmpiezza * 0.85, false);
+      this.disegno.strokePath();
+
+      // Cono di taglio semi-trasparente
+      this.disegno.fillStyle(0xffe680, alfa * 0.15);
+      this.disegno.beginPath();
+      this.disegno.moveTo(this.x, this.y);
+      this.disegno.arc(this.x, this.y, raggio, angoloCentro - semiAmpiezza, angoloCentro + semiAmpiezza, false);
+      this.disegno.closePath();
+      this.disegno.fillPath();
+    }
     if (this.staParando()) {
       // Lo scudo: una barra chiara appoggiata al lato verso cui si guarda.
       const lungo = 16;

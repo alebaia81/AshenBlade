@@ -75,12 +75,40 @@ export function direzioneDa(da: Vettore, a: Vettore): Vettore {
   return d === 0 ? { x: 0, y: 1 } : { x: (a.x - da.x) / d, y: (a.y - da.y) / d };
 }
 
-const VERSI: Record<Direzione, Vettore> = {
+export const VERSI: Record<Direzione, Vettore> = {
   su: { x: 0, y: -1 },
   giu: { x: 0, y: 1 },
   sinistra: { x: -1, y: 0 },
   destra: { x: 1, y: 0 },
 };
+
+/** Coseno di 50° (~0.6428), corrispondente al semi-angolo di un cono di apertura totale 100°. */
+export const COS_50_GRADI = Math.cos((50 * Math.PI) / 180);
+
+/**
+ * Controlla se un punto o bersaglio si trova all'interno di un cono d'attacco.
+ * @param centro Origine del cono (posizione dell'eroe)
+ * @param verso Direzione verso cui punta il cono (es. VERSI[direzione])
+ * @param raggio Raggio massimo del cono in pixel
+ * @param sogliaCos Coseno del semi-angolo di apertura (predefinito COS_50_GRADI per 100° totali)
+ * @param bersaglio Posizione da verificare
+ */
+export function nelCono(
+  centro: Vettore,
+  verso: Vettore,
+  raggio: number,
+  sogliaCos: number = COS_50_GRADI,
+  bersaglio: Vettore,
+): boolean {
+  const dx = bersaglio.x - centro.x;
+  const dy = bersaglio.y - centro.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist === 0) return true;
+  if (dist > raggio) return false;
+  const lenVerso = Math.hypot(verso.x, verso.y) || 1;
+  const dot = (verso.x * dx + verso.y * dy) / (lenVerso * dist);
+  return dot >= sogliaCos;
+}
 
 /**
  * Prodotto scalare tra la direzione in cui si guarda e la direzione verso

@@ -3,8 +3,10 @@ import {
   alleSpalle,
   areaDiColpo,
   arrivaDavanti,
+  COS_50_GRADI,
   direzioneDa,
   intersecano,
+  nelCono,
   nuoviColpiti,
   rettangoloDaCentro,
 } from '../src/systems/geometria';
@@ -117,5 +119,37 @@ describe('arrivaDavanti (parata del Guerriero)', () => {
   it('funziona in tutte le direzioni', () => {
     expect(arrivaDavanti('su', eroe, { x: 100, y: 85 })).toBe(true);
     expect(arrivaDavanti('giu', eroe, { x: 100, y: 85 })).toBe(false);
+  });
+});
+
+describe('nelCono (Cleave ad arco 100°)', () => {
+  const centro = { x: 100, y: 100 };
+  const versoDestra = { x: 1, y: 0 };
+  const raggio = 32;
+
+  it('nemico perfettamente frontale entro il raggio', () => {
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 120, y: 100 })).toBe(true);
+  });
+
+  it('nemico a circa 40 gradi (entro il semi-angolo di 50°)', () => {
+    // A 40 gradi, dist 20px: dx = 20 * cos(40°) ~ 15.3, dy = 20 * sin(40°) ~ 12.8
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 115.3, y: 112.8 })).toBe(true);
+  });
+
+  it('nemico a circa 60 gradi (fuori dal cono di 100°)', () => {
+    // A 60 gradi: cos(60°) = 0.5 < cos(50°) (~0.6428)
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 110, y: 117.3 })).toBe(false);
+  });
+
+  it('nemico alle spalle', () => {
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 80, y: 100 })).toBe(false);
+  });
+
+  it('nemico frontale ma oltre il raggio massimo', () => {
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 135, y: 100 })).toBe(false);
+  });
+
+  it('bersaglio sovrapposto all’origine (distanza 0)', () => {
+    expect(nelCono(centro, versoDestra, raggio, COS_50_GRADI, { x: 100, y: 100 })).toBe(true);
   });
 });

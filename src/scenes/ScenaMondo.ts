@@ -295,7 +295,13 @@ export class ScenaMondo extends Phaser.Scene {
       () => this.effettiArmatura(),
       (nemico) => this.nemicoSconfitto(nemico),
     );
-    this.attacchi = new GestoreAttacchi(this.eroe, this.nemici, this.combattimento, () => this.statisticheArma(this.eroe.arma));
+    this.attacchi = new GestoreAttacchi(
+      this.eroe,
+      this.nemici,
+      this.combattimento,
+      () => this.statisticheArma(this.eroe.arma),
+      () => this.guida?.nemicoBersaglio ?? null,
+    );
     this.proiettili = new GestoreProiettili(this, griglia.calpestabile, this.nemici);
     // Il bastone del Mago: ogni attacco lancia un dardo magico.
     this.eroe.quandoTira = (da, direzione) => this.tiraProiettile(this.eroe.arma, da, direzione);

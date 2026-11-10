@@ -31,6 +31,8 @@ export interface Colpo {
   bonus?: number;
   /** Colpo del compagno: niente passive della classe dell'eroe né effetti delle sue armature. */
   dalCompagno?: boolean;
+  /** Moltiplicatore speciale del colpo (es. 1.0 per primario, 0.7 per cleave ad area). */
+  moltiplicatore?: number;
 }
 
 export class Combattimento {
@@ -63,7 +65,7 @@ export class Combattimento {
         armatura: nemico.definizione.armatura,
         probabilitaCritico: colpo.probabilitaCritico,
         dadiAggiuntivi: controNonMorti ? ['1d6'] : [],
-        moltiplicatore: dietro ? 2 : 1,
+        moltiplicatore: (colpo.moltiplicatore ?? 1) * (dietro ? 2 : 1),
         moltiplicatoreCritico: moltiplicatoreCritico(colpo.effetti),
       },
       this.casuale,
