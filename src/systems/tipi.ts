@@ -251,8 +251,8 @@ export interface DefinizioneCompagno {
   colore: string;
   vita: number;
   velocita: number;
-  /** Dado del suo attacco: più piccolo di quello dell'eroe (circa metà danno, §10). */
-  danno: string;
+  /** Danno del suo attacco: più piccolo di quello dell'eroe (circa metà danno, §10). */
+  danno: number | string;
   /** Da quanto lontano colpisce (dardi di Elisa: molto). */
   portata: number;
   ricaricaMs: number;

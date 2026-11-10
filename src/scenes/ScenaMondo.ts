@@ -73,6 +73,7 @@ import { areaDiColpo, direzioneDa, intersecano } from '../systems/geometria';
 import { aTiro, direzioneVerso } from '../systems/mira';
 import { attivi, bonus, rimanente } from '../systems/effettiTemporanei';
 import { aggiungi, conta, togli } from '../systems/inventario';
+import { smontaOggettoDaInventario } from '../systems/crafting';
 import { cellaDaPixel, centroCella } from '../systems/coordinate';
 import { assegnaPreferito, cosaFa, svuotaPreferito } from '../systems/preferiti';
 import {
@@ -674,6 +675,29 @@ export class ScenaMondo extends Phaser.Scene {
     this.oggettiATerra.lascia([pila], { x: this.eroe.x, y: this.eroe.y + 10 }, true);
   }
 
+  /** Smonta o distrugge un'arma o armatura dello zaino per liberare spazio e recuperare materiali grezzi. */
+  smontaOggetto(indice: number): string {
+    const pila = this.partita.inventario.spazi[indice];
+    if (!pila || èDiMissione(this.dati.oggetti[pila.id])) return 'Questo oggetto non può essere smontato.';
+    const esito = smontaOggettoDaInventario(this.partita.inventario, indice, this.dati);
+    if (!esito.ok || !esito.inventario) return esito.errore ?? 'Impossibile smontare questo oggetto.';
+
+    scriviPartita(this, { ...this.partita, inventario: esito.inventario });
+    this.salvaPartita();
+    suoni.effetto('raccolta');
+
+    if (esito.scartati && esito.scartati.length > 0) {
+      this.oggettiATerra.lascia(
+        esito.scartati.map((s) => ({ id: s.id, quantita: s.quantita })),
+        { x: this.eroe.x, y: this.eroe.y + 10 },
+        false,
+      );
+    }
+
+    const elenco = esito.materialiRecuperati?.map((m) => `${m.quantita}× ${m.nome}`).join(', ') ?? '';
+    return `Oggetto smontato! Recuperati: ${elenco}.`;
+  }
+
   /** Modalità sviluppatore: un oggetto direttamente nello zaino. */
   daiOggetto(id: string, quantita = 1): string {
     const definizione = this.dati.oggetti[id];
@@ -1140,7 +1164,9 @@ export class ScenaMondo extends Phaser.Scene {
     const da = { x: c.x, y: c.y };
     // Elisa con un eroe senza mana: i suoi dardi fanno +1 (il suo bonus serve comunque a qualcosa).
     const extra = d.bonus.tipo === 'rigenerazione_mana' && this.eroe.mana.massima === 0 ? 1 : 0;
-    const colpo = { dado: d.danno, modificatore: extra, probabilitaCritico: 0.05, respinta: 80, da, puòEssereAlleSpalle: false, effetti: [], dalCompagno: true };
+    const dannoBase = typeof d.danno === 'number' ? d.danno : undefined;
+    const dado = typeof d.danno === 'string' ? d.danno : '1d4';
+    const colpo = { dannoBase, dado, modificatore: extra, probabilitaCritico: 0.05, respinta: 80, da, puòEssereAlleSpalle: false, effetti: [], dalCompagno: true };
     if (d.proiettile) {
       const tiro = d.proiettile;
       this.proiettili.lancia({

@@ -225,10 +225,12 @@ describe('dati del gioco', () => {
   });
 
   it('i compagni fanno meno danni dell’eroe della stessa classe (circa la metà)', () => {
-    const massimo = (dado: string) => { const [n, f] = dado.split('d').map(Number); return n! * f!; };
+    const valoreDanno = (d: number | string) =>
+      typeof d === 'number' ? d : (() => { const [n, f] = d.split('d').map(Number); return n! * f!; })();
     for (const c of Object.values(mondo.compagni)) {
       const arma = mondo.armi[mondo.classi[c.classe]!.arma]!;
-      expect(massimo(c.danno), c.id).toBeLessThanOrEqual(massimo(arma.dado));
+      const dannoEroe = arma.dannoBase ?? 8;
+      expect(valoreDanno(c.danno), c.id).toBeLessThanOrEqual(dannoEroe);
     }
   });
 

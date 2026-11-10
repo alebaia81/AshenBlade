@@ -57,7 +57,7 @@ export class Minimappa {
   private readonly titoloGrande: Phaser.GameObjects.Text;
   private readonly sottotitoloValle: Phaser.GameObjects.Text;
   private readonly sottotitoloZona: Phaser.GameObjects.Text;
-  private readonly piedeGrande: Phaser.GameObjects.Text;
+  private readonly piedeGrande: Phaser.GameObjects.Container;
   private readonly etichetteGrandi: Phaser.GameObjects.Text[] = [];
   private modalita: ModalitaMappa = 'nascosta';
 
@@ -108,21 +108,44 @@ export class Minimappa {
       .setVisible(false);
 
     this.piedeGrande = scena.add
-      .text(
-        GRANDE.x + GRANDE.larghezza / 2,
-        GRANDE.y + GRANDE.altezza - 22,
-        '● Tu (oro)   ● Compagno (verde)   ● Abitanti (celeste)   ● Nemici (rosso)   ■ Forzieri (giallo)   ■ Uscite (azzurro)',
-        {
-          ...STILE_TESTO,
-          fontSize: '11px',
-          color: '#e8d9b0',
-          stroke: '#000000',
-          strokeThickness: 2,
-        },
-      )
-      .setOrigin(0.5, 0)
+      .container(GRANDE.x + GRANDE.larghezza / 2, GRANDE.y + GRANDE.altezza - 14)
       .setDepth(16)
       .setVisible(false);
+
+    const vociLegenda = [
+      { testo: '● Tu (oro)', colore: '#ffd23f' },
+      { testo: '● Compagno (verde)', colore: '#5fd35f' },
+      { testo: '● Abitanti (celeste)', colore: '#6ec6ff' },
+      { testo: '● Nemici (rosso)', colore: '#ff5252' },
+      { testo: '■ Forzieri (giallo)', colore: '#ffe680' },
+      { testo: '■ Uscite (azzurro)', colore: '#63b3ed' },
+    ];
+
+    const testiLegenda: Phaser.GameObjects.Text[] = [];
+    let larghezzaTotale = 0;
+    const spaziatura = 14;
+
+    for (const v of vociLegenda) {
+      const t = scena.add
+        .text(0, 0, v.testo, {
+          ...STILE_TESTO,
+          fontSize: '11px',
+          color: v.colore,
+          stroke: '#000000',
+          strokeThickness: 2,
+        })
+        .setOrigin(0, 0.5);
+      testiLegenda.push(t);
+      this.piedeGrande.add(t);
+      larghezzaTotale += t.width;
+    }
+    larghezzaTotale += spaziatura * (vociLegenda.length - 1);
+
+    let cursoreX = -larghezzaTotale / 2;
+    for (const t of testiLegenda) {
+      t.setX(cursoreX);
+      cursoreX += t.width + spaziatura;
+    }
 
     for (const n of NODI_MONDO) {
       const gx = GRANDE_VALLE.x + n.rx * GRANDE_VALLE.larghezza;

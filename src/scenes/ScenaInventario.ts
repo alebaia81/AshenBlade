@@ -9,6 +9,7 @@ import { èDiMissione } from '../systems/oggetti';
 import * as Phaser from 'phaser';
 import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, LARGHEZZA_SCHERMO, SCENA_INVENTARIO, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
+import { materialiDaSmontaggio } from '../systems/crafting';
 import { confrontaConAttuale } from '../systems/equipaggiamento';
 import type { Pila } from '../systems/inventario';
 import { colorePerRarita } from '../systems/oggetti';
@@ -56,6 +57,7 @@ export class ScenaInventario extends Phaser.Scene {
   private nomeOggetto!: Phaser.GameObjects.Text;
   private esito!: Phaser.GameObjects.Text;
   private usa!: Pulsante;
+  private smonta!: Pulsante;
   private getta!: Pulsante;
   private aiPreferiti!: Pulsante;
   private altroSlot!: Pulsante;
@@ -165,10 +167,11 @@ export class ScenaInventario extends Phaser.Scene {
     });
 
     const pulsante = (dx: number, testo: string, alClic: () => void) =>
-      new Pulsante(this, destra + dx, this.alto + 274, { larghezza: 110, altezza: 34, testo, alClic });
-    this.usa = pulsante(60, 'Usa', () => this.usaSelezionato());
-    this.getta = pulsante(190, 'Getta', () => this.gettaSelezionato());
-    this.aiPreferiti = pulsante(320, 'Preferiti', () => this.mettiNeiPreferiti());
+      new Pulsante(this, destra + dx, this.alto + 274, { larghezza: 88, altezza: 34, testo, alClic });
+    this.usa = pulsante(48, 'Usa', () => this.usaSelezionato());
+    this.smonta = pulsante(144, 'Smonta', () => this.smontaSelezionato());
+    this.getta = pulsante(240, 'Getta', () => this.gettaSelezionato());
+    this.aiPreferiti = pulsante(336, 'Preferiti', () => this.mettiNeiPreferiti());
 
     this.esito = this.add.text(destra, this.alto + 312, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffe680', wordWrap: { width: 380 } });
     this.add.text(destra, this.alto + 338, 'Barra dei preferiti: trascina qui pozioni e armi (fuori per toglierle)', {
@@ -559,14 +562,27 @@ export class ScenaInventario extends Phaser.Scene {
 
     if (selTasca) {
       this.usa.impostaTesto('Usa').impostaAttivo(false);
+      this.smonta.impostaAttivo(false);
       this.getta.impostaAttivo(false);
       this.aiPreferiti.impostaAttivo(false);
       this.altroSlot.setVisible(false).impostaAttivo(false);
     } else if (selZaino) {
-      const tipo = this.dati.oggetti[selZaino.id]?.tipo;
-      const usabile = tipo === 'arma' || tipo === 'armatura' || this.dati.oggetti[selZaino.id]?.effetto !== undefined;
+      const def = this.dati.oggetti[selZaino.id];
+      const tipo = def?.tipo;
+      const usabile = tipo === 'arma' || tipo === 'armatura' || def?.effetto !== undefined;
       const etichettaUsa = tipo === 'arma' ? 'Impugna' : tipo === 'armatura' ? 'Indossa' : 'Usa';
       this.usa.impostaTesto(etichettaUsa).impostaAttivo(usabile);
+
+      const smontabile = (tipo === 'arma' || tipo === 'armatura') && !èDiMissione(def);
+      this.smonta.impostaAttivo(smontabile);
+
+      if (smontabile) {
+        const mat = materialiDaSmontaggio(selZaino.id, this.dati);
+        const elenco = Object.entries(mat).map(([id, qta]) => `${qta}× ${this.dati.oggetti[id]?.nome ?? id}`).join(', ');
+        if (elenco) {
+          this.dettagli.setText(`${this.dettagli.text}\n\n🔨 Smontando recuperi: ${elenco}`);
+        }
+      }
 
       if (tipo === 'arma') {
         const slotPredefinito = this.dati.armi[selZaino.id]?.slot ?? 'primaria';
@@ -577,10 +593,11 @@ export class ScenaInventario extends Phaser.Scene {
         this.altroSlot.setVisible(false).impostaAttivo(false);
       }
 
-      this.getta.impostaAttivo(!èDiMissione(this.dati.oggetti[selZaino.id]));
+      this.getta.impostaAttivo(!èDiMissione(def));
       this.aiPreferiti.impostaAttivo(tipo === 'pozione' || tipo === 'arma');
     } else {
       this.usa.impostaTesto('Usa').impostaAttivo(false);
+      this.smonta.impostaAttivo(false);
       this.getta.impostaAttivo(false);
       this.aiPreferiti.impostaAttivo(false);
       this.altroSlot.setVisible(false).impostaAttivo(false);
@@ -634,6 +651,14 @@ export class ScenaInventario extends Phaser.Scene {
     }
     const errore = this.mondo.impostaPreferito(libero, pila.id);
     this.esito.setText(errore ?? `Nello spazio ${libero + 1} dei preferiti (tasto ${libero + 1})`);
+  }
+
+  private smontaSelezionato(): void {
+    if (this.selezionato === null) return;
+    const messaggio = this.mondo.smontaOggetto(this.selezionato);
+    this.esito.setText(messaggio);
+    this.selezionato = null;
+    this.ridisegna();
   }
 
   private gettaSelezionato(): void {

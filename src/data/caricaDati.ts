@@ -432,7 +432,14 @@ function controllaArmatura(id: string, a: DefinizioneArmatura): string[] {
 }
 
 function controllaCompagno(id: string, c: DefinizioneCompagno, classi: Record<string, DefinizioneClasse>): string[] {
-  const errori = controllaDado(`Compagno "${id}"`, c.danno);
+  const errori: string[] = [];
+  if (typeof c.danno === 'string') {
+    errori.push(...controllaDado(`Compagno "${id}"`, c.danno));
+  } else if (typeof c.danno === 'number') {
+    if (c.danno <= 0) errori.push(`Compagno "${id}": il danno deve essere maggiore di 0`);
+  } else {
+    errori.push(`Compagno "${id}": serve un danno (numero o dado)`);
+  }
   if (c.id !== id) errori.push(`Compagno "${id}": il campo id vale "${c.id}"`);
   if (!classi[c.classe]) errori.push(`Compagno "${id}": la classe "${c.classe}" non esiste`);
   if (!(c.prezzo > 0)) errori.push(`Compagno "${id}": serve un "prezzo"`);
