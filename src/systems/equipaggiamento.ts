@@ -208,10 +208,11 @@ export function confrontaConAttuale(
   armi: Record<string, DefinizioneArma>,
   armature: Record<string, DefinizioneArmatura>,
   caratteristiche: Caratteristiche,
+  slotScelto?: SpazioEquipaggiamento,
 ): ConfrontoEquipaggiamento | null {
   const arma = armi[idOggetto];
   if (arma) {
-    const slot = arma.slot;
+    const slot = (slotScelto === 'primaria' || slotScelto === 'secondaria') ? slotScelto : arma.slot;
     const attualeId = equip[slot];
     const attuale = attualeId ? armi[attualeId] : null;
     const dannoNuovo = dannoBaseArma(arma, arma.potenziamento ?? 0) + modificatoreArma(arma, caratteristiche);

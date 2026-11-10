@@ -222,6 +222,17 @@ describe('confrontaConAttuale', () => {
     }
   });
 
+  it('confronta arma con lo slot specifico (es. secondaria)', () => {
+    const equipConSecondaria = { ...equip, secondaria: 'spadone_acciaio' };
+    const diff = confrontaConAttuale('spada_ferro', equipConSecondaria, armi, armature, car, 'secondaria');
+    expect(diff).not.toBeNull();
+    if (diff && diff.tipo === 'arma') {
+      expect(diff.spazio).toBe('secondaria');
+      expect(diff.nomeAttuale).toBe('Spadone d’acciaio');
+      expect(diff.deltaDanno).toBeLessThan(0);
+    }
+  });
+
   it('restituisce null se l’oggetto non è né arma né armatura', () => {
     expect(confrontaConAttuale('pozione_cura', equip, armi, armature, car)).toBeNull();
   });
