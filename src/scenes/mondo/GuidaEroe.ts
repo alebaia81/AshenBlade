@@ -10,7 +10,7 @@ import type { Nemico } from '../../entities/Nemico';
 import type { Tastiera } from '../../entities/Comandi';
 import { TESSERA } from '../../costanti';
 import { cellaDaPixel, centroCella } from '../../systems/coordinate';
-import { aPortata, aTiro, bersaglioSotto, direzioneVerso } from '../../systems/mira';
+import { aPortata, aTiro, bersaglioProssimita, bersaglioSotto, direzioneVerso } from '../../systems/mira';
 import { calcolaVelocita } from '../../systems/movimento';
 import { cellaRaggiungibilePiuVicina, liberoTra, lisciaPercorso, trovaPercorso, type Griglia } from '../../systems/percorso';
 import { seguiPercorso } from '../../systems/seguiPercorso';
@@ -39,7 +39,7 @@ export interface Interagibile {
 type Obiettivo =
   | { tipo: 'punto'; destinazione: Vettore; punti: Vettore[]; indice: number }
   | { tipo: 'interagisci'; bersaglio: Interagibile; punti: Vettore[]; indice: number }
-  | { tipo: 'nemico'; nemico: Nemico; punti: Vettore[]; indice: number; ricalcolo: number }
+  | { tipo: 'nemico'; nemico: Nemico; punti: Vettore[]; indice: number; ricalcolo: number; colpiEseguiti: number }
   | {
       tipo: 'avvicina_tiro';
       punto: Vettore;
@@ -88,9 +88,21 @@ export class GuidaEroe {
       this.fermoDa = adesso;
       return 'interagibile';
     }
-    const nemico = this.nemicoSotto(punto);
+
+    // 1. Clic diretto sul nemico
+    let nemico = this.nemicoSotto(punto);
+
+    // 2. Smart Proximity Targeting: se il clic è entro raggio 2 tessere dall'eroe,
+    // cerca il nemico più vicino entro il raggio di mischia
+    const eroe = { x: this.eroe.x, y: this.eroe.y };
+    const distClic = Math.hypot(punto.x - eroe.x, punto.y - eroe.y);
+    const RAGGIO_SMART_TARGET = 2.0 * TESSERA;
+    if (!nemico && distClic <= RAGGIO_SMART_TARGET) {
+      nemico = this.nemicoVicino(punto, RAGGIO_SMART_TARGET * 1.25);
+    }
+
     if (nemico) {
-      this.obiettivo = { tipo: 'nemico', nemico, punti: [], indice: 0, ricalcolo: 0 };
+      this.obiettivo = { tipo: 'nemico', nemico, punti: [], indice: 0, ricalcolo: 0, colpiEseguiti: 0 };
       return 'nemico';
     }
     this.vaiA(punto, adesso);
@@ -99,6 +111,10 @@ export class GuidaEroe {
 
   rilasciaSinistro(): void {
     this.tenuto = false;
+    // Disingaggio immediato al rilascio se abbiamo già sferrato almeno un attacco
+    if (this.obiettivo?.tipo === 'nemico' && this.obiettivo.colpiEseguiti > 0) {
+      this.obiettivo = null;
+    }
   }
 
   /** Clic destro: capriola verso il cursore. */
@@ -115,6 +131,23 @@ export class GuidaEroe {
   nemicoSotto(punto: Vettore): Nemico | null {
     const vivi = this.nemici.vivi();
     const id = bersaglioSotto(punto, vivi.map((n) => ({ id: n.id, rettangolo: n.rettangolo() })), MARGINE_CLIC);
+    return vivi.find((n) => n.id === id) ?? null;
+  }
+
+  /**
+   * Smart Proximity Targeting: trova il nemico vivo più vicino alla direzione o punto cliccato
+   * entro il raggio massimo dall'eroe.
+   */
+  nemicoVicino(punto: Vettore, raggioMax: number): Nemico | null {
+    const vivi = this.nemici.vivi();
+    const eroe = { x: this.eroe.x, y: this.eroe.y };
+    const id = bersaglioProssimita(
+      eroe,
+      punto,
+      raggioMax,
+      raggioMax * 1.25,
+      vivi.map((n) => ({ id: n.id, posizione: { x: n.forma.x, y: n.forma.y } })),
+    );
     return vivi.find((n) => n.id === id) ?? null;
   }
 
@@ -223,6 +256,19 @@ export class GuidaEroe {
     adesso: number,
   ): ComandiEroe {
     if (!o.nemico.vivo) {
+      // Se il mouse è ancora tenuto premuto, aggancia il prossimo nemico vicino al cursore entro raggio 2
+      if (this.tenuto) {
+        const RAGGIO_SMART_TARGET = 2.0 * TESSERA;
+        const prossimo = this.nemicoVicino(this.cursore, RAGGIO_SMART_TARGET * 1.25);
+        if (prossimo) {
+          o.nemico = prossimo;
+          o.punti = [];
+          o.indice = 0;
+          o.ricalcolo = 0;
+          o.colpiEseguiti = 0;
+          return this.versoNemico(o, comandi, adesso);
+        }
+      }
       this.obiettivo = null;
       return comandi;
     }
@@ -236,8 +282,18 @@ export class GuidaEroe {
       ? aTiro(this.griglia, eroe, centro, tiro.gittata, TESSERA)
       : aPortata(eroe, this.eroe.lato, forma, bersaglio);
     if (pronto) {
-      // Fermo e girato verso il nemico: l'eroe continua ad attaccare finché il nemico non cade.
-      return { ...comandi, attacca: true, guarda: direzioneVerso(eroe, centro), mira: centro };
+      o.colpiEseguiti++;
+      const comandiAttacco: ComandiEroe = {
+        ...comandi,
+        attacca: true,
+        guarda: direzioneVerso(eroe, centro),
+        mira: centro,
+      };
+      // Se il tasto del mouse è stato rilasciato (click singolo), esegue 1 singolo attacco e disingaggia
+      if (!this.tenuto) {
+        this.obiettivo = null;
+      }
+      return comandiAttacco;
     }
     // Se non ci sono muri in mezzo, si corre dritti verso il nemico senza aspettare il ricalcolo di A*.
     const mezzo = this.eroe.lato / 2;

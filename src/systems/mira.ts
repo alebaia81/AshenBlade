@@ -55,6 +55,37 @@ export function bersaglioSotto<Id>(
   return migliore;
 }
 
+/**
+ * Smart Proximity Targeting: se il clic è avvenuto entro il raggio di prossimità dall'eroe,
+ * aggancia il bersaglio più vicino al punto cliccato tra quelli entro raggioMax dall'eroe.
+ */
+export function bersaglioProssimita<Id>(
+  eroe: Vettore,
+  puntoCliccato: Vettore,
+  raggioProssimita: number,
+  raggioMax: number,
+  bersagli: readonly { id: Id; posizione: Vettore }[],
+): Id | null {
+  const distClicEroe = Math.hypot(puntoCliccato.x - eroe.x, puntoCliccato.y - eroe.y);
+  if (distClicEroe > raggioProssimita) return null;
+
+  let migliore: Id | null = null;
+  let punteggioMigliore = Infinity;
+
+  for (const { id, posizione } of bersagli) {
+    const distEroe = Math.hypot(posizione.x - eroe.x, posizione.y - eroe.y);
+    if (distEroe > raggioMax) continue;
+
+    const distClic = Math.hypot(posizione.x - puntoCliccato.x, posizione.y - puntoCliccato.y);
+    if (distClic < punteggioMigliore) {
+      punteggioMigliore = distClic;
+      migliore = id;
+    }
+  }
+
+  return migliore;
+}
+
 /** Le armi a distanza tirano solo fino a questa frazione della gittata: un margine contro i bersagli che si allontanano. */
 const MARGINE_GITTATA = 0.85;
 

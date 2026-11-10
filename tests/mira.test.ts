@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { aPortata, aTiro, bersaglioSotto, direzioneVerso } from '../src/systems/mira';
+import { aPortata, aTiro, bersaglioProssimita, bersaglioSotto, direzioneVerso } from '../src/systems/mira';
 import { grigliaDa } from './aiuti/griglia';
 
 describe('direzioneVerso (4 direzioni)', () => {
@@ -98,5 +98,30 @@ describe('aTiro (armi a distanza)', () => {
     expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 50, y: 8 + 20 }, 100, 16)).toBe(true);
     // Distanza ~108 px > 85 px
     expect(aTiro(g, { x: 8, y: 8 }, { x: 8 + 80, y: 8 + 70 }, 100, 16)).toBe(false);
+  });
+});
+
+describe('bersaglioProssimita (Smart Proximity Targeting r <= 2.0)', () => {
+  const eroe = { x: 100, y: 100 };
+  const bersagli = [
+    { id: 'nemico_A', posizione: { x: 120, y: 100 } }, // a 20 px a destra
+    { id: 'nemico_B', posizione: { x: 100, y: 125 } }, // a 25 px in basso
+    { id: 'nemico_Lontano', posizione: { x: 180, y: 100 } }, // a 80 px (fuori raggio)
+  ];
+
+  it('se il clic è entro raggio 2 tessere (32 px) aggancia il nemico più vicino al punto cliccato', () => {
+    // Clic a terra vicino a nemico A: aggancia nemico A
+    expect(bersaglioProssimita(eroe, { x: 115, y: 105 }, 32, 40, bersagli)).toBe('nemico_A');
+    // Clic a terra vicino a nemico B: aggancia nemico B
+    expect(bersaglioProssimita(eroe, { x: 105, y: 120 }, 32, 40, bersagli)).toBe('nemico_B');
+  });
+
+  it('se il clic è oltre il raggio di prossimità (> 32 px) non aggancia (movimento a terra)', () => {
+    expect(bersaglioProssimita(eroe, { x: 140, y: 100 }, 32, 40, bersagli)).toBeNull();
+  });
+
+  it('ignora i nemici fuori dalla portata massima dall’eroe', () => {
+    const soliLontani = [{ id: 'nemico_Lontano', posizione: { x: 180, y: 100 } }];
+    expect(bersaglioProssimita(eroe, { x: 120, y: 100 }, 32, 40, soliLontani)).toBeNull();
   });
 });
