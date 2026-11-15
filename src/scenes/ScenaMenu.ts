@@ -69,7 +69,7 @@ export class ScenaMenu extends Phaser.Scene {
     this.add.text(CX, 38, 'Ashen Blade', { ...STILE_TITOLO, fontSize: '42px', color: '#f0e6c8' }).setOrigin(0.5);
     this.add.text(CX, 74, "L'Ombra della Quercia", { ...STILE_TITOLO, fontSize: '20px', color: '#d8c290' }).setOrigin(0.5);
     this.contenuto = this.add.container(0, 0);
-    this.messaggio = this.add.text(CX, 440, '', { ...STILE_TESTO, fontSize: '15px', color: '#ffb0a0', align: 'center' }).setOrigin(0.5).setDepth(10);
+    this.messaggio = this.add.text(CX, 518, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffb0a0', align: 'center' }).setOrigin(0.5).setDepth(10);
     this.input.keyboard?.on('keydown-ESC', () => this.pagina !== 'principale' && this.vai('principale'));
     this.cameras.main.fadeIn(400);
     suoni.branoDellaZona('menu');
@@ -163,14 +163,36 @@ export class ScenaMenu extends Phaser.Scene {
         testo: '📲 Installa su iOS',
         dimensioneTesto: 13,
         colore: 0x1f3b58,
-        alClic: () => {
-          this.messaggio
-            .setText('Per installare su iOS: tocca Condividi (quadrato con freccia) e poi "Aggiungi a schermata Home".')
-            .setColor('#ffd23f');
-        },
+        alClic: () => this.mostraGuidaIos(),
       });
       this.contenuto.add(this.pulsanteInstalla);
     }
+  }
+
+  private mostraGuidaIos(): void {
+    const cx = LARGHEZZA_SCHERMO / 2;
+    const cy = ALTEZZA_SCHERMO / 2;
+    const scatola = this.add.container(0, 0).setDepth(1000);
+    const chiudi = () => scatola.destroy();
+
+    // Sfondo oscurato che cattura i tocchi per non interagire sotto
+    scatola.add(this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.75).setInteractive().on('pointerdown', chiudi));
+
+    // Riquadro stile fantasy
+    scatola.add(this.add.rectangle(cx, cy, 620, 240, 0x141a24).setStrokeStyle(2, 0xffd23f));
+
+    // Titolo
+    scatola.add(this.add.text(cx, cy - 80, '📲 Come installare su iPhone o iPad', { ...STILE_TITOLO, fontSize: '20px', color: '#ffd23f' }).setOrigin(0.5));
+
+    // Istruzioni
+    const testo =
+      '1. Tocca il tasto Condividi di Safari in basso (l\'icona del quadrato con freccia ⬆️).\n\n' +
+      '2. Scorri il menu verso il basso e tocca "Aggiungi alla schermata Home".\n\n' +
+      '3. Tocca "Aggiungi" in alto a destra: avrai il gioco a tutto schermo!';
+    scatola.add(this.add.text(cx, cy - 10, testo, { ...STILE_TESTO, fontSize: '15px', color: '#e2e8f0', lineSpacing: 4, wordWrap: { width: 560 } }).setOrigin(0.5));
+
+    // Tasto chiudi
+    scatola.add(new Pulsante(this, cx, cy + 80, { larghezza: 160, altezza: 40, testo: 'Ho capito', dimensioneTesto: 15, colore: 0x2f5d3a, alClic: chiudi }));
   }
 
   private paginaSlot(modo: 'nuova' | 'carica'): void {
