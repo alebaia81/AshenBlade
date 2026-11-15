@@ -23,13 +23,8 @@ import {
   iconaArmaAssente,
   iconaCapriola,
   iconaCompagno,
-  iconaDischetto,
-  iconaIngranaggio,
   iconaMappa,
   iconaMenu,
-  iconaDaDisegno,
-  iconaPergamena,
-  iconaRitratto,
   iconaZaino,
   type DisegnaIcona,
 } from './interfaccia/icone';
@@ -70,7 +65,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
   private compagno!: SpazioBarra;
   private preferiti: SpazioBarra[] = [];
   private effetti!: Phaser.GameObjects.Text;
-  private dischetto!: Pulsante;
+  private dischetto?: Pulsante;
   private minimappa!: Minimappa;
   private controlliTouch!: ControlliTouch;
   private vignetteDanno!: Phaser.GameObjects.Image;
@@ -100,18 +95,14 @@ export class ScenaInterfaccia extends Phaser.Scene {
     const numeriMana = conMana ? this.add.text(MANA.x + MANA.larghezza + 8, MANA.y - 3, '', { ...stileNumeri, fontSize: '13px' }) : null;
     const livello = this.add.text(ESPERIENZA.x + ESPERIENZA.larghezza + 8, ESPERIENZA.y - 3, '', { ...stileNumeri, fontSize: '13px' });
 
-    // Icone in alto a destra: si cliccano, come nel design §13.
-    // Quelle delle fasi future si vedono già, spente: l'interfaccia non si sposterà più.
+    // Icone in alto a destra: lasciamo fuori solo Mappa e Zaino, tutto il resto è nel menu hamburger.
     const mondo = () => this.scene.get(SCENA_MONDO) as ScenaMondo;
     const icone = [
-      { icona: iconaRitratto, suggerimento: 'Scheda del personaggio (C)', alClic: () => mondo().apriScheda() },
+      { icona: iconaMenu, suggerimento: 'Menu di gioco (Esc)', alClic: () => mondo().apriPausa() },
       { icona: iconaZaino, suggerimento: 'Zaino (I)', alClic: () => mondo().apriInventario() },
-      { icona: iconaPergamena, suggerimento: 'Registro delle quest (L)', alClic: () => mondo().apriRegistro() },
-      { icona: this.iconaDelDischetto(), suggerimento: 'Salva (F2)', alClic: () => this.salva() },
-      { icona: iconaIngranaggio, suggerimento: 'Modalità sviluppatore (F8)', alClic: () => mondo().alternaSviluppatore() },
-      { icona: iconaMenu, suggerimento: 'Pausa e menu (Esc)', alClic: () => mondo().apriPausa() },
       { icona: iconaMappa, suggerimento: 'Mappa: Zona / Valle / Grande (M)', alClic: () => this.minimappa.alternaModalita() },
     ];
+    const pulsantiTop: Pulsante[] = [];
     icone.forEach((voce, i) => {
       const pulsante = new Pulsante(this, larghezza - 30 - i * DISTANZA_ICONE, 30, {
         larghezza: 44,
@@ -120,13 +111,23 @@ export class ScenaInterfaccia extends Phaser.Scene {
         suggerimento: voce.suggerimento,
         alClic: voce.alClic ?? (() => {}),
       });
-      if (voce.suggerimento.startsWith('Salva')) this.dischetto = pulsante;
+      pulsantiTop.push(pulsante);
     });
     // F2 lo ascolta l'interfaccia, che resta attiva anche quando il mondo è in pausa:
     // si può salvare in qualsiasi momento (§12), anche con lo zaino aperto.
     this.input.keyboard?.on('keydown-F2', () => this.salva());
-    // Pallino giallo sul ritratto quando ci sono punti da assegnare.
+    // Pallino giallo sul menu hamburger quando ci sono punti da assegnare nella scheda.
     const pallino = this.add.circle(larghezza - 12, 12, 7, 0xffd23f).setStrokeStyle(2, 0x000000).setDepth(2);
+
+    const suRidimensiona = (gameSize: Phaser.Structs.Size) => {
+      const w = gameSize.width;
+      pulsantiTop.forEach((p, i) => {
+        p.setPosition(w - 30 - i * DISTANZA_ICONE, 30);
+      });
+      pallino.setPosition(w - 12, 12);
+    };
+    this.scale.on('resize', suRidimensiona);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off('resize', suRidimensiona));
 
     this.creaBarraBassa(mondo);
     this.minimappa = new Minimappa(this);
@@ -269,22 +270,19 @@ export class ScenaInterfaccia extends Phaser.Scene {
     });
   }
 
-  /** Il dischetto in pixel art (sprite.json); se manca, quello a forme delle fasi precedenti. */
-  private iconaDelDischetto(): DisegnaIcona {
-    const img = this.dati.sprite.immagini['dischetto'];
-    return img && 'disegno' in img ? iconaDaDisegno(img.disegno, img.tavolozza) : iconaDischetto;
-  }
-
   /**
-   * Il dischetto (§12): salva, lo fa "girare" (si stringe e si riallarga due
-   * volte, come una moneta che ruota), fa "bip" e mostra l'esito.
+   * Salva (§12): fa "bip" e mostra l'esito.
    */
   salva(): void {
     const esito = (this.scene.get(SCENA_MONDO) as ScenaMondo).salvaPartita();
-    this.tweens.killTweensOf(this.dischetto);
-    this.dischetto.setScale(1);
+    if (this.dischetto) {
+      this.tweens.killTweensOf(this.dischetto);
+      this.dischetto.setScale(1);
+      if (esito.ok) {
+        this.tweens.add({ targets: this.dischetto, scaleX: 0, duration: 110, yoyo: true, repeat: 1 });
+      }
+    }
     if (esito.ok) {
-      this.tweens.add({ targets: this.dischetto, scaleX: 0, duration: 110, yoyo: true, repeat: 1 });
       suoni.effetto('bip');
     }
     mostraAvviso(this, esito.messaggio);
