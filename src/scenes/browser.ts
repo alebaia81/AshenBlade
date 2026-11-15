@@ -61,3 +61,34 @@ export function scegliFile(alCaricamento: (testo: string) => void): void {
   document.body.appendChild(input);
   input.click();
 }
+
+/** Interfaccia per l'evento nativo beforeinstallprompt dei browser Chromium. */
+export interface EventoBeforeInstallPrompt extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  prompt(): Promise<void>;
+}
+
+/** Controlla se il prompt nativo di installazione PWA è disponibile. */
+export function promptInstallazioneDisponibile(): boolean {
+  if (typeof window === 'undefined') return false;
+  return !!(window as unknown as { eventoInstallazionePwa?: EventoBeforeInstallPrompt }).eventoInstallazionePwa;
+}
+
+/** Mostra il prompt nativo di installazione dell'applicazione. */
+export async function avviaInstallazionePwa(): Promise<boolean> {
+  if (typeof window === 'undefined') return false;
+  const w = window as unknown as { eventoInstallazionePwa?: EventoBeforeInstallPrompt };
+  if (!w.eventoInstallazionePwa) return false;
+  try {
+    await w.eventoInstallazionePwa.prompt();
+    const scelta = await w.eventoInstallazionePwa.userChoice;
+    if (scelta.outcome === 'accepted') {
+      w.eventoInstallazionePwa = undefined;
+      return true;
+    }
+  } catch {
+    // Ignora errori o chiusura del dialogo
+  }
+  return false;
+}

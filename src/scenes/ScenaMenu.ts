@@ -23,7 +23,7 @@ import {
   type Salvataggio,
   type StatoSlot,
 } from '../systems/salvataggio';
-import { archivioDelBrowser, scaricaFile, scegliFile, soloInMemoria } from './browser';
+import { archivioDelBrowser, avviaInstallazionePwa, promptInstallazioneDisponibile, scaricaFile, scegliFile, soloInMemoria } from './browser';
 import { chiediConferma } from './interfaccia/Conferma';
 import { Pulsante } from './interfaccia/Pulsante';
 import { STILE_TESTO, STILE_TITOLO } from './interfaccia/testi';
@@ -49,6 +49,7 @@ export class ScenaMenu extends Phaser.Scene {
   private pagina: Pagina = 'principale';
   private contenuto!: Phaser.GameObjects.Container;
   private messaggio!: Phaser.GameObjects.Text;
+  private pulsanteInstalla?: Pulsante;
 
   constructor(private readonly dati: DatiGioco) {
     super(SCENA_MENU);
@@ -63,6 +64,21 @@ export class ScenaMenu extends Phaser.Scene {
     this.input.keyboard?.on('keydown-ESC', () => this.pagina !== 'principale' && this.vai('principale'));
     this.cameras.main.fadeIn(400);
     suoni.branoDellaZona('menu');
+
+    const ascoltatoreInstallazione = () => {
+      if (this.pagina === 'principale') {
+        this.mostraPulsanteInstalla();
+      }
+    };
+    window.addEventListener('pwa-installabile', ascoltatoreInstallazione);
+    window.addEventListener('pwa-installata', () => {
+      this.pulsanteInstalla?.destroy();
+      this.pulsanteInstalla = undefined;
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      window.removeEventListener('pwa-installabile', ascoltatoreInstallazione);
+    });
+
     this.vai('principale');
   }
 
@@ -73,6 +89,7 @@ export class ScenaMenu extends Phaser.Scene {
 
   private vai(pagina: Pagina, messaggio = ''): void {
     this.pagina = pagina;
+    this.pulsanteInstalla = undefined;
     this.contenuto.removeAll(true); // true = distruggi anche gli oggetti, non solo staccarli
     this.messaggio.setText(messaggio).setColor('#ffb0a0');
     if (pagina === 'principale') this.paginaPrincipale();
@@ -107,6 +124,27 @@ export class ScenaMenu extends Phaser.Scene {
     if (soloInMemoria) {
       this.messaggio.setText('Questo browser non permette di salvare: i salvataggi durano finché la pagina resta aperta.');
     }
+    this.mostraPulsanteInstalla();
+  }
+
+  private mostraPulsanteInstalla(): void {
+    if (!promptInstallazioneDisponibile()) return;
+    if (this.pulsanteInstalla && this.pulsanteInstalla.active) return;
+    this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
+      larghezza: 148,
+      altezza: 36,
+      testo: '📲 Installa App',
+      dimensioneTesto: 13,
+      colore: 0x1f3b58,
+      alClic: async () => {
+        const installato = await avviaInstallazionePwa();
+        if (installato && this.pulsanteInstalla) {
+          this.pulsanteInstalla.destroy();
+          this.pulsanteInstalla = undefined;
+        }
+      },
+    });
+    this.contenuto.add(this.pulsanteInstalla);
   }
 
   private paginaSlot(modo: 'nuova' | 'carica'): void {
