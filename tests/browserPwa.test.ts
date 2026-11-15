@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { avviaInstallazionePwa, promptInstallazioneDisponibile } from '../src/scenes/browser';
+import { avviaInstallazionePwa, eDispositivoIos, inModalitaStandalone, promptInstallazioneDisponibile } from '../src/scenes/browser';
 
 describe('PWA Install Helpers', () => {
   it('promptInstallazioneDisponibile restituisce false se eventoInstallazionePwa non è presente', () => {
@@ -48,5 +48,39 @@ describe('PWA Install Helpers', () => {
     const result = await avviaInstallazionePwa();
     expect(prompted).toBe(true);
     expect(result).toBe(false);
+  });
+
+  it('eDispositivoIos identifica correttamente iPhone e iPad', () => {
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X)', platform: 'iPhone' },
+      configurable: true,
+    });
+    expect(eDispositivoIos()).toBe(true);
+
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { userAgent: 'Mozilla/5.0 (Linux; Android 13)', platform: 'Linux' },
+      configurable: true,
+    });
+    expect(eDispositivoIos()).toBe(false);
+  });
+
+  it('inModalitaStandalone verifica display-mode e navigator.standalone', () => {
+    (globalThis as any).window = {
+      matchMedia: (query: string) => ({ matches: query.includes('standalone') }),
+    };
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { standalone: false },
+      configurable: true,
+    });
+    expect(inModalitaStandalone()).toBe(true);
+
+    (globalThis as any).window = {
+      matchMedia: () => ({ matches: false }),
+    };
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { standalone: false },
+      configurable: true,
+    });
+    expect(inModalitaStandalone()).toBe(false);
   });
 });

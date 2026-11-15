@@ -23,7 +23,16 @@ import {
   type Salvataggio,
   type StatoSlot,
 } from '../systems/salvataggio';
-import { archivioDelBrowser, avviaInstallazionePwa, promptInstallazioneDisponibile, scaricaFile, scegliFile, soloInMemoria } from './browser';
+import {
+  archivioDelBrowser,
+  avviaInstallazionePwa,
+  eDispositivoIos,
+  inModalitaStandalone,
+  promptInstallazioneDisponibile,
+  scaricaFile,
+  scegliFile,
+  soloInMemoria,
+} from './browser';
 import { chiediConferma } from './interfaccia/Conferma';
 import { Pulsante } from './interfaccia/Pulsante';
 import { STILE_TESTO, STILE_TITOLO } from './interfaccia/testi';
@@ -128,23 +137,40 @@ export class ScenaMenu extends Phaser.Scene {
   }
 
   private mostraPulsanteInstalla(): void {
-    if (!promptInstallazioneDisponibile()) return;
     if (this.pulsanteInstalla && this.pulsanteInstalla.active) return;
-    this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
-      larghezza: 148,
-      altezza: 36,
-      testo: '📲 Installa App',
-      dimensioneTesto: 13,
-      colore: 0x1f3b58,
-      alClic: async () => {
-        const installato = await avviaInstallazionePwa();
-        if (installato && this.pulsanteInstalla) {
-          this.pulsanteInstalla.destroy();
-          this.pulsanteInstalla = undefined;
-        }
-      },
-    });
-    this.contenuto.add(this.pulsanteInstalla);
+    if (inModalitaStandalone()) return;
+
+    if (promptInstallazioneDisponibile()) {
+      this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
+        larghezza: 148,
+        altezza: 36,
+        testo: '📲 Installa App',
+        dimensioneTesto: 13,
+        colore: 0x1f3b58,
+        alClic: async () => {
+          const installato = await avviaInstallazionePwa();
+          if (installato && this.pulsanteInstalla) {
+            this.pulsanteInstalla.destroy();
+            this.pulsanteInstalla = undefined;
+          }
+        },
+      });
+      this.contenuto.add(this.pulsanteInstalla);
+    } else if (eDispositivoIos()) {
+      this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
+        larghezza: 148,
+        altezza: 36,
+        testo: '📲 Installa su iOS',
+        dimensioneTesto: 13,
+        colore: 0x1f3b58,
+        alClic: () => {
+          this.messaggio
+            .setText('Per installare su iOS: tocca Condividi (quadrato con freccia) e poi "Aggiungi a schermata Home".')
+            .setColor('#ffd23f');
+        },
+      });
+      this.contenuto.add(this.pulsanteInstalla);
+    }
   }
 
   private paginaSlot(modo: 'nuova' | 'carica'): void {

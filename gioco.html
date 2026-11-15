@@ -29,7 +29,7 @@
         height: 100%;
         min-height: 100%;
         height: 100dvh;
-        background: #000000;
+        background: #0e121a;
         overflow: hidden;
         touch-action: none;
         display: flex;
@@ -44,10 +44,6 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        padding-top: env(safe-area-inset-top, 0px);
-        padding-right: env(safe-area-inset-right, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-        padding-left: env(safe-area-inset-left, 0px);
       }
       #gioco canvas {
         display: block;
@@ -140,6 +136,11 @@
         }
         window.mostraErroreAvvio = mostra;
         window.addEventListener('error', function (e) {
+          // Ignora errori browser/esterni mascherati ("Script error.") senza dettagli
+          if (e.message === 'Script error.' && !e.error) {
+            console.warn('Ignorato errore esterno browser:', e);
+            return;
+          }
           mostra('Si è verificato un errore e il gioco si è fermato.', e.error ? (e.error.stack || e.error.message) : e.message);
         });
         // Se dopo 8 secondi il gioco non ha dato segni di vita, lo diciamo.

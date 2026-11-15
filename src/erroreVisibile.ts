@@ -19,6 +19,17 @@ export function mostraErrore(errore: unknown): void {
  * dentro il ciclo di gioco di Phaser (che gira fuori dal nostro try/catch).
  */
 export function installaGestoreErrori(): void {
-  window.addEventListener('error', (evento) => mostraErrore(evento.error ?? evento.message));
-  window.addEventListener('unhandledrejection', (evento) => mostraErrore(evento.reason));
+  window.addEventListener('error', (evento) => {
+    // "Script error." senza dettagli è generato dal browser per script esterni, estensioni
+    // o dal pannello "Condividi" di iOS Safari per motivi di sicurezza/CORS: non deve bloccare il gioco.
+    if (evento.message === 'Script error.' && !evento.error) {
+      console.warn('Ignorato errore esterno del browser (es. estensione o sistema):', evento);
+      return;
+    }
+    mostraErrore(evento.error ?? evento.message);
+  });
+  window.addEventListener('unhandledrejection', (evento) => {
+    if (!evento.reason) return;
+    mostraErrore(evento.reason);
+  });
 }

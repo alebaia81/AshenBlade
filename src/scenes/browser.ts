@@ -92,3 +92,22 @@ export async function avviaInstallazionePwa(): Promise<boolean> {
   }
   return false;
 }
+
+/** Verifica se il dispositivo attuale è iOS (iPhone/iPad/iPod). */
+export function eDispositivoIos(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+/** Verifica se l'app è già avviata in modalità standalone / schermo intero (PWA installata). */
+export function inModalitaStandalone(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches ||
+    !!(navigator as unknown as { standalone?: boolean }).standalone
+  );
+}

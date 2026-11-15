@@ -41,7 +41,7 @@ try {
   const gioco = new Phaser.Game({
     type: Phaser.AUTO, // WebGL se disponibile
     parent: 'gioco',
-    backgroundColor: '#000000',
+    backgroundColor: '#0e121a',
     // pixelArt: niente sfocature quando si ingrandisce (importante con lo zoom ×3).
     pixelArt: true,
     roundPixels: true,
