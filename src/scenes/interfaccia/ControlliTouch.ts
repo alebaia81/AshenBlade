@@ -17,9 +17,12 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
 
   private btnAttacco: Phaser.GameObjects.Container;
   private btnSchivata: Phaser.GameObjects.Container;
-  private btnRaccolta: Phaser.GameObjects.Container;
-  private testoRaccolta: Phaser.GameObjects.Text;
-  private azioneRaccolta: (() => void) | null = null;
+  private btnAbilita: Phaser.GameObjects.Container;
+  private testoAbilita: Phaser.GameObjects.Text;
+  private azioneAbilita: (() => void) | null = null;
+  private btnInterazione: Phaser.GameObjects.Container;
+  private testoInterazione: Phaser.GameObjects.Text;
+  private azioneInterazione: (() => void) | null = null;
 
   constructor(scena: Phaser.Scene) {
     super(scena, 0, 0);
@@ -106,23 +109,40 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
     ).container;
     this.add(this.btnSchivata);
 
-    // 4. Nuovo Pulsante Raccolta / Scavo contestuale (sopra l'attacco, per pollice destro)
-    const resRaccolta = this.creaPulsanteAzione(
+    // 4. Pulsante Abilità di classe / Parata (in alto a sinistra rispetto all'attacco)
+    const resAbilita = this.creaPulsanteAzione(
+      scena,
+      xDestra - 164,
+      388,
+      24,
+      0x1e1b4b,
+      0xf59e0b,
+      '🛡️',
+      18,
+      () => this.azioneAbilita?.(),
+      () => {},
+    );
+    this.btnAbilita = resAbilita.container;
+    this.testoAbilita = resAbilita.text;
+    this.add(this.btnAbilita);
+
+    // 5. Pulsante Interazione contestuale (Parlare 💬 / Scavare ⛏️ / Raccogliere ✋, sopra l'attacco)
+    const resInterazione = this.creaPulsanteAzione(
       scena,
       xDestra - 90,
-      352,
+      336,
       25,
       0x166534,
       0x4ade80,
-      '⛏️',
+      '💬',
       18,
-      () => this.azioneRaccolta?.(),
+      () => this.azioneInterazione?.(),
       () => {},
     );
-    this.btnRaccolta = resRaccolta.container;
-    this.testoRaccolta = resRaccolta.text;
-    this.btnRaccolta.setVisible(false);
-    this.add(this.btnRaccolta);
+    this.btnInterazione = resInterazione.container;
+    this.testoInterazione = resInterazione.text;
+    this.btnInterazione.setVisible(false);
+    this.add(this.btnInterazione);
 
     // Autodetect touch device
     const opzioni = leggiOpzioni(archivioDelBrowser());
@@ -140,16 +160,42 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
     scena.add.existing(this);
   }
 
-  /** Mostra o nasconde il pulsante rapido di raccolta contestuale (minerale o pianta). */
-  impostaRaccolta(visibile: boolean, icona: '⛏️' | '✋' = '⛏️', alTocco?: () => void): void {
+  /** Imposta l'icona e l'azione dell'abilità di classe (es. Parata 🛡️ per Guerriero). */
+  impostaAbilita(simbolo: string, alTocco: () => void): void {
+    this.testoAbilita.setText(simbolo);
+    this.azioneAbilita = alTocco;
+  }
+
+  /** Aggiorna lo stato visivo di ricarica/disponibilità dell'abilità su touch. */
+  aggiornaStatoAbilita(frazione: number, pronta: boolean): void {
     if (!this.visible) return;
-    this.btnRaccolta.setVisible(visibile);
+    const puoUsare = pronta && frazione <= 0;
+    this.btnAbilita.setAlpha(puoUsare ? 1 : 0.4);
+  }
+
+  /** Mostra o nasconde il pulsante rapido di interazione contestuale (parlare con persona, scavare minerale, raccogliere pianta). */
+  impostaInterazione(visibile: boolean, icona = '💬', alTocco?: () => void): void {
+    if (!this.visible) return;
+    this.btnInterazione.setVisible(visibile);
     if (visibile) {
-      this.testoRaccolta.setText(icona);
-      this.azioneRaccolta = alTocco ?? null;
+      this.testoInterazione.setText(icona);
+      this.azioneInterazione = alTocco ?? null;
     } else {
-      this.azioneRaccolta = null;
+      this.azioneInterazione = null;
     }
+  }
+
+  /** Alias per compatibilità con il codice precedente. */
+  impostaRaccolta(visibile: boolean, icona: '⛏️' | '✋' | '💬' = '⛏️', alTocco?: () => void): void {
+    this.impostaInterazione(visibile, icona, alTocco);
+  }
+
+  /** Riposiziona i comandi touch sulla destra quando cambia la dimensione dello schermo. */
+  ridimensiona(nuovaLarghezza: number): void {
+    this.btnAttacco.setPosition(nuovaLarghezza - 90, 432);
+    this.btnSchivata.setPosition(nuovaLarghezza - 164, 456);
+    this.btnAbilita.setPosition(nuovaLarghezza - 164, 388);
+    this.btnInterazione.setPosition(nuovaLarghezza - 90, 336);
   }
 
   private creaPulsanteAzione(

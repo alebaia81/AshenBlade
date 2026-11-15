@@ -125,6 +125,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
         p.setPosition(w - 30 - i * DISTANZA_ICONE, 30);
       });
       pallino.setPosition(w - 12, 12);
+      this.controlliTouch?.ridimensiona(w);
     };
     this.scale.on('resize', suRidimensiona);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off('resize', suRidimensiona));
@@ -132,6 +133,15 @@ export class ScenaInterfaccia extends Phaser.Scene {
     this.creaBarraBassa(mondo);
     this.minimappa = new Minimappa(this);
     this.controlliTouch = new ControlliTouch(this);
+    const classeId = leggiPartita(this).personaggio.classe;
+    const iconeClassi: Record<string, string> = {
+      guerriero: '🛡️',
+      mago: '🔥',
+      ladro: '👤',
+      chierico: '💖',
+    };
+    const iconaAbilitaClasse = iconeClassi[classeId] ?? '⭐';
+    this.controlliTouch.impostaAbilita(iconaAbilitaClasse, () => mondo().attivaAbilita());
     // Monete: un'icona e il numero, sotto le barre.
     const yMonete = ESPERIENZA.y + 20;
     const iconaMonete = this.add.graphics({ x: 22, y: yMonete });
@@ -327,12 +337,15 @@ export class ScenaInterfaccia extends Phaser.Scene {
     }
     this.effetti.setText(mondo.effettiAttivi().map((e) => `${NOMI_EFFETTI[e.tipo] ?? e.tipo} +${e.valore} · ${e.secondi} s`).join('\n'));
     if (this.controlliTouch) {
-      const vena = mondo.trovaVenaVicina?.();
-      if (vena) {
-        const icona = vena.aspetto === 'cespuglio' ? '✋' : '⛏️';
-        this.controlliTouch.impostaRaccolta(true, icona, () => mondo.scavaVena(vena));
+      this.controlliTouch.aggiornaStatoAbilita(abilita.frazione, abilita.manaSufficiente);
+      const interazione = mondo.trovaInterazioneVicina?.();
+      if (interazione?.tipo === 'abitante') {
+        this.controlliTouch.impostaInterazione(true, '💬', () => mondo.parla(interazione.abitante.definizione.id));
+      } else if (interazione?.tipo === 'vena') {
+        const icona = interazione.vena.aspetto === 'cespuglio' ? '✋' : '⛏️';
+        this.controlliTouch.impostaInterazione(true, icona, () => mondo.scavaVena(interazione.vena));
       } else {
-        this.controlliTouch.impostaRaccolta(false);
+        this.controlliTouch.impostaInterazione(false);
       }
     }
   }

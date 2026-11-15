@@ -62,6 +62,14 @@ export class Nemico {
     this.vita = creaRisorsa(definizione.vita);
   }
 
+  get x(): number {
+    return this.forma.x;
+  }
+
+  get y(): number {
+    return this.forma.y;
+  }
+
   aggiorna(adesso: number, bersaglio: Vettore | null): void {
     if (!this._vivo) return;
     if (this.imposto && adesso < this.imposto.fino) {

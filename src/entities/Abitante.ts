@@ -17,6 +17,14 @@ export class Abitante {
   private readonly segno: Phaser.GameObjects.Text;
   private _segno: Segno = null;
 
+  get x(): number {
+    return this.posizione.x;
+  }
+
+  get y(): number {
+    return this.posizione.y;
+  }
+
   constructor(
     scena: Phaser.Scene,
     readonly posizione: Vettore,

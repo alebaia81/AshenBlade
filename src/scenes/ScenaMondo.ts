@@ -68,7 +68,7 @@ import {
   effettiEquipaggiati,
   type SpazioEquipaggiamento,
 } from '../systems/equipaggiamento';
-import { areaDiColpo, direzioneDa, intersecano } from '../systems/geometria';
+import { areaDiColpo, direzioneDa, intersecano, VERSI } from '../systems/geometria';
 import { aTiro, direzioneVerso } from '../systems/mira';
 import { attivi, bonus, rimanente } from '../systems/effettiTemporanei';
 import { aggiungi, conta, togli } from '../systems/inventario';
@@ -830,14 +830,35 @@ export class ScenaMondo extends Phaser.Scene {
 
   // ---- abilità di classe ----
 
-  /** Pulsante dell'abilità nella barra: con il mirino aspetta il clic sul bersaglio, altrimenti parte subito. */
+  /** Direzione o bersaglio intelligente per l'abilità (specie su touch/tastiera). */
+  private puntoAbilitaVersoBersaglio(): Vettore {
+    if (!this.input.activePointer.wasTouch && this.input.activePointer.x > 0 && this.input.activePointer.y > 0) {
+      return this.nelMondo(this.input.activePointer);
+    }
+    // Cerca il nemico vivo più vicino all'eroe entro 120 px
+    let nemicoVicino: { x: number; y: number } | null = null;
+    let minD = 120;
+    for (const n of this.nemici.vivi()) {
+      const d = Math.hypot(n.x - this.eroe.x, n.y - this.eroe.y);
+      if (d < minD) {
+        minD = d;
+        nemicoVicino = { x: n.x, y: n.y };
+      }
+    }
+    if (nemicoVicino) return nemicoVicino;
+    // Se non ci sono nemici vicini, mira nella direzione verso cui l'eroe guarda
+    const verso = VERSI[this.eroe.guarda] ?? { x: 1, y: 0 };
+    return { x: this.eroe.x + verso.x * 40, y: this.eroe.y + verso.y * 40 };
+  }
+
+  /** Pulsante dell'abilità nella barra o su touch: con il mirino aspetta il clic sul bersaglio, altrimenti parte subito. */
   attivaAbilita(): void {
     if (!this.scene.isActive() || this.inTransizione) return;
     if (this.classe.abilita.mira) {
       this.mira = this.mira === 'abilita' ? null : 'abilita'; // un secondo clic sul pulsante annulla
       return;
     }
-    this.usaAbilita(this.nelMondo(this.input.activePointer));
+    this.usaAbilita(this.puntoAbilitaVersoBersaglio());
   }
 
   /** Usa l'abilità verso un punto del mondo, se è pronta e c'è abbastanza mana. */
@@ -1327,6 +1348,36 @@ export class ScenaMondo extends Phaser.Scene {
 
   scavaVena(v: Vena): void {
     this.scava(v);
+  }
+
+  /** Restituisce l'abitante più vicino all'eroe entro 36 px (distanza comoda per avviare il dialogo da touch). */
+  trovaAbitanteVicino(): Abitante | null {
+    if (!this.eroe || this.eroe.sconfitto) return null;
+    let piuVicino: Abitante | null = null;
+    let minDistanza = 36;
+    for (const a of this.abitanti) {
+      const d = Phaser.Math.Distance.Between(this.eroe.x, this.eroe.y, a.x, a.y);
+      if (d <= minDistanza) {
+        minDistanza = d;
+        piuVicino = a;
+      }
+    }
+    return piuVicino;
+  }
+
+  /** Restituisce l'interazione più vicina (abitante per parlare, vena per scavare, cespuglio per raccogliere). */
+  trovaInterazioneVicina(): { tipo: 'abitante'; abitante: Abitante } | { tipo: 'vena'; vena: Vena } | null {
+    if (!this.eroe || this.eroe.sconfitto) return null;
+    const abitante = this.trovaAbitanteVicino();
+    const vena = this.trovaVenaVicina();
+    if (abitante && vena) {
+      const dA = Phaser.Math.Distance.Between(this.eroe.x, this.eroe.y, abitante.x, abitante.y);
+      const dV = Phaser.Math.Distance.Between(this.eroe.x, this.eroe.y, vena.x, vena.y);
+      return dA <= dV ? { tipo: 'abitante', abitante } : { tipo: 'vena', vena };
+    }
+    if (abitante) return { tipo: 'abitante', abitante };
+    if (vena) return { tipo: 'vena', vena };
+    return null;
   }
 
   // ---- cartelli, cancelli e frane (fase 7b) ----
