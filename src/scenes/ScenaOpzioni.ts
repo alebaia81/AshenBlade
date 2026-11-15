@@ -4,7 +4,7 @@
 // ed effetti si regolano qui dalla fase 9c.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_MENU, SCENA_OPZIONI } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_MENU, SCENA_OPZIONI } from '../costanti';
 import { leggiOpzioni, scriviOpzioni } from '../systems/opzioni';
 import { suoni } from '../audio/Suoni';
 import { archivioDelBrowser } from './browser';
@@ -37,9 +37,9 @@ export class ScenaOpzioni extends Phaser.Scene {
   }
 
   create(): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.6).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.6).setInteractive();
     this.add.rectangle(cx, cy, 620, 516, 0x1b2230, 0.98).setStrokeStyle(2, 0x9aa7b8);
     this.add.text(cx, cy - 228, 'Opzioni', { ...STILE_TITOLO, fontSize: '24px' }).setOrigin(0.5);
 

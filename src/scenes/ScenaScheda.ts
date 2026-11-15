@@ -6,7 +6,7 @@
 //   e non mentre un nemico ti vede.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_MONDO, SCENA_SCHEDA } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_MONDO, SCENA_SCHEDA } from '../costanti';
 import datiEroe from '../data/eroe.json';
 import type { DatiGioco } from '../data/caricaDati';
 import { modificatore, NOMI_CARATTERISTICHE, type NomeCaratteristica } from '../systems/caratteristiche';
@@ -82,7 +82,7 @@ export class ScenaScheda extends Phaser.Scene {
 
   /** La scheda può essere aperta direttamente su una pagina (es. dallo zaino). */
   create(dati: { scheda?: Scheda } = {}): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
@@ -94,7 +94,7 @@ export class ScenaScheda extends Phaser.Scene {
 
     // Velo scuro su tutto lo schermo: è interattivo così "assorbe" i clic
     // e non li lascia passare al gioco sotto (come un overlay modale).
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x1b2230, 0.97).setStrokeStyle(2, 0x9aa7b8);
     this.intestazione = this.add.text(this.sinistra + 24, this.alto + 18, '', { ...STILE_TITOLO, fontSize: '18px', lineSpacing: 6 });
 

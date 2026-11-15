@@ -48,6 +48,10 @@ export class ScenaCreazione extends Phaser.Scene {
     super(SCENA_CREAZIONE);
   }
 
+  get ox(): number {
+    return Math.max(0, (this.scale.width - LARGHEZZA_SCHERMO) / 2);
+  }
+
   create(): void {
     // Dalla fase 9a la scena può ripartire (nuova partita dal menu): si ricomincia da capo.
     this.schede = [];
@@ -55,14 +59,14 @@ export class ScenaCreazione extends Phaser.Scene {
     this.nome = '';
     this.nomeAttivo = false;
     this.cameras.main.setBackgroundColor('#1b2230');
-    this.add.text(LARGHEZZA_SCHERMO / 2, 34, 'Crea il tuo personaggio', STILE_TITOLO).setOrigin(0.5);
-    new Pulsante(this, 70, 34, { larghezza: 110, altezza: 34, testo: '← Menu', dimensioneTesto: 14, alClic: () => this.scene.start(SCENA_MENU) });
+    this.add.text(this.scale.width / 2, 34, 'Crea il tuo personaggio', STILE_TITOLO).setOrigin(0.5);
+    new Pulsante(this, 70 + this.ox, 34, { larghezza: 110, altezza: 34, testo: '← Menu', dimensioneTesto: 14, alClic: () => this.scene.start(SCENA_MENU) });
 
-    this.creaSchedeClassi();
-    this.creaCaratteristiche();
-    this.riepilogo = this.add.text(560, 190, '', { ...STILE_TESTO, wordWrap: { width: 370 }, lineSpacing: 6 });
-    this.creaCampoNome();
-    this.inizia = new Pulsante(this, 800, 492, {
+    this.creaSchedeClassi(this.ox);
+    this.creaCaratteristiche(this.ox);
+    this.riepilogo = this.add.text(560 + this.ox, 190, '', { ...STILE_TESTO, wordWrap: { width: 370 }, lineSpacing: 6 });
+    this.creaCampoNome(this.ox);
+    this.inizia = new Pulsante(this, 800 + this.ox, 492, {
       larghezza: 240,
       altezza: 46,
       testo: "Inizia l'avventura",
@@ -83,9 +87,9 @@ export class ScenaCreazione extends Phaser.Scene {
 
   // ---- costruzione dell'interfaccia ----
 
-  private creaSchedeClassi(): void {
+  private creaSchedeClassi(ox: number): void {
     Object.values(this.dati.classi).forEach((classe, i) => {
-      const pulsante = new Pulsante(this, 125 + i * 237, 112, {
+      const pulsante = new Pulsante(this, 125 + ox + i * 237, 112, {
         larghezza: 220,
         altezza: 84,
         testo: `${classe.nome}\n${classe.descrizione}`,
@@ -102,30 +106,30 @@ export class ScenaCreazione extends Phaser.Scene {
     });
   }
 
-  private creaCaratteristiche(): void {
-    this.testoPunti = this.add.text(30, 172, '', { ...STILE_TESTO, fontSize: '18px' });
+  private creaCaratteristiche(ox: number): void {
+    this.testoPunti = this.add.text(30 + ox, 172, '', { ...STILE_TESTO, fontSize: '18px' });
     const righe = {} as typeof this.righe;
     NOMI_CARATTERISTICHE.forEach((nome, i) => {
       const y = 222 + i * 40;
       const d = DESCRIZIONE_CARATTERISTICA[nome];
-      this.add.text(30, y - 10, `${nome}  ${d.nome}`, { ...STILE_TESTO, fontStyle: 'bold' });
-      this.add.text(30, y + 8, d.effetto, { ...STILE_TESTO, fontSize: '12px', color: '#9aa7b8' });
-      const valore = this.add.text(300, y, '', { ...STILE_TESTO, fontSize: '18px' }).setOrigin(0.5);
-      const meno = new Pulsante(this, 380, y, { larghezza: 34, altezza: 30, testo: '−', alClic: () => this.togliPunto(nome) });
-      const piu = new Pulsante(this, 420, y, { larghezza: 34, altezza: 30, testo: '+', alClic: () => this.mettiPunto(nome) });
+      this.add.text(30 + ox, y - 10, `${nome}  ${d.nome}`, { ...STILE_TESTO, fontStyle: 'bold' });
+      this.add.text(30 + ox, y + 8, d.effetto, { ...STILE_TESTO, fontSize: '12px', color: '#9aa7b8' });
+      const valore = this.add.text(300 + ox, y, '', { ...STILE_TESTO, fontSize: '18px' }).setOrigin(0.5);
+      const meno = new Pulsante(this, 380 + ox, y, { larghezza: 34, altezza: 30, testo: '−', alClic: () => this.togliPunto(nome) });
+      const piu = new Pulsante(this, 420 + ox, y, { larghezza: 34, altezza: 30, testo: '+', alClic: () => this.mettiPunto(nome) });
       righe[nome] = { valore, meno, piu };
     });
     this.righe = righe;
   }
 
-  private creaCampoNome(): void {
-    this.add.text(30, 478, 'Nome:', { ...STILE_TESTO, fontSize: '18px' });
-    this.campoNome = this.add.rectangle(100, 470, 330, 40, 0x10141c).setOrigin(0, 0).setStrokeStyle(2, 0x9aa7b8);
+  private creaCampoNome(ox: number): void {
+    this.add.text(30 + ox, 478, 'Nome:', { ...STILE_TESTO, fontSize: '18px' });
+    this.campoNome = this.add.rectangle(100 + ox, 470, 330, 40, 0x10141c).setOrigin(0, 0).setStrokeStyle(2, 0x9aa7b8);
     this.campoNome.setInteractive({ useHandCursor: true });
-    this.testoNome = this.add.text(112, 480, '', { ...STILE_TESTO, fontSize: '18px' });
+    this.testoNome = this.add.text(112 + ox, 480, '', { ...STILE_TESTO, fontSize: '18px' });
 
     // Pulsanti touch e rapidi: Scrivi (apre il campo nativo dello smartphone) e Casuale (dice roll)
-    new Pulsante(this, 488, 490, {
+    new Pulsante(this, 488 + ox, 490, {
       larghezza: 96,
       altezza: 38,
       testo: '✏️ Scrivi',
@@ -133,7 +137,7 @@ export class ScenaCreazione extends Phaser.Scene {
       alClic: () => this.richiediNomeTouch(),
     });
 
-    new Pulsante(this, 600, 490, {
+    new Pulsante(this, 600 + ox, 490, {
       larghezza: 104,
       altezza: 38,
       testo: '🎲 Casuale',

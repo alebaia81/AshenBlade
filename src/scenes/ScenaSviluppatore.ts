@@ -8,7 +8,6 @@ import * as Phaser from 'phaser';
 import {
   CHIAVE_SVIL_AREE,
   CHIAVE_SVIL_INVULNERABILE,
-  LARGHEZZA_SCHERMO,
   SCENA_MONDO,
   SCENA_SVILUPPATORE,
 } from '../costanti';
@@ -139,7 +138,7 @@ export class ScenaSviluppatore extends Phaser.Scene {
     const righeExtra = (this.elenco !== 'principale' ? 1 : 0) + (haScorrimento ? 1 : 0);
     const totaleRighe = visibili.length + righeExtra;
 
-    const destra = LARGHEZZA_SCHERMO - 12;
+    const destra = this.scale.width - 12;
     const alto = 64;
     const sinistra = destra - LARGHEZZA + 12;
     const altezza = (totaleRighe + 3) * ALTEZZA_RIGA + 16;

@@ -46,6 +46,14 @@ export class Vena {
     return this._esaurita;
   }
 
+  get x(): number {
+    return this.posizione.x;
+  }
+
+  get y(): number {
+    return this.posizione.y;
+  }
+
   /** Trema un attimo, poi chiama "fatto": la scena fa cadere i materiali. */
   scava(fatto: () => void): void {
     if (this._esaurita) return;

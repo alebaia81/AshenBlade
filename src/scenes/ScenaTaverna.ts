@@ -3,7 +3,7 @@
 // volta; poi riprenderlo è gratis. Uno solo alla volta.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_MONDO, SCENA_TAVERNA } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_MONDO, SCENA_TAVERNA } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { congeda, ingaggia } from '../systems/taverna';
 import type { DefinizioneCompagno } from '../systems/tipi';
@@ -28,11 +28,11 @@ export class ScenaTaverna extends Phaser.Scene {
   }
 
   create(): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x221a14, 0.97).setStrokeStyle(2, 0xb08a5a);
     this.add.text(this.sinistra + 24, this.alto + 14, 'Il Cinghiale Zoppo', { ...STILE_TITOLO, fontSize: '22px' });
     this.add.text(this.sinistra + 24, this.alto + 42, 'Un compagno ti segue e combatte con te. Si paga una volta sola; uno alla volta.', { ...STILE_TESTO, fontSize: '13px', color: '#c8b8a0' });

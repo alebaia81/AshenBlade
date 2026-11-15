@@ -4,7 +4,6 @@
 import * as Phaser from 'phaser';
 import {
   ALTEZZA_SCHERMO,
-  LARGHEZZA_SCHERMO,
   SCENA_INTERFACCIA,
   SCENA_MENU,
   SCENA_MONDO,
@@ -29,10 +28,10 @@ export class ScenaPausa extends Phaser.Scene {
   }
 
   create(): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.conferma = null;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, 380, 380, 0x1b2230, 0.98).setStrokeStyle(2, 0x9aa7b8);
     this.add.text(cx, 126, 'Pausa', { ...STILE_TITOLO, fontSize: '26px' }).setOrigin(0.5);
     const voce = (y: number, testo: string, alClic: () => void) => new Pulsante(this, cx, y, { larghezza: 260, altezza: 44, testo, dimensioneTesto: 17, alClic });

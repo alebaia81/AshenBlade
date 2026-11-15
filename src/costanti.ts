@@ -7,6 +7,16 @@ export const TESSERA = 16;
 export const LARGHEZZA_SCHERMO = 960;
 export const ALTEZZA_SCHERMO = 540;
 
+/** Calcola la larghezza dinamica per widescreen su schermi ultra-larghi (es. 19.5:9 o 20:9 su smartphone) */
+export function calcolaLarghezzaGioco(larghezzaFinestra: number, altezzaFinestra: number): number {
+  if (!larghezzaFinestra || !altezzaFinestra) return LARGHEZZA_SCHERMO;
+  const ratio = larghezzaFinestra / altezzaFinestra;
+  if (ratio > 16 / 9) {
+    return Math.min(1350, Math.round(ALTEZZA_SCHERMO * ratio));
+  }
+  return LARGHEZZA_SCHERMO;
+}
+
 /** Altezza della barra in basso (abilità, arma secondaria, compagno): il mondo si vede sopra. */
 export const ALTEZZA_BARRA_BASSA = 56;
 

@@ -7,7 +7,7 @@
 
 import { èDiMissione } from '../systems/oggetti';
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, LARGHEZZA_SCHERMO, SCENA_INVENTARIO, SCENA_MONDO } from '../costanti';
+import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, SCENA_INVENTARIO, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { materialiDaSmontaggio } from '../systems/crafting';
 import { confrontaConAttuale } from '../systems/equipaggiamento';
@@ -90,7 +90,7 @@ export class ScenaInventario extends Phaser.Scene {
     this.sopraSlot = null;
     this.trascinamento = null;
     this.fantasma = null;
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
@@ -98,7 +98,7 @@ export class ScenaInventario extends Phaser.Scene {
     const destra = this.destra;
 
     // Velo modale: assorbe i clic, come nella scheda.
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x1b2230, 0.97).setStrokeStyle(2, 0x9aa7b8);
 
     this.titolo = this.add.text(this.sinistra + 24, this.alto + 14, '', { ...STILE_TITOLO, fontSize: '18px' });

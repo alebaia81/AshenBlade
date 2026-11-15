@@ -6,7 +6,7 @@
 // che si ri-renderizza quando cambia lo stato.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, CHIAVE_SLOT, LARGHEZZA_SCHERMO, SCENA_CREAZIONE, SCENA_INTRO, SCENA_MENU, SCENA_MONDO, SCENA_OPZIONI } from '../costanti';
+import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, CHIAVE_SLOT, SCENA_CREAZIONE, SCENA_INTRO, SCENA_MENU, SCENA_MONDO, SCENA_OPZIONI } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { trovaPunto } from '../systems/mappa';
 import { leggiOpzioni } from '../systems/opzioni';
@@ -41,7 +41,6 @@ import { suoni } from '../audio/Suoni';
 
 type Pagina = 'principale' | 'nuova' | 'carica' | 'crediti';
 
-const CX = LARGHEZZA_SCHERMO / 2;
 /** Posizioni dei pulsanti: le usano anche le prove nel browser (tests/browser/aiuti.cjs). */
 export const MENU = {
   continua: 250,
@@ -64,12 +63,16 @@ export class ScenaMenu extends Phaser.Scene {
     super(SCENA_MENU);
   }
 
+  get cx(): number {
+    return this.scale.width / 2;
+  }
+
   create(): void {
     this.cameras.main.setBackgroundColor('#141a24');
-    this.add.text(CX, 38, 'Ashen Blade', { ...STILE_TITOLO, fontSize: '42px', color: '#f0e6c8' }).setOrigin(0.5);
-    this.add.text(CX, 74, "L'Ombra della Quercia", { ...STILE_TITOLO, fontSize: '20px', color: '#d8c290' }).setOrigin(0.5);
+    this.add.text(this.cx, 38, 'Ashen Blade', { ...STILE_TITOLO, fontSize: '42px', color: '#f0e6c8' }).setOrigin(0.5);
+    this.add.text(this.cx, 74, "L'Ombra della Quercia", { ...STILE_TITOLO, fontSize: '20px', color: '#d8c290' }).setOrigin(0.5);
     this.contenuto = this.add.container(0, 0);
-    this.messaggio = this.add.text(CX, 518, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffb0a0', align: 'center' }).setOrigin(0.5).setDepth(10);
+    this.messaggio = this.add.text(this.cx, 518, '', { ...STILE_TESTO, fontSize: '13px', color: '#ffb0a0', align: 'center' }).setOrigin(0.5).setDepth(10);
     this.input.keyboard?.on('keydown-ESC', () => this.pagina !== 'principale' && this.vai('principale'));
     this.cameras.main.fadeIn(400);
     suoni.branoDellaZona('menu');
@@ -114,7 +117,7 @@ export class ScenaMenu extends Phaser.Scene {
     const ultimo = ultimoSlot(archivio);
     const riepilogo = ultimo ? elencoSlot(archivio)[ultimo - 1] : null;
     const voce = (y: number, testo: string, alClic: () => void, colore?: number): Pulsante => {
-      const p = new Pulsante(this, CX, y, { larghezza: 320, altezza: 46, testo, dimensioneTesto: 18, ...(colore ? { colore } : {}), alClic });
+      const p = new Pulsante(this, this.cx, y, { larghezza: 320, altezza: 46, testo, dimensioneTesto: 18, ...(colore ? { colore } : {}), alClic });
       this.contenuto.add(p);
       return p;
     };
@@ -141,7 +144,7 @@ export class ScenaMenu extends Phaser.Scene {
     if (inModalitaStandalone()) return;
 
     if (promptInstallazioneDisponibile()) {
-      this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
+      this.pulsanteInstalla = new Pulsante(this, this.scale.width - 96, 38, {
         larghezza: 148,
         altezza: 36,
         testo: '📲 Installa App',
@@ -157,7 +160,7 @@ export class ScenaMenu extends Phaser.Scene {
       });
       this.contenuto.add(this.pulsanteInstalla);
     } else if (eDispositivoIos()) {
-      this.pulsanteInstalla = new Pulsante(this, LARGHEZZA_SCHERMO - 96, 38, {
+      this.pulsanteInstalla = new Pulsante(this, this.scale.width - 96, 38, {
         larghezza: 148,
         altezza: 36,
         testo: '📲 Installa su iOS',
@@ -170,13 +173,13 @@ export class ScenaMenu extends Phaser.Scene {
   }
 
   private mostraGuidaIos(): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.cx;
     const cy = ALTEZZA_SCHERMO / 2;
     const scatola = this.add.container(0, 0).setDepth(1000);
     const chiudi = () => scatola.destroy();
 
     // Sfondo oscurato che cattura i tocchi per non interagire sotto
-    scatola.add(this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.75).setInteractive().on('pointerdown', chiudi));
+    scatola.add(this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.75).setInteractive().on('pointerdown', chiudi));
 
     // Riquadro stile fantasy
     scatola.add(this.add.rectangle(cx, cy, 620, 240, 0x141a24).setStrokeStyle(2, 0xffd23f));
@@ -197,14 +200,15 @@ export class ScenaMenu extends Phaser.Scene {
 
   private paginaSlot(modo: 'nuova' | 'carica'): void {
     const titolo = modo === 'nuova' ? 'Nuova partita: scegli uno slot' : 'Carica una partita';
-    this.contenuto.add(this.add.text(CX, 106, titolo, { ...STILE_TITOLO, fontSize: '22px' }).setOrigin(0.5));
+    this.contenuto.add(this.add.text(this.cx, 106, titolo, { ...STILE_TITOLO, fontSize: '22px' }).setOrigin(0.5));
     elencoSlot(archivioDelBrowser()).forEach((s, i) => this.rigaSlot(s, MENU.righeSlot[i]!, modo));
-    this.contenuto.add(new Pulsante(this, CX, MENU.indietro, { larghezza: 200, altezza: 40, testo: 'Indietro (Esc)', alClic: () => this.vai('principale') }));
+    this.contenuto.add(new Pulsante(this, this.cx, MENU.indietro, { larghezza: 200, altezza: 40, testo: 'Indietro (Esc)', alClic: () => this.vai('principale') }));
   }
 
   private rigaSlot(s: StatoSlot, y: number, modo: 'nuova' | 'carica'): void {
     const larghezza = modo === 'carica' ? 520 : 600;
-    const x = modo === 'carica' ? 110 + larghezza / 2 : CX;
+    const inizioX = modo === 'carica' ? (this.scale.width - 770) / 2 : this.cx - larghezza / 2;
+    const x = inizioX + larghezza / 2;
     const riga = new Pulsante(this, x, y, {
       larghezza,
       altezza: 84,
@@ -219,7 +223,7 @@ export class ScenaMenu extends Phaser.Scene {
 
     // A destra: esporta, importa, elimina.
     const piccolo = (dx: number, testo: string, alClic: () => void, attivo: boolean) => {
-      const p = new Pulsante(this, 110 + larghezza + 20 + dx, y, { larghezza: 76, altezza: 40, testo, dimensioneTesto: 13, alClic });
+      const p = new Pulsante(this, inizioX + larghezza + 20 + dx, y, { larghezza: 76, altezza: 40, testo, dimensioneTesto: 13, alClic });
       if (!attivo) p.impostaAttivo(false);
       this.contenuto.add(p);
     };
@@ -248,8 +252,8 @@ export class ScenaMenu extends Phaser.Scene {
       'Grafica (dalla fase 9b): Kenney.nl, pacchetti Tiny Town e Tiny Dungeon (CC0)',
       'Suoni e musica (dalla fase 9c): generati dal codice',
     ];
-    this.contenuto.add(this.add.text(CX, 260, righe.join('\n'), { ...STILE_TESTO, fontSize: '18px', align: 'center', lineSpacing: 8 }).setOrigin(0.5));
-    this.contenuto.add(new Pulsante(this, CX, MENU.indietro, { larghezza: 200, altezza: 40, testo: 'Indietro (Esc)', alClic: () => this.vai('principale') }));
+    this.contenuto.add(this.add.text(this.cx, 260, righe.join('\n'), { ...STILE_TESTO, fontSize: '18px', align: 'center', lineSpacing: 8 }).setOrigin(0.5));
+    this.contenuto.add(new Pulsante(this, this.cx, MENU.indietro, { larghezza: 200, altezza: 40, testo: 'Indietro (Esc)', alClic: () => this.vai('principale') }));
   }
 
   // ---- azioni ----
@@ -338,15 +342,21 @@ export class ScenaMenu extends Phaser.Scene {
     const g = this.add.graphics();
     this.contenuto.add(g);
     g.fillStyle(0x1f2a1f, 1);
-    g.fillRect(0, ALTEZZA_SCHERMO - 60, LARGHEZZA_SCHERMO, 60); // prato
+    g.fillRect(0, ALTEZZA_SCHERMO - 60, this.scale.width, 60); // prato
+
+    const xAlbero = Math.max(80, this.cx - 350);
     g.fillStyle(0x5a3d22, 1);
-    g.fillRect(118, 330, 26, 150); // tronco
+    g.fillRect(xAlbero - 13, 330, 26, 150); // tronco
     g.fillStyle(0x2f5d3a, 1);
-    for (const [x, y, r] of [[131, 300, 62], [90, 330, 44], [172, 330, 44], [131, 250, 46]] as const) g.fillCircle(x, y, r);
+    for (const [dx, y, r] of [[0, 300, 62], [-41, 330, 44], [41, 330, 44], [0, 250, 46]] as const) {
+      g.fillCircle(xAlbero + dx, y, r);
+    }
+
+    const xLuna = Math.min(this.scale.width - 130, this.cx + 350);
     g.fillStyle(0xe8e0c0, 1);
-    g.fillCircle(830, 90, 30); // la luna
+    g.fillCircle(xLuna, 90, 30); // la luna
     g.fillStyle(0x141a24, 1);
-    g.fillCircle(842, 82, 26); // …che diventa una falce
-    this.contenuto.add(this.add.text(CX, 104, 'Un gioco di ruolo', { ...STILE_TESTO, fontSize: '15px', color: '#9aa7b8' }).setOrigin(0.5));
+    g.fillCircle(xLuna + 12, 82, 26); // …che diventa una falce
+    this.contenuto.add(this.add.text(this.cx, 104, 'Un gioco di ruolo', { ...STILE_TESTO, fontSize: '15px', color: '#9aa7b8' }).setOrigin(0.5));
   }
 }

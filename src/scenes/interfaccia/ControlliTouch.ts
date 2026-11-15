@@ -17,6 +17,9 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
 
   private btnAttacco: Phaser.GameObjects.Container;
   private btnSchivata: Phaser.GameObjects.Container;
+  private btnRaccolta: Phaser.GameObjects.Container;
+  private testoRaccolta: Phaser.GameObjects.Text;
+  private azioneRaccolta: (() => void) | null = null;
 
   constructor(scena: Phaser.Scene) {
     super(scena, 0, 0);
@@ -72,10 +75,11 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
       Comandi.rilasciaAttaccoTouch();
     });
 
+    const xDestra = scena.scale.width;
     // 2. Pulsante Attacco (in basso a destra, grande)
     this.btnAttacco = this.creaPulsanteAzione(
       scena,
-      870,
+      xDestra - 90,
       432,
       28,
       0x991b1b,
@@ -84,13 +88,13 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
       20,
       () => Comandi.segnalaAttaccoTouch(true),
       () => Comandi.rilasciaAttaccoTouch(),
-    );
+    ).container;
     this.add(this.btnAttacco);
 
     // 3. Pulsante Schivata / Capriola (in basso a destra, accanto all'attacco)
     this.btnSchivata = this.creaPulsanteAzione(
       scena,
-      796,
+      xDestra - 164,
       456,
       22,
       0x1e3a8a,
@@ -99,8 +103,26 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
       16,
       () => Comandi.segnalaSchivataTouch(),
       () => {},
-    );
+    ).container;
     this.add(this.btnSchivata);
+
+    // 4. Nuovo Pulsante Raccolta / Scavo contestuale (sopra l'attacco, per pollice destro)
+    const resRaccolta = this.creaPulsanteAzione(
+      scena,
+      xDestra - 90,
+      352,
+      25,
+      0x166534,
+      0x4ade80,
+      '⛏️',
+      18,
+      () => this.azioneRaccolta?.(),
+      () => {},
+    );
+    this.btnRaccolta = resRaccolta.container;
+    this.testoRaccolta = resRaccolta.text;
+    this.btnRaccolta.setVisible(false);
+    this.add(this.btnRaccolta);
 
     // Autodetect touch device
     const opzioni = leggiOpzioni(archivioDelBrowser());
@@ -118,6 +140,18 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
     scena.add.existing(this);
   }
 
+  /** Mostra o nasconde il pulsante rapido di raccolta contestuale (minerale o pianta). */
+  impostaRaccolta(visibile: boolean, icona: '⛏️' | '✋' = '⛏️', alTocco?: () => void): void {
+    if (!this.visible) return;
+    this.btnRaccolta.setVisible(visibile);
+    if (visibile) {
+      this.testoRaccolta.setText(icona);
+      this.azioneRaccolta = alTocco ?? null;
+    } else {
+      this.azioneRaccolta = null;
+    }
+  }
+
   private creaPulsanteAzione(
     scena: Phaser.Scene,
     x: number,
@@ -129,7 +163,7 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
     dimensioneTesto: number,
     suPremi: () => void,
     suRilascia: () => void,
-  ): Phaser.GameObjects.Container {
+  ): { container: Phaser.GameObjects.Container; text: Phaser.GameObjects.Text } {
     const c = scena.add.container(x, y);
     const bg = scena.add.circle(0, 0, raggio, colore, 0.55).setStrokeStyle(2, bordo, 0.85);
     const txt = scena.add.text(0, 0, simbolo, {
@@ -156,7 +190,7 @@ export class ControlliTouch extends Phaser.GameObjects.Container {
     bg.on('pointerup', termina);
     bg.on('pointerout', termina);
 
-    return c;
+    return { container: c, text: txt };
   }
 
   private aggiornaPosizioneJoystick(px: number, py: number): void {

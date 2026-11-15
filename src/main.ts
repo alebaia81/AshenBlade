@@ -1,7 +1,7 @@
 // Punto di ingresso: carica i dati, configura Phaser e avvia le scene.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO } from './costanti';
+import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, calcolaLarghezzaGioco } from './costanti';
 import { caricaDati } from './data/caricaDati';
 import { installaGestoreErrori, mostraErrore } from './erroreVisibile';
 import { ScenaCreazione } from './scenes/ScenaCreazione';
@@ -38,6 +38,11 @@ try {
   suoni.impostaVolumi(opzioni.volumeMusica, opzioni.volumeEffetti);
   (window as unknown as { suoni: typeof suoni }).suoni = suoni;
 
+  const calcolaLarghezza = (): number => {
+    if (typeof window === 'undefined') return LARGHEZZA_SCHERMO;
+    return calcolaLarghezzaGioco(window.innerWidth, window.innerHeight);
+  };
+
   const gioco = new Phaser.Game({
     type: Phaser.AUTO, // WebGL se disponibile
     parent: 'gioco',
@@ -49,10 +54,10 @@ try {
       activePointers: 3,
     },
     scale: {
-      // FIT: adatta il gioco alla finestra mantenendo le proporzioni 16:9.
+      // FIT: adatta il gioco alla finestra a tutto schermo.
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: LARGHEZZA_SCHERMO,
+      width: calcolaLarghezza(),
       height: ALTEZZA_SCHERMO,
     },
     physics: {
@@ -89,11 +94,16 @@ try {
   // curiosare (es. gioco.scene.getScene('Mondo')) e per le verifiche automatiche.
   (window as unknown as { gioco: Phaser.Game }).gioco = gioco;
 
-  window.addEventListener('resize', () => {
+  const aggiornaDimensioni = () => {
+    const nuovaLarghezza = calcolaLarghezza();
+    if (gioco.scale.width !== nuovaLarghezza) {
+      gioco.scale.setGameSize(nuovaLarghezza, ALTEZZA_SCHERMO);
+    }
     gioco.scale.refresh();
-  });
+  };
+  window.addEventListener('resize', aggiornaDimensioni);
   window.addEventListener('orientationchange', () => {
-    setTimeout(() => gioco.scale.refresh(), 200);
+    setTimeout(aggiornaDimensioni, 200);
   });
 
   // Il gioco è partito: togliamo la scritta di caricamento e lo segnaliamo

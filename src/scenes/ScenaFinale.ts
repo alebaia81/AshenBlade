@@ -4,7 +4,7 @@
 // resta aperto per le quest rimaste (design §3).
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_FINALE, SCENA_MONDO } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_FINALE, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { STILE_TESTO } from './interfaccia/testi';
 
@@ -19,9 +19,9 @@ export class ScenaFinale extends Phaser.Scene {
 
   create(): void {
     this.pagina = 0;
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x05050a, 1).setInteractive().on('pointerdown', () => this.avanti());
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x05050a, 1).setInteractive().on('pointerdown', () => this.avanti());
     this.testo = this.add
       .text(cx, cy - 20, '', { ...STILE_TESTO, fontSize: '22px', color: '#f0e8d8', align: 'center', wordWrap: { width: 640 }, lineSpacing: 8 })
       .setOrigin(0.5);

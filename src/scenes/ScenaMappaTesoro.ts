@@ -5,7 +5,7 @@
 // Si apre sopra lo zaino ("Usa" sulla mappa); si chiude con un clic o con Esc.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_MAPPA_TESORO } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_MAPPA_TESORO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { èCalpestabile, voceIn } from '../systems/mappa';
 import { STILE_TESTO, STILE_TITOLO } from './interfaccia/testi';
@@ -23,7 +23,7 @@ export class ScenaMappaTesoro extends Phaser.Scene {
   }
 
   create({ oggetto }: DatiMappaTesoro): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     const def = this.dati.oggetti[oggetto];
     const effetto = def?.effetto;
@@ -33,7 +33,7 @@ export class ScenaMappaTesoro extends Phaser.Scene {
     const mappa = idMappa ? this.dati.mappe[idMappa] : undefined;
 
     // Velo e pergamena: tutto lo schermo è cliccabile per chiudere.
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.6).setInteractive().on('pointerdown', () => this.chiudi());
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.6).setInteractive().on('pointerdown', () => this.chiudi());
     this.add.rectangle(cx, cy, AREA.larghezza + 80, AREA.altezza + 150, 0xe8d9b0).setStrokeStyle(4, 0x8a6a3a);
     this.add.text(cx, cy - AREA.altezza / 2 - 52, def?.nome ?? 'Mappa', { ...STILE_TITOLO, fontSize: '22px', color: '#4a3018' }).setOrigin(0.5);
 

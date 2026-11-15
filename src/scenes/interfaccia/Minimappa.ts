@@ -8,10 +8,6 @@ import type { ScenaMondo } from '../ScenaMondo';
 import { STILE_TESTO, STILE_TITOLO } from './testi';
 import { suoni } from '../../audio/Suoni';
 
-const GRANDE = { x: 130, y: 74, larghezza: 700, altezza: 372 };
-const GRANDE_VALLE = { x: GRANDE.x + 18, y: GRANDE.y + 44, larghezza: 316, altezza: 280 };
-const GRANDE_ZONA = { x: GRANDE.x + 356, y: GRANDE.y + 44, larghezza: 326, altezza: 280 };
-
 interface NodoMondo {
   id: string;
   nomeCompleto: string;
@@ -52,6 +48,7 @@ const COLLEGAMENTI_MONDO: readonly [string, string][] = [
 export type ModalitaMappa = 'nascosta' | 'grande';
 
 export class Minimappa {
+  private readonly scena: Phaser.Scene;
   private readonly grafica: Phaser.GameObjects.Graphics;
   private readonly chiusuraGrande: Phaser.GameObjects.Rectangle;
   private readonly titoloGrande: Phaser.GameObjects.Text;
@@ -61,12 +58,29 @@ export class Minimappa {
   private readonly etichetteGrandi: Phaser.GameObjects.Text[] = [];
   private modalita: ModalitaMappa = 'nascosta';
 
+  private get grandeX(): number {
+    return Math.round((this.scena.scale.width - 700) / 2);
+  }
+  private get grandeArea() {
+    return { x: this.grandeX, y: 74, larghezza: 700, altezza: 372 };
+  }
+  private get grandeValle() {
+    return { x: this.grandeX + 18, y: 74 + 44, larghezza: 316, altezza: 280 };
+  }
+  private get grandeZona() {
+    return { x: this.grandeX + 356, y: 74 + 44, larghezza: 326, altezza: 280 };
+  }
+
   constructor(scena: Phaser.Scene) {
+    this.scena = scena;
     this.grafica = scena.add.graphics().setDepth(15);
+    const g = this.grandeArea;
+    const gv = this.grandeValle;
+    const gz = this.grandeZona;
 
     // Intestazione cliccabile della mappa per chiuderla col mouse.
     this.chiusuraGrande = scena.add
-      .rectangle(GRANDE.x + GRANDE.larghezza / 2, GRANDE.y + 18, GRANDE.larghezza, 36, 0x243040, 0.01)
+      .rectangle(g.x + g.larghezza / 2, g.y + 18, g.larghezza, 36, 0x243040, 0.01)
       .setDepth(16)
       .setVisible(false)
       .setInteractive({ useHandCursor: true });
@@ -76,7 +90,7 @@ export class Minimappa {
     });
 
     this.titoloGrande = scena.add
-      .text(GRANDE.x + GRANDE.larghezza / 2, GRANDE.y + 10, 'Mappa della Valle e della Zona  (clic qui o premi M per chiudere)', {
+      .text(g.x + g.larghezza / 2, g.y + 10, 'Mappa della Valle e della Zona  (clic qui o premi M per chiudere)', {
         ...STILE_TITOLO,
         fontSize: '16px',
         color: '#ffe680',
@@ -88,7 +102,7 @@ export class Minimappa {
       .setVisible(false);
 
     this.sottotitoloValle = scena.add
-      .text(GRANDE_VALLE.x + GRANDE_VALLE.larghezza / 2, GRANDE.y + 30, 'Mondo (le 12 zone della Valle)', {
+      .text(gv.x + gv.larghezza / 2, g.y + 30, 'Mondo (le 12 zone della Valle)', {
         ...STILE_TESTO,
         fontSize: '12px',
         color: '#cfd8e3',
@@ -98,7 +112,7 @@ export class Minimappa {
       .setVisible(false);
 
     this.sottotitoloZona = scena.add
-      .text(GRANDE_ZONA.x + GRANDE_ZONA.larghezza / 2, GRANDE.y + 30, '', {
+      .text(gz.x + gz.larghezza / 2, g.y + 30, '', {
         ...STILE_TESTO,
         fontSize: '12px',
         color: '#cfd8e3',
@@ -108,7 +122,7 @@ export class Minimappa {
       .setVisible(false);
 
     this.piedeGrande = scena.add
-      .container(GRANDE.x + GRANDE.larghezza / 2, GRANDE.y + GRANDE.altezza - 14)
+      .container(g.x + g.larghezza / 2, g.y + g.altezza - 14)
       .setDepth(16)
       .setVisible(false);
 
@@ -148,8 +162,8 @@ export class Minimappa {
     }
 
     for (const n of NODI_MONDO) {
-      const gx = GRANDE_VALLE.x + n.rx * GRANDE_VALLE.larghezza;
-      const gy = GRANDE_VALLE.y + n.ry * GRANDE_VALLE.altezza + (n.dyGrande ?? -8);
+      const gx = gv.x + n.rx * gv.larghezza;
+      const gy = gv.y + n.ry * gv.altezza + (n.dyGrande ?? -8);
       const tg = scena.add
         .text(gx, gy, n.nomeCompleto, {
           ...STILE_TESTO,
@@ -174,6 +188,25 @@ export class Minimappa {
   impostaModalita(nuova: ModalitaMappa): void {
     this.modalita = nuova;
     const inGrande = nuova === 'grande';
+    if (inGrande) {
+      const g = this.grandeArea;
+      const gv = this.grandeValle;
+      const gz = this.grandeZona;
+      this.chiusuraGrande.setPosition(g.x + g.larghezza / 2, g.y + 18);
+      this.titoloGrande.setPosition(g.x + g.larghezza / 2, g.y + 10);
+      this.sottotitoloValle.setPosition(gv.x + gv.larghezza / 2, g.y + 30);
+      this.sottotitoloZona.setPosition(gz.x + gz.larghezza / 2, g.y + 30);
+      this.piedeGrande.setPosition(g.x + g.larghezza / 2, g.y + g.altezza - 14);
+
+      NODI_MONDO.forEach((n, i) => {
+        const tg = this.etichetteGrandi[i];
+        if (tg) {
+          const gx = gv.x + n.rx * gv.larghezza;
+          const gy = gv.y + n.ry * gv.altezza + (n.dyGrande ?? -8);
+          tg.setPosition(gx, gy);
+        }
+      });
+    }
     this.chiusuraGrande.setVisible(inGrande);
     this.titoloGrande.setVisible(inGrande);
     this.sottotitoloValle.setVisible(inGrande);
@@ -196,19 +229,20 @@ export class Minimappa {
     dati: NonNullable<ReturnType<ScenaMondo['statoMinimappa']>>,
     adesso: number,
   ): void {
-    g.fillStyle(0x0f1620, 0.92).fillRect(GRANDE.x, GRANDE.y, GRANDE.larghezza, GRANDE.altezza);
-    g.fillStyle(0x1f2d3d, 0.96).fillRect(GRANDE.x, GRANDE.y, GRANDE.larghezza, 28);
-    g.lineStyle(2, 0xd8c290, 1).strokeRect(GRANDE.x, GRANDE.y, GRANDE.larghezza, GRANDE.altezza);
+    const grande = this.grandeArea;
+    g.fillStyle(0x0f1620, 0.92).fillRect(grande.x, grande.y, grande.larghezza, grande.altezza);
+    g.fillStyle(0x1f2d3d, 0.96).fillRect(grande.x, grande.y, grande.larghezza, 28);
+    g.lineStyle(2, 0xd8c290, 1).strokeRect(grande.x, grande.y, grande.larghezza, grande.altezza);
     g.lineStyle(1, 0x5a6d82, 0.8).lineBetween(
-      GRANDE.x + 344,
-      GRANDE.y + 32,
-      GRANDE.x + 344,
-      GRANDE.y + GRANDE.altezza - 28,
+      grande.x + 344,
+      grande.y + 32,
+      grande.x + 344,
+      grande.y + grande.altezza - 28,
     );
 
     this.sottotitoloZona.setText(`Zona attuale: ${dati.nomeMappa}`);
-    this.disegnaMondo(g, GRANDE_VALLE, this.etichetteGrandi, dati.idMappa, adesso);
-    this.disegnaZona(g, GRANDE_ZONA, dati, adesso);
+    this.disegnaMondo(g, this.grandeValle, this.etichetteGrandi, dati.idMappa, adesso);
+    this.disegnaZona(g, this.grandeZona, dati, adesso);
   }
 
   private disegnaZona(

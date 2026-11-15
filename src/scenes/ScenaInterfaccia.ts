@@ -49,9 +49,9 @@ const VITA = { x: 12, y: 46, larghezza: 180, altezza: 14 };
  */
 const BARRA_BASSA = { altezza: ALTEZZA_BARRA_BASSA, distanza: 52, stacco: 40 };
 /** Centro x dello spazio "i" (0–3 azioni, 4–9 preferiti): tutto centrato nello schermo. */
-export function xSpazioBarra(i: number): number {
+export function xSpazioBarra(i: number, larghezzaSchermo: number = LARGHEZZA_SCHERMO): number {
   const larghezza = 10 * BARRA_BASSA.distanza + BARRA_BASSA.stacco;
-  const inizio = (LARGHEZZA_SCHERMO - larghezza) / 2 + BARRA_BASSA.distanza / 2;
+  const inizio = (larghezzaSchermo - larghezza) / 2 + BARRA_BASSA.distanza / 2;
   return inizio + i * BARRA_BASSA.distanza + (i >= 4 ? BARRA_BASSA.stacco : 0);
 }
 /** Nomi brevi degli effetti a tempo, per l'elenco sotto le barre. */
@@ -72,6 +72,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
   private effetti!: Phaser.GameObjects.Text;
   private dischetto!: Pulsante;
   private minimappa!: Minimappa;
+  private controlliTouch!: ControlliTouch;
   private vignetteDanno!: Phaser.GameObjects.Image;
 
   constructor(private readonly dati: DatiGioco) {
@@ -79,6 +80,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
   }
 
   create(): void {
+    const larghezza = this.scale.width;
     const nomeMappa = this.add.text(12, 10, '', {
       fontFamily: 'monospace',
       fontSize: '20px',
@@ -111,7 +113,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
       { icona: iconaMappa, suggerimento: 'Mappa: Zona / Valle / Grande (M)', alClic: () => this.minimappa.alternaModalita() },
     ];
     icone.forEach((voce, i) => {
-      const pulsante = new Pulsante(this, LARGHEZZA_SCHERMO - 30 - i * DISTANZA_ICONE, 30, {
+      const pulsante = new Pulsante(this, larghezza - 30 - i * DISTANZA_ICONE, 30, {
         larghezza: 44,
         altezza: 44,
         icona: voce.icona,
@@ -124,11 +126,11 @@ export class ScenaInterfaccia extends Phaser.Scene {
     // si può salvare in qualsiasi momento (§12), anche con lo zaino aperto.
     this.input.keyboard?.on('keydown-F2', () => this.salva());
     // Pallino giallo sul ritratto quando ci sono punti da assegnare.
-    const pallino = this.add.circle(LARGHEZZA_SCHERMO - 12, 12, 7, 0xffd23f).setStrokeStyle(2, 0x000000).setDepth(2);
+    const pallino = this.add.circle(larghezza - 12, 12, 7, 0xffd23f).setStrokeStyle(2, 0x000000).setDepth(2);
 
     this.creaBarraBassa(mondo);
     this.minimappa = new Minimappa(this);
-    new ControlliTouch(this);
+    this.controlliTouch = new ControlliTouch(this);
     // Monete: un'icona e il numero, sotto le barre.
     const yMonete = ESPERIENZA.y + 20;
     const iconaMonete = this.add.graphics({ x: 22, y: yMonete });
@@ -138,7 +140,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
     this.effetti = this.add.text(12, yMonete + 16, '', { ...stileNumeri, fontSize: '13px', color: '#ffe680' });
 
     const messaggio = this.add
-      .text(LARGHEZZA_SCHERMO / 2, ALTEZZA_SCHERMO / 2, '', {
+      .text(larghezza / 2, ALTEZZA_SCHERMO / 2, '', {
         fontFamily: 'monospace',
         fontSize: '40px',
         color: '#ffffff',
@@ -149,7 +151,7 @@ export class ScenaInterfaccia extends Phaser.Scene {
 
     const avviso = this.add
       // In basso al centro: in alto ci sono già nome della mappa, barre e pannelli.
-      .text(LARGHEZZA_SCHERMO / 2, ALTEZZA_SCHERMO - 90, '', {
+      .text(larghezza / 2, ALTEZZA_SCHERMO - 90, '', {
         fontFamily: 'sans-serif',
         fontSize: '20px',
         color: '#ffe680',
@@ -163,10 +165,10 @@ export class ScenaInterfaccia extends Phaser.Scene {
 
     // La barra del boss (fase 8a): in alto al centro, visibile solo durante lo scontro.
     const LARGHEZZA_BOSS = 280;
-    const xBoss = LARGHEZZA_SCHERMO / 2 - LARGHEZZA_BOSS / 2;
+    const xBoss = larghezza / 2 - LARGHEZZA_BOSS / 2;
     const fondoBoss = this.add.rectangle(xBoss, 66, LARGHEZZA_BOSS, 12, 0x1a0a0a).setOrigin(0, 0.5).setStrokeStyle(2, 0x000000);
     const barraBoss = this.add.rectangle(xBoss + 2, 66, LARGHEZZA_BOSS - 4, 8, 0xb02a6a).setOrigin(0, 0.5);
-    const nomeBoss = this.add.text(LARGHEZZA_SCHERMO / 2, 57, '', { ...stileNumeri, fontSize: '14px', color: '#f0c8ff' }).setOrigin(0.5, 1);
+    const nomeBoss = this.add.text(larghezza / 2, 57, '', { ...stileNumeri, fontSize: '14px', color: '#f0c8ff' }).setOrigin(0.5, 1);
     const parteBoss = [fondoBoss, barraBoss, nomeBoss];
 
     // Ogni "mostra" riceve il valore dal registro e aggiorna il disegno.
@@ -242,8 +244,8 @@ export class ScenaInterfaccia extends Phaser.Scene {
     }
 
     this.vignetteDanno = this.add
-      .image(LARGHEZZA_SCHERMO / 2, ALTEZZA_SCHERMO / 2, CHIAVE_TEX)
-      .setDisplaySize(LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO)
+      .image(this.scale.width / 2, ALTEZZA_SCHERMO / 2, CHIAVE_TEX)
+      .setDisplaySize(this.scale.width, ALTEZZA_SCHERMO)
       .setDepth(999)
       .setAlpha(0);
 
@@ -326,18 +328,28 @@ export class ScenaInterfaccia extends Phaser.Scene {
       this.compagno.impostaSuggerimento(`${c.nome} · Q\n${c.abilita}: ${c.descrizione}${c.alTappeto ? '\nAl tappeto: si rialza a fine combattimento' : ''}`);
     }
     this.effetti.setText(mondo.effettiAttivi().map((e) => `${NOMI_EFFETTI[e.tipo] ?? e.tipo} +${e.valore} · ${e.secondi} s`).join('\n'));
+    if (this.controlliTouch) {
+      const vena = mondo.trovaVenaVicina?.();
+      if (vena) {
+        const icona = vena.aspetto === 'cespuglio' ? '✋' : '⛏️';
+        this.controlliTouch.impostaRaccolta(true, icona, () => mondo.scavaVena(vena));
+      } else {
+        this.controlliTouch.impostaRaccolta(false);
+      }
+    }
   }
 
   private creaBarraBassa(mondo: () => ScenaMondo): void {
+    const larghezza = this.scale.width;
     const y = ALTEZZA_SCHERMO - BARRA_BASSA.altezza / 2;
     // Lo sfondo è interattivo: un clic sulla barra non deve far camminare l'eroe.
     this.add
-      .rectangle(LARGHEZZA_SCHERMO / 2, y, LARGHEZZA_SCHERMO, BARRA_BASSA.altezza, 0x10141c, 0.85)
+      .rectangle(larghezza / 2, y, larghezza, BARRA_BASSA.altezza, 0x10141c, 0.85)
       .setInteractive();
     const abilita = this.dati.classi[leggiPartita(this).personaggio.classe]!.abilita;
     const costo = abilita.costoMana > 0 ? ` · ${abilita.costoMana} mana` : '';
     const spazio = (i: number, tasto: string, icona: DisegnaIcona, suggerimento: string, alClic: () => void) =>
-      new SpazioBarra(this, xSpazioBarra(i), y, tasto, alClic).impostaIcona('fissa', icona).impostaSuggerimento(suggerimento);
+      new SpazioBarra(this, xSpazioBarra(i, larghezza), y, tasto, alClic).impostaIcona('fissa', icona).impostaSuggerimento(suggerimento);
 
     this.capriola = spazio(0, '', iconaCapriola, 'Capriola\nclic destro nel mondo · Spazio', () => mondo().capriola());
     this.abilita = spazio(1, 'E', iconaAbilita, `${abilita.nome}${costo} · E\n${abilita.descrizione}`, () => mondo().attivaAbilita());
@@ -345,10 +357,10 @@ export class ScenaInterfaccia extends Phaser.Scene {
     this.compagno = spazio(3, 'Q', iconaCompagno, '', () => mondo().usaAbilitaCompagno());
 
     // Una lineetta separa le azioni fisse dai preferiti.
-    const xSeparatore = (xSpazioBarra(3) + xSpazioBarra(4)) / 2;
+    const xSeparatore = (xSpazioBarra(3, larghezza) + xSpazioBarra(4, larghezza)) / 2;
     this.add.rectangle(xSeparatore, y, 2, LATO_SPAZIO - 8, 0x4a5568);
     this.preferiti = Array.from({ length: NUMERO_PREFERITI }, (_, i) =>
-      new SpazioBarra(this, xSpazioBarra(4 + i), y, String(i + 1), () => mondo().usaPreferito(i)),
+      new SpazioBarra(this, xSpazioBarra(4 + i, larghezza), y, String(i + 1), () => mondo().usaPreferito(i)),
     );
     this.aggiornaPreferiti(leggiPartita(this));
   }

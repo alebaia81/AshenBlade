@@ -5,7 +5,7 @@
 // I prezzi e le regole stanno in systems/negozio.ts.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, LARGHEZZA_SCHERMO, SCENA_MONDO, SCENA_NEGOZIO } from '../costanti';
+import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, SCENA_MONDO, SCENA_NEGOZIO } from '../costanti';
 import type { DatiGioco, DefinizioneNegozio } from '../data/caricaDati';
 import { modificatore } from '../systems/caratteristiche';
 import { èDiMissione } from '../systems/oggetti';
@@ -50,13 +50,13 @@ export class ScenaNegozio extends Phaser.Scene {
     this.negozio = this.dati.negozi[dati.negozio]!;
     this.selezione = null;
     this.sopra = null;
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
     const { sinistra, alto } = this;
 
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x1b2230, 0.97).setStrokeStyle(2, 0x9aa7b8);
     this.add.text(sinistra + 24, alto + 16, this.negozio.nome, { ...STILE_TITOLO, fontSize: '22px' });
     const intestazione = { ...STILE_TESTO, fontSize: '13px', color: '#9aa7b8' };

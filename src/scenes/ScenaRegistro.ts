@@ -5,7 +5,7 @@
 // Non decide nulla: legge la Partita e chiede a systems/quest.ts.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, LARGHEZZA_SCHERMO, SCENA_MONDO, SCENA_REGISTRO } from '../costanti';
+import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, SCENA_MONDO, SCENA_REGISTRO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { chiConclude, progresso, statoDi, type DefinizioneQuest, type StatoVisibile } from '../systems/quest';
 import { Pulsante } from './interfaccia/Pulsante';
@@ -34,12 +34,12 @@ export class ScenaRegistro extends Phaser.Scene {
   }
 
   create(): void {
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
     this.scelta = null;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x2a2418, 0.97).setStrokeStyle(2, 0xc9b88a);
     this.add.text(this.sinistra + 24, this.alto + 16, 'Registro delle quest', { ...STILE_TITOLO, fontSize: '22px' });
     new Pulsante(this, this.sinistra + PANNELLO.larghezza - 90, this.alto + PANNELLO.altezza - 32, { larghezza: 150, altezza: 40, testo: 'Chiudi (L)', alClic: () => this.chiudi() });

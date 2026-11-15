@@ -4,7 +4,7 @@
 // systems/dialoghi.ts: questa scena si limita a mostrare e a chiamare.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_DIALOGO, SCENA_MONDO } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_DIALOGO, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { esitoRisposta, risposteVisibili, type CosaApribile, type Dialogo, type Risposta } from '../systems/dialoghi';
 import type { DefinizioneAbitante } from '../systems/tipi';
@@ -42,11 +42,11 @@ export class ScenaDialogo extends Phaser.Scene {
     this.dialogo = this.dati.dialoghi[this.abitante.dialogo]!;
     this.nodo = this.dialogo.inizio;
 
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     this.sinistra = cx - RIQUADRO.larghezza / 2;
     this.alto = ALTEZZA_SCHERMO - RIQUADRO.margineBasso - RIQUADRO.altezza;
     // Velo leggero su tutto lo schermo: i clic non arrivano al mondo.
-    this.add.rectangle(cx, ALTEZZA_SCHERMO / 2, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x000000, 0.25).setInteractive();
+    this.add.rectangle(cx, ALTEZZA_SCHERMO / 2, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.25).setInteractive();
     this.add
       .rectangle(cx, this.alto + RIQUADRO.altezza / 2, RIQUADRO.larghezza, RIQUADRO.altezza, 0x1b2230, 0.96)
       .setStrokeStyle(2, 0x9aa7b8);

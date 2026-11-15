@@ -14,7 +14,6 @@ import {
   CHIAVE_SVIL_AREE,
   CHIAVE_SVIL_INVULNERABILE,
   DURATA_DISSOLVENZA,
-  LARGHEZZA_SCHERMO,
   SCENA_DIALOGO,
   SCENA_FUCINA,
   SCENA_INTERFACCIA,
@@ -1310,6 +1309,26 @@ export class ScenaMondo extends Phaser.Scene {
     });
   }
 
+  /** Restituisce la vena o risorsa non esaurita più vicina all'eroe entro 32 px. */
+  trovaVenaVicina(): Vena | null {
+    if (!this.eroe || this.eroe.sconfitto) return null;
+    let piuVicina: Vena | null = null;
+    let minDistanza = 32;
+    for (const v of this.vene) {
+      if (v.esaurita) continue;
+      const d = Phaser.Math.Distance.Between(this.eroe.x, this.eroe.y, v.x, v.y);
+      if (d <= minDistanza) {
+        minDistanza = d;
+        piuVicina = v;
+      }
+    }
+    return piuVicina;
+  }
+
+  scavaVena(v: Vena): void {
+    this.scava(v);
+  }
+
   // ---- cartelli, cancelli e frane (fase 7b) ----
 
   private creaCartelli(): void {
@@ -1864,7 +1883,12 @@ export class ScenaMondo extends Phaser.Scene {
   private preparaTelecamera(): void {
     const camera = this.cameras.main;
     // La telecamera disegna solo sopra la barra in basso, così la barra non copre la mappa.
-    camera.setViewport(0, 0, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO - ALTEZZA_BARRA_BASSA);
+    camera.setViewport(0, 0, this.scale.width, ALTEZZA_SCHERMO - ALTEZZA_BARRA_BASSA);
+    const suRidimensiona = (gameSize: Phaser.Structs.Size) => {
+      camera.setViewport(0, 0, gameSize.width, ALTEZZA_SCHERMO - ALTEZZA_BARRA_BASSA);
+    };
+    this.scale.on('resize', suRidimensiona);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off('resize', suRidimensiona));
     // I limiti impediscono alla telecamera di mostrare il "fuori mappa".
     camera.setBounds(0, 0, this.mappa.larghezza * TESSERA, this.mappa.altezza * TESSERA);
     camera.setZoom(ZOOM);

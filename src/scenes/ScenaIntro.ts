@@ -3,7 +3,7 @@
 // (data/intro.json). Si può saltare in qualunque momento.
 
 import * as Phaser from 'phaser';
-import { ALTEZZA_SCHERMO, LARGHEZZA_SCHERMO, SCENA_CREAZIONE, SCENA_INTRO } from '../costanti';
+import { ALTEZZA_SCHERMO, SCENA_CREAZIONE, SCENA_INTRO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
 import { Pulsante } from './interfaccia/Pulsante';
 import { STILE_TESTO, STILE_TITOLO } from './interfaccia/testi';
@@ -22,9 +22,9 @@ export class ScenaIntro extends Phaser.Scene {
   create(): void {
     this.pagina = 0;
     this.finita = false;
-    const cx = LARGHEZZA_SCHERMO / 2;
+    const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
-    this.add.rectangle(cx, cy, LARGHEZZA_SCHERMO, ALTEZZA_SCHERMO, 0x07090f, 1).setInteractive().on('pointerdown', () => this.avanti());
+    this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x07090f, 1).setInteractive().on('pointerdown', () => this.avanti());
     this.add.text(cx, 54, 'Ashen Blade', { ...STILE_TITOLO, fontSize: '34px', color: '#f0e6c8' }).setOrigin(0.5);
     this.add.text(cx, 88, "L'Ombra della Quercia", { ...STILE_TITOLO, fontSize: '18px', color: '#d8c290' }).setOrigin(0.5);
     this.add.graphics().lineStyle(1, 0x6e5d3e, 0.7).lineBetween(cx - 160, 112, cx + 160, 112);
@@ -32,7 +32,7 @@ export class ScenaIntro extends Phaser.Scene {
       .text(cx, cy + 16, '', { ...STILE_TESTO, fontSize: '22px', color: '#f0e8d8', align: 'center', wordWrap: { width: 680 }, lineSpacing: 8 })
       .setOrigin(0.5);
     this.indicazione = this.add.text(cx, ALTEZZA_SCHERMO - 40, '', { ...STILE_TESTO, fontSize: '13px', color: '#8a8a9a' }).setOrigin(0.5);
-    new Pulsante(this, LARGHEZZA_SCHERMO - 80, 34, { larghezza: 130, altezza: 36, testo: 'Salta (Esc)', dimensioneTesto: 14, alClic: () => this.fine() });
+    new Pulsante(this, this.scale.width - 80, 34, { larghezza: 130, altezza: 36, testo: 'Salta (Esc)', dimensioneTesto: 14, alClic: () => this.fine() });
     this.input.keyboard?.on('keydown-SPACE', () => this.avanti());
     this.input.keyboard?.on('keydown-ENTER', () => this.avanti());
     this.input.keyboard?.on('keydown-ESC', () => this.fine());
