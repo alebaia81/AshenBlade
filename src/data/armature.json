@@ -334,5 +334,19 @@
     "prezzo": 240,
     "armatura": 4,
     "effetti": []
+  },
+  "stivali_palude": {
+    "id": "stivali_palude",
+    "nome": "Stivali della palude",
+    "descrizione": "Leggendari: stivali leggeri foderati di giunco incantato del Guado. +1 DES, +1 INT.",
+    "pezzo": "stivali",
+    "rarita": "leggendaria",
+    "prezzo": 430,
+    "armatura": 3,
+    "effetti": [],
+    "bonus": {
+      "DES": 1,
+      "INT": 1
+    }
   }
 }

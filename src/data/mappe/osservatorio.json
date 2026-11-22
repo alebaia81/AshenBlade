@@ -1,0 +1,163 @@
+{
+  "id": "osservatorio",
+  "nome": "L’Osservatorio di Orvald",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#241c34",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#8878b0" }
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d88030",
+      "tessera": "braciere"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#3e3254",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9888c0" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "casa_colle",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "R": {
+      "tipo": "porta",
+      "runica": true,
+      "aspetto": "cancello",
+      "nome": "la prima porta runica dell’Osservatorio",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "Q": {
+      "tipo": "porta",
+      "runica": true,
+      "aspetto": "cancello",
+      "nome": "la porta runica della sala degli specchi",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "1": {
+      "tipo": "cartello",
+      "aspetto": "leva",
+      "aprePorta": "15:12",
+      "testo": "Azioni la leva d’argento: le rune sulla porta centrale si spengono",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "2": {
+      "tipo": "cartello",
+      "aspetto": "leva",
+      "aprePorta": "19:12",
+      "testo": "Ruoti lo specchio runico: il sigillo verso la sala di Selva si apre",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "C": {
+      "tipo": "nemico",
+      "nemico": "cultista",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "spettro",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "golem",
+      "colore": "#3e3254",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9888c0" }
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "selva_boss",
+      "colore": "#3e3254",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9888c0" }
+    },
+    "!": {
+      "tipo": "barriera",
+      "boss": "selva_boss",
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "i": {
+      "tipo": "vena",
+      "materiale": "inchiostro_luna",
+      "quantita": [1, 2],
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#3e3254",
+      "coloreMuro": "#241c34",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9888c0" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#8878b0" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "quaderno_lia",
+        "pozione_mana"
+      ],
+      "monete": 70,
+      "colore": "#483c60",
+      "tessera": { "immagine": "terra", "tinta": "#a898d0" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "ghianda_oro",
+        "inchiostro_luna"
+      ],
+      "monete": 80,
+      "colore": "#3e3254",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9888c0" }
+    }
+  },
+  "griglia": [
+    "##############################",
+    "#####,,,######################",
+    "#####,Y,######################",
+    "######M#######################",
+    "#..........###......##########",
+    "#....1.....###..i...##########",
+    "#..........###......##########",
+    "#........C.###..S...##########",
+    "#...................##########",
+    "#...f...........f...##########",
+    "######...######...###,,,,,,,,#",
+    "#..............#...##f,,,,,,f#",
+    "#na............R...Q.!,,,,,B,#",
+    "#..............#...##f,,,,,,f#",
+    "######...######...###,,,,,,,,#",
+    "#...f...........f...##########",
+    "#...................##########",
+    "#........S.###..C...##########",
+    "#..........###......##########",
+    "#....i.....###..G...##########",
+    "#..........###......##########",
+    "#..........###..2..X##########",
+    "#..........###......##########",
+    "##############################",
+    "##############################",
+    "##############################"
+  ]
+}

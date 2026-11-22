@@ -25,6 +25,7 @@ const ORDINE: Partial<Record<StatoVisibile, number>> = { pronta: 0, attiva: 1, c
 
 export class ScenaRegistro extends Phaser.Scene {
   private scelta: string | null = null;
+  private pagina = 0;
   private contenuto!: Phaser.GameObjects.Container;
   private sinistra = 0;
   private alto = 0;
@@ -39,6 +40,7 @@ export class ScenaRegistro extends Phaser.Scene {
     this.sinistra = cx - PANNELLO.larghezza / 2;
     this.alto = cy - PANNELLO.altezza / 2;
     this.scelta = null;
+    this.pagina = 0;
     this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x2a2418, 0.97).setStrokeStyle(2, 0xc9b88a);
     this.add.text(this.sinistra + 24, this.alto + 16, 'Registro delle quest', { ...STILE_TITOLO, fontSize: '22px' });
@@ -81,7 +83,9 @@ export class ScenaRegistro extends Phaser.Scene {
       );
       return;
     }
-    voci.slice(0, RIGHE_VISIBILI).forEach(({ d, stato }, i) => {
+    const pagineTotali = Math.max(1, Math.ceil(voci.length / RIGHE_VISIBILI));
+    this.pagina = Math.min(this.pagina, pagineTotali - 1);
+    voci.slice(this.pagina * RIGHE_VISIBILI, (this.pagina + 1) * RIGHE_VISIBILI).forEach(({ d, stato }, i) => {
       const y = alto + 92 + i * RIGA;
       const scelta = d.id === this.scelta;
       const conclusa = stato === 'conclusa';
@@ -98,8 +102,35 @@ export class ScenaRegistro extends Phaser.Scene {
         this.add.text(sinistra + 58, y + 10, `${d.tipo === 'principale' ? 'Principale · ' : ''}${ETICHETTE[stato] ?? ''}`, { ...STILE_TESTO, fontSize: '12px', color: stato === 'pronta' ? GIALLO : '#9a8a7a' }).setOrigin(0, 0.5),
       ]);
     });
-    if (voci.length > RIGHE_VISIBILI) {
-      this.contenuto.add(this.add.text(sinistra + 24, alto + PANNELLO.altezza - 46, `E altre ${voci.length - RIGHE_VISIBILI} concluse.`, { ...STILE_TESTO, fontSize: '13px', color: GRIGIO }));
+    if (pagineTotali > 1) {
+      const yPag = alto + PANNELLO.altezza - 34;
+      const prec = new Pulsante(this, sinistra + 68, yPag, {
+        larghezza: 84,
+        altezza: 28,
+        testo: '◀ Prec',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.pagina = Math.max(0, this.pagina - 1);
+          this.ridisegna();
+        },
+      });
+      prec.impostaAttivo(this.pagina > 0);
+      const succ = new Pulsante(this, sinistra + 320, yPag, {
+        larghezza: 84,
+        altezza: 28,
+        testo: 'Succ ▶',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.pagina = Math.min(pagineTotali - 1, this.pagina + 1);
+          this.ridisegna();
+        },
+      });
+      succ.impostaAttivo(this.pagina < pagineTotali - 1);
+      this.contenuto.add([
+        prec,
+        succ,
+        this.add.text(sinistra + 194, yPag, `Pagina ${this.pagina + 1} / ${pagineTotali}`, { ...STILE_TESTO, fontSize: '13px', color: '#c8b8a0' }).setOrigin(0.5),
+      ]);
     }
     const voce = voci.find((v) => v.d.id === this.scelta);
     if (voce) this.dettagli(voce.d, voce.stato);

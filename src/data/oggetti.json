@@ -695,5 +695,60 @@
     "prezzo": 50,
     "colore": "#8890e8",
     "forma": "cristallo"
+  },
+  "inchiostro_luna": {
+    "id": "inchiostro_luna",
+    "nome": "Inchiostro di luna",
+    "descrizione": "Inchiostro argenteo distillato nell’Osservatorio di Orvald per tracciare rune e sigilli.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 55,
+    "colore": "#c8b8ff",
+    "forma": "cristallo"
+  },
+  "lacrima_selva": {
+    "id": "lacrima_selva",
+    "nome": "Lacrima di Selva",
+    "descrizione": "Gemma violacea che teneva prigioniera la mente di Selva nell’Osservatorio. Spezzata, conserva ancora il suo potere arcano.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 130,
+    "colore": "#d890ff",
+    "forma": "cristallo"
+  },
+  "sigillo_eco_selva_boss": {
+    "id": "sigillo_eco_selva_boss",
+    "nome": "Sigillo dell’Eco: Selva",
+    "descrizione": "Un sigillo tracciato con inchiostro di luna. Usalo sull’altare nell’Osservatorio di Orvald per affrontare l’Eco di Selva l’Incantatrice.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "quaderno_lia": {
+    "id": "quaderno_lia",
+    "nome": "Quaderno di Lia",
+    "descrizione": "Il quaderno di scuola della piccola Lia, pieno di disegni della Quercia Antica e di suo padre Orvald. Selva lo ha custodito nell’Osservatorio.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#f0d8a8",
+    "forma": "lettera"
+  },
+  "lettere_orvald": {
+    "id": "lettere_orvald",
+    "nome": "Lettere mai spedite di Orvald",
+    "descrizione": "Tre lettere scritte da Orvald prima dell’incendio della Casa sul Colle, indirizzate a frate Anselmo e agli abitanti di Borgo Quercia.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#e8dcc0",
+    "forma": "lettera"
   }
 }

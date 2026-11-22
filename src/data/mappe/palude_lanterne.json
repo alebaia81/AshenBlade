@@ -112,9 +112,29 @@
     },
     "T": {
       "tipo": "cartello",
-      "aspetto": "cartello",
-      "testo": "Il pontile del traghetto verso la Casa sul Colle. Le lanterne blu della barca brillano nella nebbia.",
+      "aspetto": "nebbia",
+      "testo": "Il pontile del traghetto verso la Casa sul Colle. La nebbia e i Fuochi fatui bloccano la barca: parla con Mamma Orsola al Guado.",
+      "cambiaCon": {
+        "quest": "traghetto_orsola",
+        "stato": [
+          "pronta",
+          "conclusa"
+        ]
+      },
+      "diventa": "p",
       "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "c": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "casa_colle",
+      "arrivo": "a",
       "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
     }
   },
@@ -133,7 +153,7 @@
     "#~~~~.........~~~~.......~~~~.........~#",
     "#~~~...r.......~~~...f...~~~......g...~#",
     "#~~~.....S.....ppppppppppppp..........~#",
-    "#~Tpppppp......~.....S.....~.....pppppae",
+    "cTbpppppp......~.....S.....~.....pppppae",
     "#~~~...........ppppppppppppp..........~#",
     "#~~~...g.......~~~.......~~~......r...~#",
     "#~~~~.........~~~~.......~~~~.........~#",

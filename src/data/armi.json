@@ -577,5 +577,32 @@
     "ricaricaMs": 60,
     "bonusCritico": 0.12,
     "respinta": 100
+  },
+  "bacchetta_selva": {
+    "id": "bacchetta_selva",
+    "nome": "Bacchetta di Selva",
+    "descrizione": "Leggendaria: la bacchetta d’ebano e argento dell’allieva di Orvald. Dardi d’ombra rapidi che rallentano il bersaglio.",
+    "tipo": "bacchetta",
+    "slot": "secondaria",
+    "rarita": "leggendaria",
+    "prezzo": 440,
+    "effetti": [
+      "rallentamento"
+    ],
+    "dado": "1d10",
+    "caratteristica": "INT",
+    "portata": 10,
+    "larghezzaColpo": 10,
+    "durataMs": 150,
+    "ricaricaMs": 550,
+    "bonusCritico": 0.08,
+    "respinta": 100,
+    "proiettile": {
+      "velocita": 220,
+      "gittata": 160,
+      "dimensione": 3,
+      "colore": "#d898ff",
+      "costoMana": 2
+    }
   }
 }

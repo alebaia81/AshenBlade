@@ -20,6 +20,7 @@ import { leggiPartita, scriviPartita } from './statoCondiviso';
 
 const PANNELLO = { larghezza: 900, altezza: 480 };
 const RIGA = 23;
+const MERCE_PER_PAGINA = 14;
 const SPAZIO = 46;
 const DISTANZA = 52;
 const COLONNE = 4;
@@ -32,6 +33,7 @@ export class ScenaNegozio extends Phaser.Scene {
   private negozio!: DefinizioneNegozio;
   private selezione: Scelta | null = null;
   private sopra: Scelta | null = null;
+  private paginaMerce = 0;
   /** Ciò che si ridisegna a ogni cambiamento (righe della merce e spazi dello zaino). */
   private contenuto!: Phaser.GameObjects.Container;
   private monete!: Phaser.GameObjects.Text;
@@ -50,6 +52,7 @@ export class ScenaNegozio extends Phaser.Scene {
     this.negozio = this.dati.negozi[dati.negozio]!;
     this.selezione = null;
     this.sopra = null;
+    this.paginaMerce = 0;
     const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
@@ -103,7 +106,10 @@ export class ScenaNegozio extends Phaser.Scene {
     this.contenuto.removeAll(true);
 
     // ---- la merce ----
-    this.negozio.merce.forEach((id, i) => {
+    const pagineMerce = Math.max(1, Math.ceil(this.negozio.merce.length / MERCE_PER_PAGINA));
+    this.paginaMerce = Math.min(this.paginaMerce, pagineMerce - 1);
+    const merceVisibile = this.negozio.merce.slice(this.paginaMerce * MERCE_PER_PAGINA, (this.paginaMerce + 1) * MERCE_PER_PAGINA);
+    merceVisibile.forEach((id, i) => {
       const o = this.dati.oggetti[id]!;
       const y = alto + 78 + i * RIGA;
       const scelto = this.selezione?.da === 'merce' && this.selezione.id === id;
@@ -121,6 +127,36 @@ export class ScenaNegozio extends Phaser.Scene {
         this.add.text(sinistra + 424, y, `${prezzo}`, { ...STILE_TESTO, fontSize: '14px', color: prezzo > partita.monete ? '#ff7a7a' : '#ffe680' }).setOrigin(1, 0.5),
       ]);
     });
+    if (pagineMerce > 1) {
+      const yPag = alto + 418;
+      const prec = new Pulsante(this, sinistra + 74, yPag, {
+        larghezza: 88,
+        altezza: 26,
+        testo: '◀ Prec',
+        dimensioneTesto: 12,
+        alClic: () => {
+          this.paginaMerce = Math.max(0, this.paginaMerce - 1);
+          this.ridisegna();
+        },
+      });
+      prec.impostaAttivo(this.paginaMerce > 0);
+      const succ = new Pulsante(this, sinistra + 384, yPag, {
+        larghezza: 88,
+        altezza: 26,
+        testo: 'Succ ▶',
+        dimensioneTesto: 12,
+        alClic: () => {
+          this.paginaMerce = Math.min(pagineMerce - 1, this.paginaMerce + 1);
+          this.ridisegna();
+        },
+      });
+      succ.impostaAttivo(this.paginaMerce < pagineMerce - 1);
+      this.contenuto.add([
+        prec,
+        succ,
+        this.add.text(sinistra + 229, yPag, `Pagina ${this.paginaMerce + 1} / ${pagineMerce}`, { ...STILE_TESTO, fontSize: '12px', color: '#9aa7b8' }).setOrigin(0.5),
+      ]);
+    }
 
     // ---- lo zaino ----
     partita.inventario.spazi.forEach((pila, i) => {

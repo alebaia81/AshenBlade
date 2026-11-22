@@ -100,6 +100,12 @@
       "colore": "#8a6e50",
       "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
     },
+    "S": {
+      "tipo": "abitante",
+      "abitante": "selva",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
     "g": {
       "tipo": "vena",
       "materiale": "giunco_palude",
@@ -131,9 +137,9 @@
     "#....f...ppppppppppppp..f....#",
     "~~~~~~~~~ppppppOpppppp~~~~~~~~",
     "~~~~~~~~~ppppppppppppp~~~~~~~~",
-    "~~~~~~~~~ppppPpp@ppppp~~~~~~~~",
-    "obpppppppppppppppppppMpppX~~~~",
-    "~~~~~~~~~ppppppppppppp~~~~~~~~",
+    "~~~~~~~~~ppppPpp@ppMpp~~~~~~~~",
+    "obpppppppppppppppppppppppX~~~~",
+    "~~~~~~~~~pppppppppSppp~~~~~~~~",
     "~~~~~~~~~fpppppppppppf~~~~~~~~",
     "~~~~~~~~~~~~~~ppp~~~~~~~~~~~~~",
     "#.............:::..........T.#",

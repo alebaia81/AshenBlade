@@ -1,0 +1,153 @@
+{
+  "id": "casa_colle",
+  "nome": "La Casa sul Colle",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1420",
+      "tessera": [{ "immagine": "erba", "tinta": "#a090b8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    "H": {
+      "tipo": "muro",
+      "colore": "#4a3830",
+      "tessera": { "immagine": "muro_legno", "tinta": "#887068" }
+    },
+    "t": {
+      "tipo": "muro",
+      "colore": "#3a2828",
+      "tessera": { "immagine": "tetto_grigio", "tinta": "#706068" }
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d88030",
+      "tessera": "braciere"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "e": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "palude_lanterne",
+      "arrivo": "b",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "osservatorio",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "S": {
+      "tipo": "abitante",
+      "abitante": "selva",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "r": {
+      "tipo": "vena",
+      "materiale": "erica",
+      "quantita": [1, 2],
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "lettere_orvald",
+        "inchiostro_luna"
+      ],
+      "monete": 60,
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "1": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "Un ricordo si accende nella stanza: la piccola Lia è seduta al tavolo vicino al camino e sillaba ad alta voce un libro d’erboristeria, mentre Orvald sorride e corregge con dolcezza ogni parola.",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "2": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "Un ricordo trema nell’aria: fuori piove a dirotto. Lia tossisce sotto le coperte, la fronte brucia per la febbre grigia, e Orvald pesta erbe nel mortaio con le mani che tremano: «Resisti, piccolina mia, l’infuso è quasi pronto…»",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "3": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "Un ricordo silenzioso accanto al letto vuoto: le campane di Borgo Quercia suonano a lutto nella valle. Orvald stringe tra le dita il piccolo ciondolo d’argento di Lia e sussurra: «Non finisce qui. Te lo prometto, Lia.»",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "4": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "Un ricordo nel laboratorio: Orvald traccia cerchi di gesso sul pavimento e annota sul diario: «Legno della Quercia Antica per il respiro, ossa di re per il corpo, ossidiana nera per l’anima… Selva mi implora di fermarmi, ma non può capire il dolore di un padre.»",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "5": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "Un ricordo di fumo e fiamme: la porta del laboratorio si spalanca nella notte. È Berta, più giovane di vent’anni, con una torcia accesa in pugno: «Fermati, Orvald! Stai svegliando i morti! Brucerò questo posto prima che tu distrugga Borgo Quercia!»",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    },
+    "6": {
+      "tipo": "cartello",
+      "aspetto": "ricordo",
+      "testo": "L’ultimo ricordo sulla soglia annerita: la casa brucia nella notte. Berta trascina via Orvald mentre le travi crollano, e la giovane Selva fugge verso la cappella di frate Anselmo stringendo al petto il quaderno di scuola di Lia.",
+      "colore": "#5a483e",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#988478" }
+    }
+  },
+  "griglia": [
+    "########################",
+    "#...r..............r...#",
+    "#..tttttttttttttttttt..#",
+    "#..HHHHHHHHHHHHHHHHHH..#",
+    "#..Hpp1ppppHHpppp2ppH..#",
+    "#..HpppppppHHpppppppH..#",
+    "#..Hppp3ppp..pppp4ppH..#",
+    "#..HHHHHHHH..HHHHHHHH..#",
+    "#..HppppppppppppppppH..#",
+    "#..Hpp5pppppppppp6ppH..#",
+    "#..Hpppppppppppppppp::ae",
+    "#..HppXppppfppppSpppH..#",
+    "#..HpppppppubpppppppH..#",
+    "#..HHHHHHHH..HHHHHHHH..#",
+    "#..........::..........#",
+    "#....r.....::.....r....#",
+    "#..........::..........#",
+    "#......................#",
+    "#......................#",
+    "########################"
+  ]
+}

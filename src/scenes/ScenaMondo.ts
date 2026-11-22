@@ -1963,7 +1963,7 @@ export class ScenaMondo extends Phaser.Scene {
       const aggiornata = aggiungiTascaMissioni(p, id, quantita);
       scriviPartita(this, aggiornata);
       mostraNumero(this, this.eroe.x, this.eroe.y - 10, `+${quantita} ${definizione.nome} (Missioni)`, 'esperienza');
-      const avvisi = avvisiRaccolta(this.partita.quest, this.dati.quest, p.inventario, id);
+      const avvisi = avvisiRaccolta(this.partita.quest, this.dati.quest, aggiornata.inventario, id, aggiornata.tascaMissioni);
       if (avvisi.length > 0) mostraAvviso(this, avvisi.at(-1)!);
       return 0;
     }

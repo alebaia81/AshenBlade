@@ -217,5 +217,18 @@
     "monete": 100,
     "conosciutaDallInizio": false,
     "banco": "fucina"
+  },
+  "sigillo_eco_selva_boss": {
+    "id": "sigillo_eco_selva_boss",
+    "risultato": "sigillo_eco_selva_boss",
+    "materiali": {
+      "inchiostro_luna": 2,
+      "erica": 2,
+      "frammento_eco": 1
+    },
+    "monete": 130,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "selva_boss",
+    "banco": "alchimia"
   }
 }

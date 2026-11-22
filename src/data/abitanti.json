@@ -94,5 +94,11 @@
     "nome": "Mamma Orsola",
     "colore": "#b86848",
     "dialogo": "orsola"
+  },
+  "selva": {
+    "id": "selva",
+    "nome": "Selva",
+    "colore": "#b880f0",
+    "dialogo": "selva"
   }
 }

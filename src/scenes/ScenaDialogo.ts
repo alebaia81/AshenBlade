@@ -12,7 +12,7 @@ import { STILE_TESTO } from './interfaccia/testi';
 import { aggiungiImmagine, aspettoDi } from './grafica';
 import type { ScenaMondo } from './ScenaMondo';
 
-const RIQUADRO = { larghezza: 880, altezza: 220, margineBasso: 12 };
+const RIQUADRO = { larghezza: 880, altezza: 244, margineBasso: 12 };
 const RIGA_RISPOSTA = 26;
 const COLORE_RISPOSTA = '#ffe680';
 
@@ -72,7 +72,9 @@ export class ScenaDialogo extends Phaser.Scene {
     this.risposte = this.add.container(0, 0);
     this.notizia = this.add.text(xTesto, 0, '', { ...STILE_TESTO, fontSize: '14px', color: '#8fe08f', wordWrap: { width: RIQUADRO.larghezza - 160 } });
 
-    for (const [i, tasto] of ['ONE', 'TWO', 'THREE', 'FOUR'].entries()) this.input.keyboard?.on(`keydown-${tasto}`, () => this.rispondi(i));
+    for (const [i, tasto] of ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE'].entries()) {
+      this.input.keyboard?.on(`keydown-${tasto}`, () => this.rispondi(i));
+    }
     this.input.keyboard?.on('keydown-ESC', () => this.chiudi());
     this.mostraNodo();
   }
@@ -94,13 +96,16 @@ export class ScenaDialogo extends Phaser.Scene {
     // Le risposte stanno in fondo al riquadro, dal basso verso l'alto.
     const xTesto = this.sinistra + 130;
     const visibili = this.visibili;
-    const primaY = this.alto + RIQUADRO.altezza - 14 - visibili.length * RIGA_RISPOSTA;
-    this.notizia.setY(primaY - 30);
+    const compatto = visibili.length > 4;
+    const rigaAlt = compatto ? 22 : RIGA_RISPOSTA;
+    const fontRisposta = compatto ? '14px' : '16px';
+    const primaY = this.alto + RIQUADRO.altezza - 12 - visibili.length * rigaAlt;
+    this.notizia.setY(primaY - 24);
     visibili.forEach((r, i) => {
-      const riga = this.add.text(xTesto, primaY + i * RIGA_RISPOSTA, `${i + 1}. ${r.testo}`, { ...STILE_TESTO, fontSize: '16px', color: COLORE_RISPOSTA });
+      const riga = this.add.text(xTesto, primaY + i * rigaAlt, `${i + 1}. ${r.testo}`, { ...STILE_TESTO, fontSize: fontRisposta, color: COLORE_RISPOSTA });
       // Tutta la riga è cliccabile, non solo le lettere (come nel pannello sviluppatore).
       riga.setInteractive({
-        hitArea: new Phaser.Geom.Rectangle(-6, -3, RIQUADRO.larghezza - 160, RIGA_RISPOSTA),
+        hitArea: new Phaser.Geom.Rectangle(-6, -3, RIQUADRO.larghezza - 160, rigaAlt),
         hitAreaCallback: Phaser.Geom.Rectangle.Contains,
         useHandCursor: true,
       });

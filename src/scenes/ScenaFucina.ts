@@ -44,6 +44,7 @@ export class ScenaFucina extends Phaser.Scene {
   private banco: BancoCrafting = 'fucina';
   private scheda: 'crea' | 'potenzia' = 'crea';
   private scelta: string | null = null;
+  private paginaRicette = 0;
   private armaScelta: DoveArma | null = null;
   private schede!: { crea: Pulsante; potenzia?: Pulsante };
   private contenuto!: Phaser.GameObjects.Container;
@@ -65,6 +66,7 @@ export class ScenaFucina extends Phaser.Scene {
     this.alto = cy - PANNELLO.altezza / 2;
     const { sinistra, alto } = this;
     this.scelta = null;
+    this.paginaRicette = 0;
     this.armaScelta = null;
     this.scheda = 'crea';
 
@@ -117,10 +119,13 @@ export class ScenaFucina extends Phaser.Scene {
     this.monete.setText(String(partita.monete));
     this.contenuto.removeAll(true);
     const ricette = this.conosciute;
-    if (!this.scelta && ricette.length > 0) this.scelta = ricette[0]!.id;
+    if ((!this.scelta || !ricette.some((r) => r.id === this.scelta)) && ricette.length > 0) this.scelta = ricette[0]!.id;
+    const pagineTotali = Math.max(1, Math.ceil(ricette.length / RIGHE_VISIBILI));
+    this.paginaRicette = Math.min(this.paginaRicette, pagineTotali - 1);
+    const visibili = ricette.slice(this.paginaRicette * RIGHE_VISIBILI, (this.paginaRicette + 1) * RIGHE_VISIBILI);
 
     // ---- elenco delle ricette ----
-    ricette.forEach((r, i) => {
+    visibili.forEach((r, i) => {
       const o = this.dati.oggetti[r.risultato]!;
       const y = alto + 92 + i * RIGA;
       const scelta = r.id === this.scelta;
@@ -140,13 +145,48 @@ export class ScenaFucina extends Phaser.Scene {
         this.add.text(sinistra + 66, y + 10, pronta ? 'hai tutto' : 'mancano materiali', { ...STILE_TESTO, fontSize: '12px', color: pronta ? VERDE : '#9a8a7a' }).setOrigin(0, 0.5),
       ]);
     });
-    this.contenuto.add(
-      this.add.text(sinistra + 24, alto + PANNELLO.altezza - 46, `Ricette conosciute: ${ricette.length}. Altre si imparano dalle pergamene (usale dallo zaino).`, {
-        ...STILE_TESTO,
-        fontSize: '13px',
-        color: '#c8b8a0',
-      }),
-    );
+    if (pagineTotali > 1) {
+      const yPag = alto + PANNELLO.altezza - 36;
+      const prec = new Pulsante(this, sinistra + 68, yPag, {
+        larghezza: 84,
+        altezza: 28,
+        testo: '◀ Prec',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.paginaRicette = Math.max(0, this.paginaRicette - 1);
+          this.ridisegna();
+        },
+      });
+      prec.impostaAttivo(this.paginaRicette > 0);
+      const succ = new Pulsante(this, sinistra + 320, yPag, {
+        larghezza: 84,
+        altezza: 28,
+        testo: 'Succ ▶',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.paginaRicette = Math.min(pagineTotali - 1, this.paginaRicette + 1);
+          this.ridisegna();
+        },
+      });
+      succ.impostaAttivo(this.paginaRicette < pagineTotali - 1);
+      this.contenuto.add([
+        prec,
+        succ,
+        this.add.text(sinistra + 194, yPag, `Pagina ${this.paginaRicette + 1} / ${pagineTotali} (${ricette.length})`, {
+          ...STILE_TESTO,
+          fontSize: '13px',
+          color: '#c8b8a0',
+        }).setOrigin(0.5),
+      ]);
+    } else {
+      this.contenuto.add(
+        this.add.text(sinistra + 24, alto + PANNELLO.altezza - 46, `Ricette conosciute: ${ricette.length}. Altre si imparano dalle pergamene (usale dallo zaino).`, {
+          ...STILE_TESTO,
+          fontSize: '13px',
+          color: '#c8b8a0',
+        }),
+      );
+    }
     this.dettagli();
   }
 

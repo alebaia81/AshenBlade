@@ -583,6 +583,30 @@
       ]
     }
   },
+  "selva_liberata": {
+    "id": "selva_liberata",
+    "nome": "L’incantesimo dell’Osservatorio",
+    "tipo": "principale",
+    "daChi": "selva",
+    "richiede": [
+      "traghetto_orsola"
+    ],
+    "descrizione": "Selva, l’antica allieva di Orvald, è tornata alla Casa sul Colle per fermare il maestro, ma un incantesimo degli specchi dell’Osservatorio la tiene prigioniera.",
+    "passi": [
+      {
+        "descrizione": "Scendi nell'Osservatorio di Orvald e spezza l'incantesimo sconfiggendo Selva l'Incantatrice",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "selva_boss",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 120,
+      "esperienza": 320
+    }
+  },
   "lettera_bruno": {
     "id": "lettera_bruno",
     "nome": "La lettera di Bruno",

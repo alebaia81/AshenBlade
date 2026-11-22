@@ -2251,5 +2251,107 @@
         ]
       }
     }
+  },
+  "selva": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Io sono Selva. Vent'anni fa ero l'allieva di maestro Orvald nel suo laboratorio… e oggi la sua magia riecheggia ancora tra queste mura.",
+        "risposte": [
+          {
+            "testo": "Distilliamo pozioni e sigilli (Banco di alchimia)",
+            "apri": "alchimia"
+          },
+          {
+            "testo": "Come posso spezzare l'incantesimo che ti tiene prigioniera?",
+            "va": "chiedeAiuto",
+            "se": {
+              "quest": "selva_liberata",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto scendendo nell'Osservatorio per spezzare lo specchio.",
+            "va": "attesaAiuto",
+            "se": {
+              "quest": "selva_liberata",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho sconfitto la tua ombra nell'Osservatorio: l'incantesimo è spezzato!",
+            "va": "libera",
+            "se": {
+              "quest": "selva_liberata",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "selva_liberata",
+              "unisci": "selva"
+            }
+          },
+          {
+            "testo": "Raccontami di Orvald e di quella notte.",
+            "va": "storiaOrvald"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "chiedeAiuto": {
+        "testo": "Quello che vedi qui è solo un riflesso della mia voce. Quando sono tornata per fermare Orvald, il maestro ha imprigionato la mia mente nella sala degli specchi dell'Osservatorio qui sotto. Scendi, aziona le leve runiche e sconfiggi la mia ombra!",
+        "risposte": [
+          {
+            "testo": "Scendo nell'Osservatorio a liberarti.",
+            "va": "aiutoOk",
+            "azione": {
+              "accetta": "selva_liberata"
+            }
+          },
+          {
+            "testo": "Un momento.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "aiutoOk": {
+        "testo": "Fai attenzione nella sala degli specchi: l'incantesimo creerà delle illusioni identiche a me, ma basta un solo colpo per dissolverle!",
+        "risposte": [
+          {
+            "testo": "Torno presto, Selva."
+          }
+        ]
+      },
+      "attesaAiuto": {
+        "testo": "La scala per l'Osservatorio è nella Casa sul Colle. Aziona le leve d'argento per aprire le porte runiche fino alla sala degli specchi!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "libera": {
+        "testo": "La Lacrima si è spezzata… finalmente respiro! Grazie, viaggiatore. Da ora verrò con te: con il mio Velo d'ombra i nemici ci perderanno di vista, aprirò per te tutte le porte runiche di Orvald e al mio Banco di alchimia potrai distillare pozioni e sigilli!",
+        "risposte": [
+          {
+            "testo": "Mostrami il Banco di alchimia",
+            "apri": "alchimia"
+          },
+          {
+            "testo": "Benvenuta nel gruppo, Selva!"
+          }
+        ]
+      },
+      "storiaOrvald": {
+        "testo": "Orvald aveva curato mezzo villaggio prima che la febbre portasse via Lia. Quando Berta diede fuoco al laboratorio per paura dei suoi studi, frate Anselmo mi nascose nella cappella e mi fece fuggire nella notte.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      }
+    }
   }
 }

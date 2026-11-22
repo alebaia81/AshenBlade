@@ -185,6 +185,27 @@
       ],
       "tavolozza": { "k": "#283040", "g": "#687898", "l": "#98b8e0", "o": "#d8f0ff" }
     },
+    "roccia_inchiostro": {
+      "disegno": [
+        "................",
+        "................",
+        "................",
+        "......kkkkk.....",
+        "....kkglllgkk...",
+        "...kgglllgggk...",
+        "..kggggggoggk...",
+        "..kgogggggggk...",
+        ".kgggggggggoggk.",
+        ".kgggogggggggggk",
+        ".kggggggggoggggk",
+        "..kggggogggggk..",
+        "...kkggggggkk...",
+        ".....kkkkkk.....",
+        "................",
+        "................"
+      ],
+      "tavolozza": { "k": "#282038", "g": "#685888", "l": "#9888c0", "o": "#e0c8ff" }
+    },
     "mago": { "foglio": "dungeon", "indice": 84 },
     "paesano": { "foglio": "dungeon", "indice": 85 },
     "barbuto": { "foglio": "dungeon", "indice": 86 },
@@ -321,7 +342,8 @@
     "matteo": { "immagine": "ragazzo", "tinta": "#a8c8f0" },
     "grisk": { "immagine": "demone", "tinta": "#e09050" },
     "krak": { "immagine": "demone", "tinta": "#90f080" },
-    "orsola": { "immagine": "anziana", "tinta": "#ffb890" }
+    "orsola": { "immagine": "anziana", "tinta": "#ffb890" },
+    "selva": { "immagine": "incappucciato", "tinta": "#c8a0ff" }
   },
   "nemici": {
     "slime": "melma",
@@ -333,6 +355,8 @@
     "bandito_balestriere": { "immagine": "soldato", "tinta": "#e09068" },
     "ferrante": { "immagine": "bandana", "tinta": "#ffa858" },
     "fuoco_fatuo": { "immagine": "fantasma", "tinta": "#80e8ff" },
+    "illusione": { "immagine": "incappucciato", "tinta": "#e0b8ff" },
+    "selva_boss": { "immagine": "incappucciato", "tinta": "#c888ff" },
     "lupo": "ratto",
     "lupo_brughiera": { "immagine": "ratto", "tinta": "#9890c0" },
     "scheletro": "fantasma",
@@ -375,6 +399,7 @@
     "zolfo": "roccia_zolfo",
     "pietra_lunare": "roccia_lunare",
     "giunco_palude": "cespuglio",
-    "erica": "funghi"
+    "erica": "funghi",
+    "inchiostro_luna": "roccia_inchiostro"
   }
 }

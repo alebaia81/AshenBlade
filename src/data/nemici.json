@@ -682,5 +682,36 @@
       "dimensione": 3,
       "colore": "#88e8ff"
     }
+  },
+  "illusione": {
+    "nome": "Illusione di Selva",
+    "comportamento": "tiratore",
+    "vita": 1,
+    "armatura": 0,
+    "danno": "1d6",
+    "velocita": 58,
+    "raggioVista": 130,
+    "raggioAbbandono": 210,
+    "dimensione": 11,
+    "colore": "#d8a0ff",
+    "storditoMs": 150,
+    "pausaDopoAttaccoMs": 450,
+    "esperienza": 4,
+    "etichette": [],
+    "bottino": [],
+    "monete": [
+      0,
+      1
+    ],
+    "opacita": 0.55,
+    "tiro": {
+      "distanzaMin": 45,
+      "distanzaMax": 105,
+      "ricaricaMs": 1600,
+      "velocita": 150,
+      "gittata": 150,
+      "dimensione": 2,
+      "colore": "#e0b0ff"
+    }
   }
 }

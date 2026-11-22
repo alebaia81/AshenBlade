@@ -137,6 +137,110 @@
       }
     ]
   },
+  "selva_boss": {
+    "nome": "Selva l’Incantatrice",
+    "comportamento": "tiratore",
+    "vita": 210,
+    "armatura": 2,
+    "danno": "1d10",
+    "velocita": 42,
+    "raggioVista": 96,
+    "raggioAbbandono": 650,
+    "dimensione": 18,
+    "colore": "#b878f0",
+    "storditoMs": 45,
+    "pausaDopoAttaccoMs": 800,
+    "esperienza": 520,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "lacrima_selva",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "inchiostro_luna",
+        "probabilita": 1
+      }
+    ],
+    "leggendari": [
+      "bacchetta_selva",
+      "stivali_palude"
+    ],
+    "esoticoFirma": "velo_selva",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
+    "monete": [
+      120,
+      180
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": [
+          {
+            "tipo": "teletrasporto",
+            "ricaricaMs": 6500,
+            "raggio": 96,
+            "distanzaMin": 56
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 4200,
+            "colpi": 3,
+            "ventaglioGradi": 36,
+            "velocita": 155,
+            "gittata": 185,
+            "dimensione": 3,
+            "colore": "#d898ff",
+            "danno": "1d8"
+          }
+        ]
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Selva moltiplica i riflessi degli specchi: compaiono le sue illusioni!",
+        "attacchi": [
+          {
+            "tipo": "teletrasporto",
+            "ricaricaMs": 5200,
+            "raggio": 96,
+            "distanzaMin": 56
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 3600,
+            "colpi": 4,
+            "ventaglioGradi": 55,
+            "velocita": 160,
+            "gittata": 190,
+            "dimensione": 3,
+            "colore": "#d898ff",
+            "danno": "1d8"
+          },
+          {
+            "tipo": "evoca",
+            "nemico": "illusione",
+            "quanti": 2,
+            "massimo": 3,
+            "ricaricaMs": 7500
+          }
+        ]
+      }
+    ],
+    "tiro": {
+      "distanzaMin": 55,
+      "distanzaMax": 110,
+      "ricaricaMs": 1500,
+      "velocita": 155,
+      "gittata": 170,
+      "dimensione": 3,
+      "colore": "#d898ff"
+    }
+  },
   "re_scheletro": {
     "nome": "Re Scheletro",
     "comportamento": "inseguitore",

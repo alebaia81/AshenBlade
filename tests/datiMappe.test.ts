@@ -3,7 +3,7 @@ import { caricaDati } from '../src/data/caricaDati';
 import { PEZZI_ARMATURA } from '../src/systems/equipaggiamento';
 import { applicaCondizioni } from '../src/systems/condizioniMappa';
 import { chiConclude } from '../src/systems/quest';
-import { celleAbitante, celleBarriera, celleCartello, cellePorte, celleForziere, celleNemico, celleSegrete, celleVena, èCalpestabile, grigliaDellaMappa, trovaPunto } from '../src/systems/mappa';
+import { celleAbitante, celleBarriera, celleCartello, cellePorte, celleForziere, celleNemico, cellePietra, celleSegrete, celleSepolte, celleVena, èCalpestabile, grigliaDellaMappa, puntoIngressoPredefinito, trovaPunto } from '../src/systems/mappa';
 import type { Griglia } from '../src/systems/percorso';
 import type { Cella } from '../src/systems/tipi';
 
@@ -198,6 +198,12 @@ describe('dati del gioco', () => {
     expect(mondo.mappe['mulino_ponte']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'cantine_mulino', arrivo: 'a' });
     expect(mondo.mappe['cantine_mulino']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'mulino_ponte', arrivo: 'b' });
     expect(celleAbitante(mondo.mappe['mulino_ponte']!).map((a) => a.idAbitante)).toContain('ottone');
+    const mulino = mondo.mappe['mulino_ponte']!;
+    const vistiMulino = raggiungibili(grigliaDellaMappa(mulino), trovaPunto(mulino, 'a')!);
+    const ottone = celleAbitante(mulino).find((a) => a.idAbitante === 'ottone')!;
+    expect([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dc, dr]) => vistiMulino.has(`${ottone.cella.col + dc!},${ottone.cella.riga + dr!}`))).toBe(true);
+    const scaleCantine = trovaPunto(mulino, 'u')!;
+    expect(vistiMulino.has(`${scaleCantine.col},${scaleCantine.riga}`)).toBe(true);
     const reMelma = mondo.nemici['re_melma']!;
     expect(reMelma.fasi?.length).toBe(2);
     expect(reMelma.leggendari).toEqual(['mazza_mugnaio', 'guanti_ambra']);
@@ -267,6 +273,33 @@ describe('dati del gioco', () => {
     expect(celleAbitante(mondo.mappe['guado']!).map((a) => a.idAbitante)).toContain('orsola');
     expect(mondo.nemici['fuoco_fatuo']?.comportamento).toBe('tiratore');
     expect(mondo.quest['traghetto_orsola']?.daChi).toBe('orsola');
+  });
+
+  it('la Casa sul Colle e l’Osservatorio di Orvald hanno i 6 ricordi, le porte runiche, le leve e Selva l’Incantatrice (fase 13b)', () => {
+    expect(mondo.mappe['palude_lanterne']!.legenda['c']).toMatchObject({ tipo: 'uscita', verso: 'casa_colle', arrivo: 'a' });
+    expect(mondo.mappe['casa_colle']!.legenda['e']).toMatchObject({ tipo: 'uscita', verso: 'palude_lanterne', arrivo: 'b' });
+    expect(mondo.mappe['casa_colle']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'osservatorio', arrivo: 'a' });
+    expect(mondo.mappe['osservatorio']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'casa_colle', arrivo: 'b' });
+    const casa = mondo.mappe['casa_colle']!;
+    expect(celleNemico(casa).length).toBe(0);
+    const ricordi = celleCartello(casa).filter((c) => c.aspetto === 'ricordo');
+    expect(ricordi.length).toBe(6);
+    const oss = mondo.mappe['osservatorio']!;
+    const porteRuniche = cellePorte(oss).filter((p) => p.runica);
+    expect(porteRuniche.length).toBe(2);
+    const leve = celleCartello(oss).filter((c) => c.aspetto === 'leva');
+    expect(leve.map((l) => l.aprePorta).sort()).toEqual(['15:12', '19:12']);
+    for (const l of leve) {
+      expect(porteRuniche.some((p) => `${p.cella.col}:${p.cella.riga}` === l.aprePorta)).toBe(true);
+    }
+    const selvaBoss = mondo.nemici['selva_boss']!;
+    expect(selvaBoss.fasi?.length).toBe(2);
+    expect(selvaBoss.leggendari).toEqual(['bacchetta_selva', 'stivali_palude']);
+    expect(selvaBoss.esoticoFirma).toBe('velo_selva');
+    expect(mondo.nemici['illusione']?.vita).toBe(1);
+    expect(mondo.ricette['sigillo_eco_selva_boss']?.sbloccataDaBoss).toBe('selva_boss');
+    expect(mondo.ricette['sigillo_eco_selva_boss']?.banco).toBe('alchimia');
+    expect(mondo.quest['selva_liberata']?.daChi).toBe('selva');
   });
 
   it('il borgo ha i sei personaggi del design, ognuno con il suo dialogo', () => {
@@ -649,5 +682,111 @@ describe('la Torre del Negromante (fase 8c)', () => {
     const q = dati.quest['atto3_torre']!;
     expect(chiConclude(q)).toBe('berta');
     expect(q.prossimo).toBeUndefined();
+  });
+});
+
+describe('verifica globale di raggiungibilità e integrità di tutte le mappe', () => {
+  const dati = caricaDati();
+  const vicino = (visti: Set<string>, c: Cella) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dc, dr]) => visti.has(`${c.col + dc!},${c.riga + dr!}`));
+
+  function raggiungibiliConTuttoAperto(m: (typeof dati.mappe)[string], da: Cella): Set<string> {
+    const g = grigliaDellaMappa(m, (c, r) => {
+      const s = m.simboli[r]?.[c];
+      const t = s ? m.legenda[s]?.tipo : undefined;
+      return t === 'segreto' || t === 'crepata' || t === 'porta';
+    });
+    return raggiungibili(g, da);
+  }
+
+  it('ogni abitante, pietra, forziere, tesoro sepolto, vena, ricordo, leva, uscita e arrivo è raggiungibile in tutte le mappe', () => {
+    const problemi: string[] = [];
+    for (const m0 of Object.values(dati.mappe)) {
+      const m = applicaCondizioni(m0, () => true);
+      const ingressoSym = puntoIngressoPredefinito(m);
+      const start = ingressoSym ? trovaPunto(m, ingressoSym) : undefined;
+      if (!start) {
+        problemi.push(`${m.id}: nessun punto di ingresso`);
+        continue;
+      }
+      const vBase = raggiungibili(grigliaDellaMappa(m0), start);
+      const vAperto = raggiungibiliConTuttoAperto(m, start);
+
+      for (const a of celleAbitante(m0)) {
+        if (!vicino(vAperto, a.cella)) problemi.push(`${m.id}: abitante "${a.idAbitante}" irraggiungibile (${a.cella.col},${a.cella.riga})`);
+      }
+      for (const p of cellePietra(m0)) {
+        if (!vicino(vBase, p.cella)) problemi.push(`${m.id}: pietra "${p.nome}" irraggiungibile allo stato base (${p.cella.col},${p.cella.riga})`);
+      }
+      for (const f of celleForziere(m0)) {
+        if (!vicino(vAperto, f.cella)) problemi.push(`${m.id}: forziere irraggiungibile (${f.cella.col},${f.cella.riga})`);
+      }
+      for (const s of celleSepolte(m0)) {
+        if (!vAperto.has(`${s.cella.col},${s.cella.riga}`)) problemi.push(`${m.id}: tesoro sepolto irraggiungibile (${s.cella.col},${s.cella.riga})`);
+      }
+      for (const v of celleVena(m0)) {
+        if (!vicino(vAperto, v.cella)) problemi.push(`${m.id}: vena "${v.materiale}" irraggiungibile (${v.cella.col},${v.cella.riga})`);
+      }
+      for (const c of celleCartello(m0)) {
+        if ((c.aspetto === 'ricordo' || c.aspetto === 'leva') && !vicino(vAperto, c.cella)) {
+          problemi.push(`${m.id}: ${c.aspetto} irraggiungibile (${c.cella.col},${c.cella.riga})`);
+        }
+        if (c.aprePorta) {
+          const k = c.aprePorta.split(':').length === 3 ? c.aprePorta : `${m.id}:${c.aprePorta}`;
+          const [mid, col, riga] = k.split(':');
+          const target = dati.mappe[mid!];
+          const ok = target && cellePorte(target).some((p) => p.cella.col === Number(col) && p.cella.riga === Number(riga));
+          if (!ok) problemi.push(`${m.id}: leva aprePorta "${c.aprePorta}" non punta a una porta esistente`);
+        }
+      }
+      for (let r = 0; r < m.altezza; r++) {
+        for (let c = 0; c < m.larghezza; c++) {
+          const voce = m.legenda[m.simboli[r]![c]!];
+          if (voce?.tipo === 'uscita' && !vAperto.has(`${c},${r}`)) {
+            problemi.push(`${m.id}: uscita verso "${voce.verso}" irraggiungibile (${c},${r})`);
+          }
+        }
+      }
+      for (const [sym, voce] of Object.entries(m.legenda)) {
+        if (voce.tipo === 'arrivo') {
+          const pt = trovaPunto(m, sym);
+          if (pt && !vAperto.has(`${pt.col},${pt.riga}`)) {
+            problemi.push(`${m.id}: arrivo "${sym}" disconnesso dall'ingresso (${pt.col},${pt.riga})`);
+          }
+        }
+      }
+    }
+    expect(problemi).toEqual([]);
+  });
+
+  it('ogni chiave richiesta da una porta o da un forziere è ottenibile in gioco', () => {
+    const ottenibili = new Set<string>([
+      ...Object.values(dati.mappe).flatMap((m) => celleForziere(m).flatMap((f) => f.contenuto)),
+      ...Object.values(dati.mappe).flatMap((m) => celleSepolte(m).flatMap((s) => s.contenuto)),
+      ...Object.values(dati.nemici).flatMap((n) => n.bottino.map((b) => b.oggetto)),
+      ...Object.values(dati.negozi).flatMap((n) => n.merce),
+      ...Object.values(dati.quest).flatMap((q) => [...(q.ricompensa.oggetti ?? []), ...(q.oggettiAllInizio ?? [])].map((o) => o.id)),
+    ]);
+    const aperteDaDialogo = new Set<string>(
+      Object.values(dati.dialoghi).flatMap((d) =>
+        Object.values(d.nodi).flatMap((n) =>
+          n.risposte.flatMap((r) => (r.azione && 'aprePorta' in r.azione && r.azione.aprePorta ? [r.azione.aprePorta] : [])),
+        ),
+      ),
+    );
+    const mancanti: string[] = [];
+    for (const m of Object.values(dati.mappe)) {
+      for (const p of cellePorte(m)) {
+        const chiavePorta = `${m.id}:${p.cella.col}:${p.cella.riga}`;
+        if (!p.runica && !aperteDaDialogo.has(chiavePorta) && p.chiave && !ottenibili.has(p.chiave)) {
+          mancanti.push(`${m.id}: porta (${p.cella.col},${p.cella.riga}) chiede "${p.chiave}" non ottenibile`);
+        }
+      }
+      for (const f of celleForziere(m)) {
+        if (f.chiusoCon && !ottenibili.has(f.chiusoCon)) {
+          mancanti.push(`${m.id}: forziere (${f.cella.col},${f.cella.riga}) chiede "${f.chiusoCon}" non ottenibile`);
+        }
+      }
+    }
+    expect(mancanti).toEqual([]);
   });
 });
