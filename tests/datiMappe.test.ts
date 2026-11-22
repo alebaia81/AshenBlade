@@ -302,6 +302,79 @@ describe('dati del gioco', () => {
     expect(mondo.quest['selva_liberata']?.daChi).toBe('selva');
   });
 
+  it('confronto con Berta, Quaderno di Lia, Banco di alchimia, stanza runica della Torre e tutte le 12 Ghiande d’oro (fase 13c)', () => {
+    expect(mondo.quest['confronto_berta']?.concludeDa).toBe('berta');
+    expect(mondo.quest['selva_quaderno']?.ricompensa.oggetti).toEqual([{ id: 'ciondolo_lia', quantita: 1 }]);
+    expect(mondo.quest['ultime_lettere']?.daChi).toBe('anselmo');
+    expect(mondo.quest['erbe_palude']?.daChi).toBe('selva');
+    expect(mondo.quest['tesoro_luna']?.siAccettaCon).toBe('mappa_luna');
+    expect(mondo.negozi['gemma']!.merce).toContain('mappa_luna');
+    const ricetteAlchimia = Object.values(mondo.ricette).filter((r) => r.banco === 'alchimia');
+    expect(ricetteAlchimia.length).toBeGreaterThanOrEqual(6);
+    expect(cellePorte(mondo.mappe['torre_piani']!).some((p) => p.runica)).toBe(true);
+    // Conta tutte le Ghiande d'oro ottenibili nel mondo (forzieri + sepolti + ricompense quest).
+    const ghiandeForzieri = Object.values(mondo.mappe).flatMap((m) => celleForziere(m).flatMap((f) => f.contenuto.filter((id) => id === 'ghianda_oro'))).length;
+    const ghiandeSepolti = Object.values(mondo.mappe).flatMap((m) => celleSepolte(m).flatMap((s) => s.contenuto.filter((id) => id === 'ghianda_oro'))).length;
+    const ghiandeQuest = Object.values(mondo.quest).reduce(
+      (tot, q) => tot + (q.ricompensa.oggetti?.filter((o) => o.id === 'ghianda_oro').reduce((a, o) => a + o.quantita, 0) ?? 0),
+      0,
+    );
+    expect(ghiandeForzieri + ghiandeSepolti + ghiandeQuest).toBe(12);
+  });
+
+  it('il Pozzo Profondo e i 6 Sigilli dell’Eco con le sfide regionali sono completi (fase 14a)', () => {
+    expect(mondo.mappe['miniera_tana']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'miniera_profonda', arrivo: 'a' });
+    expect(mondo.mappe['miniera_profonda']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'miniera_tana', arrivo: 'b' });
+    const sigilli = Object.values(mondo.ricette).filter((r) => r.id.startsWith('sigillo_eco_'));
+    expect(sigilli.length).toBeGreaterThanOrEqual(6);
+    expect(sigilli.filter((r) => r.banco === 'fucina').map((r) => r.sbloccataDaBoss).sort()).toEqual(['re_melma', 're_scheletro']);
+    expect(sigilli.filter((r) => r.banco === 'armature').map((r) => r.sbloccataDaBoss).sort()).toEqual(['ferrante', 'troll_caverne']);
+    expect(sigilli.filter((r) => r.banco === 'alchimia').map((r) => r.sbloccataDaBoss).sort()).toEqual(['negromante', 'radice_marcia', 'selva_boss']);
+    expect(mondo.quest['eco_valle']?.daChi).toBe('bruno');
+    expect(mondo.quest['eco_colline']?.daChi).toBe('ugo');
+    expect(mondo.quest['eco_brughiera']?.daChi).toBe('selva');
+  });
+
+  it('Le Radici e la Radice Marcia sono collegati sotto Borgo Quercia con la porta runica (fase 14b)', () => {
+    expect(mondo.mappe['borgo']!.legenda['d']).toMatchObject({ tipo: 'uscita', verso: 'radici_alte', arrivo: 'a' });
+    expect(mondo.mappe['radici_alte']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'borgo', arrivo: 'k' });
+    expect(mondo.mappe['radici_alte']!.legenda['d']).toMatchObject({ tipo: 'uscita', verso: 'radici_cuore', arrivo: 'a' });
+    expect(mondo.mappe['radici_cuore']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'radici_alte', arrivo: 'b' });
+    const radice = mondo.nemici['radice_marcia']!;
+    expect(radice.fasi?.length).toBe(2);
+    expect(radice.leggendari).toEqual(['corazza_quercia', 'amuleto_quercia']);
+    expect(radice.esoticoFirma).toBe('guanti_predatore');
+    expect(mondo.quest['radici_quercia']?.daChi).toBe('rosalba');
+  });
+
+  it('i 4 traguardi delle 12 Ghiande d’oro da Rosalba e le 3 commissioni della bacheca di Tobia sono completi (fase 14c)', () => {
+    expect(mondo.quest['ghiande_3']?.ricompensa.oggetti).toEqual([{ id: 'zaino_24', quantita: 1 }]);
+    expect(mondo.quest['ghiande_6']?.ricompensa.oggetti).toEqual([{ id: 'corazza_quercia', quantita: 1 }]);
+    expect(mondo.quest['ghiande_9']?.ricompensa.oggetti).toEqual([{ id: 'amuleto_quercia', quantita: 1 }]);
+    expect(mondo.quest['ghiande_12']?.ricompensa.oggetti).toEqual([{ id: 'cuore_quercia', quantita: 1 }]);
+    expect(mondo.quest['commissione_spada']?.daChi).toBe('tobia');
+    expect(mondo.quest['commissione_corazza']?.daChi).toBe('tobia');
+    expect(mondo.quest['commissione_pozioni']?.daChi).toBe('tobia');
+  });
+
+  it('curva di bilanciamento finale: vita ed esperienza dei 7 boss crescono in ordine e l’XP totale supera il livello 20 (fase 15)', () => {
+    const ordineBoss = ['re_melma', 're_scheletro', 'ferrante', 'troll_caverne', 'selva_boss', 'negromante', 'radice_marcia'];
+    const vite = ordineBoss.map((id) => mondo.nemici[id]!.vita);
+    const esp = ordineBoss.map((id) => mondo.nemici[id]!.esperienza);
+    for (let i = 1; i < ordineBoss.length; i++) {
+      expect(vite[i]!, `${ordineBoss[i]} vita`).toBeGreaterThan(vite[i - 1]!);
+      expect(esp[i]!, `${ordineBoss[i]} esperienza`).toBeGreaterThan(esp[i - 1]!);
+    }
+    const xpQuest = Object.values(mondo.quest).reduce((acc, q) => acc + q.ricompensa.esperienza, 0);
+    const xpNemici = Object.values(mondo.mappe).reduce(
+      (acc, m) => acc + celleNemico(m).reduce((s, n) => s + mondo.nemici[n.idNemico]!.esperienza, 0),
+      0,
+    );
+    expect(xpQuest + xpNemici).toBeGreaterThanOrEqual(mondo.soglieLivelli.at(-1)!);
+    expect(Object.keys(mondo.mappe).length).toBeGreaterThanOrEqual(26);
+    expect(Object.keys(mondo.quest).length).toBeGreaterThanOrEqual(41);
+  });
+
   it('il borgo ha i sei personaggi del design, ognuno con il suo dialogo', () => {
     const presenti = celleAbitante(mondo.mappe['borgo']!).map((a) => a.idAbitante).sort();
     expect(presenti).toEqual(['anselmo', 'berta', 'bruno', 'gemma', 'rosalba', 'tobia']);

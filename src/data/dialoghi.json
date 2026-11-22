@@ -109,6 +109,17 @@
             }
           },
           {
+            "testo": "Sono stato alla Casa sul Colle: ho visto che vent'anni fa hai bruciato tu il laboratorio di Orvald!",
+            "va": "confronto1",
+            "se": {
+              "quest": "confronto_berta",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "confronto_berta"
+            }
+          },
+          {
             "testo": "È finita. Orvald non c'è più.",
             "va": "confessione1",
             "se": {
@@ -378,6 +389,27 @@
             "testo": "Arrivederci"
           }
         ]
+      },
+      "confronto1": {
+        "testo": "Sì, sono stata io! E non me ne vergogno: l'ho fatto per proteggere il borgo! Quella notte Orvald aveva già tracciato i cerchi di gesso… se non avessi bruciato quel laboratorio, i morti si sarebbero alzati vent'anni fa!",
+        "risposte": [
+          {
+            "testo": "Hai difeso il villaggio, ma il silenzio ha reso Orvald un mostro.",
+            "va": "confronto2"
+          },
+          {
+            "testo": "Capisco la tua paura, Berta. Ora tocca a me chiudere quel cerchio.",
+            "va": "confronto2"
+          }
+        ]
+      },
+      "confronto2": {
+        "testo": "Forse hai ragione, forestiero… ma la responsabilità è mia, e quando tutto sarà finito la racconterò io stessa in piazza. Ora sali su quella torre e ferma Orvald prima che la luna nera si chiuda.",
+        "risposte": [
+          {
+            "testo": "Lo farò, Berta."
+          }
+        ]
       }
     }
   },
@@ -417,6 +449,33 @@
             "se": {
               "quest": "erbe_anselmo",
               "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Sai se Orvald ha lasciato delle lettere prima di fuggire?",
+            "va": "chiedeLettere",
+            "se": {
+              "quest": "ultime_lettere",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto cercando le ultime lettere di Orvald alla Casa sul Colle.",
+            "va": "attesaLettere",
+            "se": {
+              "quest": "ultime_lettere",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Frate Anselmo, ho trovato le tre lettere mai spedite di Orvald.",
+            "va": "grazieLettere",
+            "se": {
+              "quest": "ultime_lettere",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ultime_lettere"
             }
           },
           {
@@ -564,6 +623,46 @@
           }
         ]
       },
+      "chiedeLettere": {
+        "testo": "Prima dell'incendio, Orvald mi disse che aveva scritto tre lettere per spiegare al borgo le sue ricerche sulla febbre grigia, ma non ebbe mai il coraggio di spedirle. Se le trovi nella Casa sul Colle, portamele.",
+        "risposte": [
+          {
+            "testo": "Cercherò le lettere di Orvald alla Casa sul Colle.",
+            "va": "lettereOk",
+            "azione": {
+              "accetta": "ultime_lettere"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "lettereOk": {
+        "testo": "Che la luce ti guidi oltre la palude, figliolo.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaLettere": {
+        "testo": "Le tre lettere mai spedite dovrebbero essere ancora in un forziere nella Casa sul Colle.",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieLettere": {
+        "testo": "«Perdonate un padre che ha perso la strada…» Le conserverò nella cappella, perché il villaggio ricordi chi era Orvald prima del dolore. Prendi queste pozioni per il tuo cammino.",
+        "risposte": [
+          {
+            "testo": "Grazie, frate Anselmo."
+          }
+        ]
+      },
       "ricordo": {
         "testo": "Orvald rideva sempre. Prima della febbre, prima di Lia. Lo ricordo così, quando prego. Fermalo, ma… non dimenticare chi era.",
         "risposte": [
@@ -707,7 +806,102 @@
             "va": "tesori"
           },
           {
+            "testo": "C'è qualche commissione sulla bacheca della taverna?",
+            "va": "bacheca"
+          },
+          {
             "testo": "Arrivederci"
+          }
+        ]
+      },
+      "bacheca": {
+        "testo": "Ecco la bacheca delle commissioni del Cinghiale Zoppo! Artigiani e viaggiatori lasciano qui le loro richieste: se porti gli oggetti richiesti, ti pago in monete e Frammenti d'eco!",
+        "risposte": [
+          {
+            "testo": "Accetto la commissione della Balestra per le guardie.",
+            "va": "commAccettata",
+            "se": {
+              "quest": "commissione_spada",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "commissione_spada"
+            }
+          },
+          {
+            "testo": "Ho portato la Balestra per le guardie!",
+            "va": "commConclusa",
+            "se": {
+              "quest": "commissione_spada",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "commissione_spada"
+            }
+          },
+          {
+            "testo": "Accetto la commissione della Corazza d'argento.",
+            "va": "commAccettata",
+            "se": {
+              "quest": "commissione_corazza",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "commissione_corazza"
+            }
+          },
+          {
+            "testo": "Ho portato la Corazza d'argento per la commissione!",
+            "va": "commConclusa",
+            "se": {
+              "quest": "commissione_corazza",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "commissione_corazza"
+            }
+          },
+          {
+            "testo": "Accetto la commissione delle 3 Pozioni di forza.",
+            "va": "commAccettata",
+            "se": {
+              "quest": "commissione_pozioni",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "commissione_pozioni"
+            }
+          },
+          {
+            "testo": "Ho portato le 3 Pozioni di forza per la bacheca!",
+            "va": "commConclusa",
+            "se": {
+              "quest": "commissione_pozioni",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "commissione_pozioni"
+            }
+          },
+          {
+            "testo": "Torno indietro.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "commAccettata": {
+        "testo": "Segnato sul registro! Torna qui appena hai pronto l'oggetto.",
+        "risposte": [
+          {
+            "testo": "A presto, Tobia."
+          }
+        ]
+      },
+      "commConclusa": {
+        "testo": "Lavoro impeccabile! Ecco la tua ricompensa in monete e Frammenti d'eco.",
+        "risposte": [
+          {
+            "testo": "Grazie, Tobia!"
           }
         ]
       },
@@ -810,6 +1004,33 @@
             },
             "azione": {
               "concludi": "ritorno_matteo"
+            }
+          },
+          {
+            "testo": "Parlami dei Sigilli dell'Eco della Valle.",
+            "va": "chiedeEcoValle",
+            "se": {
+              "quest": "eco_valle",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto affrontando l'Eco del Re Scheletro.",
+            "va": "attesaEcoValle",
+            "se": {
+              "quest": "eco_valle",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho sconfitto l'Eco del Re Scheletro nella Tomba del Re!",
+            "va": "grazieEcoValle",
+            "se": {
+              "quest": "eco_valle",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "eco_valle"
             }
           },
           {
@@ -947,6 +1168,50 @@
             "testo": "Sono felice per voi, Bruno."
           }
         ]
+      },
+      "chiedeEcoValle": {
+        "testo": "Con i Frammenti d'eco posso forgiare i Sigilli dell'Eco del Re Melma e del Re Scheletro. Usandoli sui loro altari li riaffronterai molto più forti, ma ti lasceranno di sicuro la loro arma esotica firma! Vuoi mettere alla prova l'Eco del Re Scheletro?",
+        "risposte": [
+          {
+            "testo": "Accetto la sfida dell'Eco del Re Scheletro.",
+            "va": "ecoValleOk",
+            "azione": {
+              "accetta": "eco_valle"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "ecoValleOk": {
+        "testo": "Forgia il Sigillo qui in fucina e scendi nella Tomba del Re!",
+        "risposte": [
+          {
+            "testo": "Apriamo la fucina.",
+            "apri": "fucina"
+          },
+          {
+            "testo": "Vado."
+          }
+        ]
+      },
+      "attesaEcoValle": {
+        "testo": "Forgia il Sigillo dell'Eco del Re Scheletro in fucina e usalo sull'altare nella Tomba del Re!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieEcoValle": {
+        "testo": "L'Eco del Re Scheletro piegato dalla tua lama! Che tempra! Tieni questi Frammenti d'eco e queste monete.",
+        "risposte": [
+          {
+            "testo": "Grazie, Bruno!"
+          }
+        ]
       }
     }
   },
@@ -1026,6 +1291,33 @@
             }
           },
           {
+            "testo": "Come sta la Quercia Antica dopo la caduta di Orvald?",
+            "va": "chiedeRadici",
+            "se": {
+              "quest": "radici_quercia",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto scendendo nelle Radici della Quercia.",
+            "va": "attesaRadici",
+            "se": {
+              "quest": "radici_quercia",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho sconfitto La Radice Marcia sotto la Quercia Antica!",
+            "va": "grazieRadici",
+            "se": {
+              "quest": "radici_quercia",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "radici_quercia"
+            }
+          },
+          {
             "testo": "Un'altra volta, nonna."
           }
         ]
@@ -1063,11 +1355,127 @@
         ]
       },
       "ghiande": {
-        "testo": "La leggenda dice che la Quercia Antica lasciò cadere dodici Ghiande d'oro nella valle, nelle colline e nella brughiera, per chi un giorno l'avrebbe salvata. Se le trovi, tienile da parte: quando la Quercia avrà bisogno di te, ti ricompenseranno!",
+        "testo": "La leggenda dice che la Quercia Antica lasciò cadere dodici Ghiande d'oro nella valle, nelle colline e nella brughiera, per chi un giorno l'avrebbe salvata. Portamele tre alla volta e ti consegnerò i doni custoditi dagli anziani!",
         "risposte": [
+          {
+            "testo": "Ti porterò le prime 3 Ghiande d'oro.",
+            "va": "ghiandeAccettata",
+            "se": {
+              "quest": "ghiande_3",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "ghiande_3"
+            }
+          },
+          {
+            "testo": "Ecco 3 Ghiande d'oro! (3 / 12)",
+            "va": "ghiandePremio",
+            "se": {
+              "quest": "ghiande_3",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ghiande_3"
+            }
+          },
+          {
+            "testo": "Cercherò altre 3 Ghiande d'oro (6 / 12).",
+            "va": "ghiandeAccettata",
+            "se": {
+              "quest": "ghiande_6",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "ghiande_6"
+            }
+          },
+          {
+            "testo": "Ecco altre 3 Ghiande d'oro! (6 / 12)",
+            "va": "ghiandePremio",
+            "se": {
+              "quest": "ghiande_6",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ghiande_6"
+            }
+          },
+          {
+            "testo": "Cercherò altre 3 Ghiande d'oro (9 / 12).",
+            "va": "ghiandeAccettata",
+            "se": {
+              "quest": "ghiande_9",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "ghiande_9"
+            }
+          },
+          {
+            "testo": "Ecco altre 3 Ghiande d'oro! (9 / 12)",
+            "va": "ghiandePremio",
+            "se": {
+              "quest": "ghiande_9",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ghiande_9"
+            }
+          },
+          {
+            "testo": "Cercherò le ultime 3 Ghiande d'oro (12 / 12).",
+            "va": "ghiandeAccettata",
+            "se": {
+              "quest": "ghiande_12",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "ghiande_12"
+            }
+          },
+          {
+            "testo": "Ecco le ultime 3 Ghiande d'oro! (12 / 12)",
+            "va": "ghiandeFinale",
+            "se": {
+              "quest": "ghiande_12",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ghiande_12"
+            }
+          },
           {
             "testo": "Ne terrò conto, nonna.",
             "va": "saluto"
+          }
+        ]
+      },
+      "ghiandeAccettata": {
+        "testo": "Cerca nei forzieri segreti, dietro le rocce crepate, nei tesori sepolti e nelle mappe del tesoro! La Quercia ti guida.",
+        "risposte": [
+          {
+            "testo": "Grazie, nonna Rosalba."
+          }
+        ]
+      },
+      "ghiandePremio": {
+        "testo": "Che splendore! Ecco il dono che gli anziani di Borgo Quercia hanno custodito per questo traguardo!",
+        "risposte": [
+          {
+            "testo": "Parliamo delle prossime Ghiande d'oro.",
+            "va": "ghiande"
+          },
+          {
+            "testo": "Grazie, nonna!"
+          }
+        ]
+      },
+      "ghiandeFinale": {
+        "testo": "Tutte e dodici le Ghiande d'oro sono tornate alla Quercia Antica! Prendi l'amuleto più prezioso della valle: il Cuore della Quercia. Finché lo porterai, la vita della Quercia scorrerà dentro di te.",
+        "risposte": [
+          {
+            "testo": "Grazie di tutto, nonna Rosalba!"
           }
         ]
       },
@@ -1166,6 +1574,46 @@
           {
             "testo": "Grazie, nonna.",
             "va": "saluto"
+          }
+        ]
+      },
+      "chiedeRadici": {
+        "testo": "Il cielo è tornato sereno, figliolo, ma sento ancora un brivido sotto i piedi. Sotto la Quercia Antica, dietro la porta runica a sud della piazza, il resto del rito sta facendo marcire le radici. Porta Selva con te e purifica il cuore dell'albero!",
+        "risposte": [
+          {
+            "testo": "Scenderò nelle Radici della Quercia.",
+            "va": "radiciOk",
+            "azione": {
+              "accetta": "radici_quercia"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "radiciOk": {
+        "testo": "La porta runica è tra gli alberi a sud della piazza, tra la fucina di Bruno e la taverna. Stai attento: laggiù gli echi delle tre regioni sono fortissimi!",
+        "risposte": [
+          {
+            "testo": "Ci penso io, nonna."
+          }
+        ]
+      },
+      "attesaRadici": {
+        "testo": "La porta runica a sud della piazza, con Selva nel gruppo. La Radice Marcia ti aspetta sul fondo!",
+        "risposte": [
+          {
+            "testo": "Torno subito."
+          }
+        ]
+      },
+      "grazieRadici": {
+        "testo": "Guarda i rami sopra la piazza… stanno già spuntando gemme nuove! Hai salvato la Quercia Antica fino alle sue radici più profonde. Prendi questo tesoro, figliolo!",
+        "risposte": [
+          {
+            "testo": "Grazie, nonna Rosalba!"
           }
         ]
       }
@@ -1370,6 +1818,33 @@
             }
           },
           {
+            "testo": "Parlami dei Sigilli dell'Eco delle Colline.",
+            "va": "chiedeEcoColline",
+            "se": {
+              "quest": "eco_colline",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto affrontando l'Eco del Troll delle Caverne.",
+            "va": "attesaEcoColline",
+            "se": {
+              "quest": "eco_colline",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho sconfitto l'Eco del Troll delle Caverne nella sua tana!",
+            "va": "grazieEcoColline",
+            "se": {
+              "quest": "eco_colline",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "eco_colline"
+            }
+          },
+          {
             "testo": "Perché sei qui?",
             "va": "perche"
           },
@@ -1521,6 +1996,50 @@
         "risposte": [
           {
             "testo": "Grazie mille, Ugo!"
+          }
+        ]
+      },
+      "chiedeEcoColline": {
+        "testo": "Sul mio banco d'armature posso forgiare i Sigilli dell'Eco di Ferrante e del Troll delle Caverne. E se porti Grisk nella Tana del Troll, dietro la roccia crepata a sud-est c'è il Pozzo Profondo pieno di cristalli e Pietra lunare!",
+        "risposte": [
+          {
+            "testo": "Accetto la sfida dell'Eco del Troll delle Caverne.",
+            "va": "ecoCollineOk",
+            "azione": {
+              "accetta": "eco_colline"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "ecoCollineOk": {
+        "testo": "Forgia il Sigillo qui e torna nella Tana del Troll. Stai pronto a schivare la sua carica!",
+        "risposte": [
+          {
+            "testo": "Mostrami il banco delle armature",
+            "apri": "armature"
+          },
+          {
+            "testo": "Vado."
+          }
+        ]
+      },
+      "attesaEcoColline": {
+        "testo": "Forgia il Sigillo dell'Eco del Troll sul banco delle armature e usalo sull'altare nella Tana del Troll!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieEcoColline": {
+        "testo": "Hai abbattuto perfino l'Eco del Troll! I minatori di Pietrafonda canteranno di te per generazioni. Ecco la tua ricompensa!",
+        "risposte": [
+          {
+            "testo": "Grazie, Ugo!"
           }
         ]
       }
@@ -2291,6 +2810,95 @@
             }
           },
           {
+            "testo": "Devo parlare con Berta dell'incendio alla Casa sul Colle.",
+            "va": "mandaBerta",
+            "se": {
+              "quest": "confronto_berta",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "C'è qualcos'altro nell'Osservatorio che dovrei recuperare?",
+            "va": "chiedeQuaderno",
+            "se": {
+              "quest": "selva_quaderno",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Dove si trova il Quaderno di Lia?",
+            "va": "attesaQuaderno",
+            "se": {
+              "quest": "selva_quaderno",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Selva, ho trovato il Quaderno di Lia nell'Osservatorio.",
+            "va": "grazieQuaderno",
+            "se": {
+              "quest": "selva_quaderno",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "selva_quaderno"
+            }
+          },
+          {
+            "testo": "Ti servono ingredienti per il Banco di alchimia?",
+            "va": "chiedeErbe",
+            "se": {
+              "quest": "erbe_palude",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Quanti Giunchi di palude ti servono?",
+            "va": "attesaErbe",
+            "se": {
+              "quest": "erbe_palude",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ti ho portato i 4 Giunchi di palude!",
+            "va": "grazieErbe",
+            "se": {
+              "quest": "erbe_palude",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "erbe_palude"
+            }
+          },
+          {
+            "testo": "Parlami dei Sigilli dell'Eco della Brughiera.",
+            "va": "chiedeEcoBrughiera",
+            "se": {
+              "quest": "eco_brughiera",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto affrontando l'Eco del Negromante in cima alla Torre.",
+            "va": "attesaEcoBrughiera",
+            "se": {
+              "quest": "eco_brughiera",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho sconfitto l'Eco del Negromante in cima alla Torre!",
+            "va": "grazieEcoBrughiera",
+            "se": {
+              "quest": "eco_brughiera",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "eco_brughiera"
+            }
+          },
+          {
             "testo": "Raccontami di Orvald e di quella notte.",
             "va": "storiaOrvald"
           },
@@ -2347,8 +2955,160 @@
         "testo": "Orvald aveva curato mezzo villaggio prima che la febbre portasse via Lia. Quando Berta diede fuoco al laboratorio per paura dei suoi studi, frate Anselmo mi nascose nella cappella e mi fece fuggire nella notte.",
         "risposte": [
           {
+            "testo": "Devo parlare con Berta di quell'incendio.",
+            "va": "mandaBerta",
+            "se": {
+              "quest": "confronto_berta",
+              "stato": "disponibile"
+            }
+          },
+          {
             "testo": "Capisco.",
             "va": "saluto"
+          }
+        ]
+      },
+      "mandaBerta": {
+        "testo": "Sì. Prima di salire alla torre, torna a Borgo Quercia e guarda Berta negli occhi: deve sapere che i ricordi della Casa sul Colle parlano ancora.",
+        "risposte": [
+          {
+            "testo": "Andrò a parlare con Berta.",
+            "va": "saluto",
+            "azione": {
+              "accetta": "confronto_berta"
+            }
+          },
+          {
+            "testo": "Più tardi.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "chiedeQuaderno": {
+        "testo": "Nell'Osservatorio, dentro un forziere, è rimasto il quaderno di scuola di Lia con i suoi disegni. Portamelo: se Orvald lo rivedrà prima della fine, forse ricorderà chi era.",
+        "risposte": [
+          {
+            "testo": "Ti porterò il Quaderno di Lia.",
+            "va": "quadernoOk",
+            "azione": {
+              "accetta": "selva_quaderno"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "quadernoOk": {
+        "testo": "Cerca nell'ala sud dell'Osservatorio di Orvald. Ti aspetto qui.",
+        "risposte": [
+          {
+            "testo": "A presto, Selva."
+          }
+        ]
+      },
+      "attesaQuaderno": {
+        "testo": "Il Quaderno di Lia è in un forziere nell'ala sud dell'Osservatorio.",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieQuaderno": {
+        "testo": "Eccolo… i disegni della Quercia Antica fatti da Lia. Lo terrò pronto per la cima della torre! E prendi questo, viaggiatore: il Ciondolo d'argento di Lia. Ti proteggerà quando sarai sul punto di cadere.",
+        "risposte": [
+          {
+            "testo": "Grazie di cuore, Selva."
+          }
+        ]
+      },
+      "chiedeErbe": {
+        "testo": "Per rimettere in funzione i miei alambicchi al Guado mi servono quattro Giunchi di palude. Se me li porti, ti insegnerò le formule alchemiche per distillare pozioni di vita e di mana!",
+        "risposte": [
+          {
+            "testo": "Ti porterò 4 Giunchi di palude.",
+            "va": "erbeOk",
+            "azione": {
+              "accetta": "erbe_palude"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "erbeOk": {
+        "testo": "I Giunchi crescono sui bordi del Guado e nella Palude delle Lanterne.",
+        "risposte": [
+          {
+            "testo": "Vado subito."
+          }
+        ]
+      },
+      "attesaErbe": {
+        "testo": "Quattro Giunchi di palude, e il Banco di alchimia tornerà a fumare!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieErbe": {
+        "testo": "Perfetti e ancora umidi di rugiada! Prendi queste due formule alchemiche: leggile dallo zaino e potrai distillare pozioni al mio banco ogni volta che vuoi!",
+        "risposte": [
+          {
+            "testo": "Apriamo il Banco di alchimia",
+            "apri": "alchimia"
+          },
+          {
+            "testo": "Grazie, Selva!"
+          }
+        ]
+      },
+      "chiedeEcoBrughiera": {
+        "testo": "Nel mio Banco di alchimia posso tracciare i Sigilli dell'Eco della Brughiera: sia quello del mio riflesso nell'Osservatorio, sia quello dell'Eco del Negromante in cima alla Torre. Vuoi affrontare l'Eco di Orvald?",
+        "risposte": [
+          {
+            "testo": "Accetto la sfida dell'Eco del Negromante.",
+            "va": "ecoBrughieraOk",
+            "azione": {
+              "accetta": "eco_brughiera"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "ecoBrughieraOk": {
+        "testo": "Forgia il Sigillo d'ossidiana al Banco di alchimia e risali in cima alla Torre. Sarà il duello più duro del tuo viaggio.",
+        "risposte": [
+          {
+            "testo": "Apriamo il Banco di alchimia",
+            "apri": "alchimia"
+          },
+          {
+            "testo": "Vado."
+          }
+        ]
+      },
+      "attesaEcoBrughiera": {
+        "testo": "Forgia il Sigillo dell'Eco del Negromante e usalo sull'altare in cima alla Torre!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieEcoBrughiera": {
+        "testo": "Hai superato perfino l'Eco del mio maestro… non resta più alcun'ombra su questa torre. Tieni questi Frammenti d'eco e queste monete.",
+        "risposte": [
+          {
+            "testo": "Grazie, Selva."
           }
         ]
       }

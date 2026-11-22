@@ -230,5 +230,62 @@
     "conosciutaDallInizio": false,
     "sbloccataDaBoss": "selva_boss",
     "banco": "alchimia"
+  },
+  "alchimia_pozione_vita": {
+    "id": "alchimia_pozione_vita",
+    "risultato": "pozione_vita",
+    "materiali": {
+      "giunco_palude": 1,
+      "erba_medicinale": 1
+    },
+    "monete": 5,
+    "conosciutaDallInizio": false,
+    "banco": "alchimia"
+  },
+  "alchimia_pozione_mana": {
+    "id": "alchimia_pozione_mana",
+    "risultato": "pozione_mana",
+    "materiali": {
+      "erica": 1,
+      "giunco_palude": 1
+    },
+    "monete": 5,
+    "conosciutaDallInizio": false,
+    "banco": "alchimia"
+  },
+  "alchimia_pozione_forza": {
+    "id": "alchimia_pozione_forza",
+    "risultato": "pozione_forza",
+    "materiali": {
+      "essenza_ombra": 1,
+      "erica": 1
+    },
+    "monete": 15,
+    "conosciutaDallInizio": false,
+    "banco": "alchimia"
+  },
+  "alchimia_pozione_resistenza": {
+    "id": "alchimia_pozione_resistenza",
+    "risultato": "pozione_resistenza",
+    "materiali": {
+      "essenza_ombra": 1,
+      "giunco_palude": 1
+    },
+    "monete": 15,
+    "conosciutaDallInizio": false,
+    "banco": "alchimia"
+  },
+  "sigillo_eco_radice_marcia": {
+    "id": "sigillo_eco_radice_marcia",
+    "risultato": "sigillo_eco_radice_marcia",
+    "materiali": {
+      "legno_vivo": 1,
+      "inchiostro_luna": 2,
+      "frammento_eco": 2
+    },
+    "monete": 200,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "radice_marcia",
+    "banco": "alchimia"
   }
 }

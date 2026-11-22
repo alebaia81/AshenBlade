@@ -7,6 +7,7 @@ import {
   assegnaPuntoPartita,
   attivaPietra,
   caratteristicheTotali,
+  componiPagineFinale,
   contaTotale,
   creaPartita,
   forziereAperto,
@@ -339,5 +340,23 @@ describe('tesori sepolti, pietre di passaggio e ricordi nella Partita (fase 10c)
     p = leggiRicordo(p, 'casa_colle:3:4');
     p = leggiRicordo(p, 'casa_colle:3:4');
     expect(p.ricordiVisti).toEqual(['casa_colle:3:4']);
+  });
+
+  it('componiPagineFinale aggiunge il Quaderno di Lia e le battute dei compagni di viaggio (fase 13c)', () => {
+    const base = ['P1', 'P2', 'P3', 'Fine'];
+    const pBase = creaPartita('Ale', guerrieroDiProva, ['FOR', 'COS']);
+    expect(componiPagineFinale(base, pBase)).toEqual(base);
+
+    const pRicca = {
+      ...pBase,
+      quest: { ...pBase.quest, selva_quaderno: { stato: 'conclusa' as const, passo: 1, conteggio: 0 } },
+      compagni: { attivo: 'selva', ingaggiati: ['tessa', 'grisk', 'selva'] },
+    };
+    const pagine = componiPagineFinale(base, pRicca);
+    expect(pagine.length).toBe(base.length + 2);
+    expect(pagine[2]).toContain('quaderno di scuola di Lia');
+    expect(pagine[pagine.length - 2]).toContain('Tessa');
+    expect(pagine[pagine.length - 2]).toContain('Grisk');
+    expect(pagine[pagine.length - 2]).toContain('Selva');
   });
 });

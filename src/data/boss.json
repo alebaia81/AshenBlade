@@ -140,7 +140,7 @@
   "selva_boss": {
     "nome": "Selva l’Incantatrice",
     "comportamento": "tiratore",
-    "vita": 210,
+    "vita": 260,
     "armatura": 2,
     "danno": "1d10",
     "velocita": 42,
@@ -481,5 +481,104 @@
       "dimensione": 3,
       "colore": "#b46bff"
     }
+  },
+  "radice_marcia": {
+    "nome": "La Radice Marcia",
+    "comportamento": "inseguitore",
+    "vita": 360,
+    "armatura": 3,
+    "danno": "2d8",
+    "velocita": 34,
+    "raggioVista": 96,
+    "raggioAbbandono": 700,
+    "dimensione": 26,
+    "colore": "#3a6e42",
+    "storditoMs": 40,
+    "pausaDopoAttaccoMs": 1000,
+    "esperienza": 1100,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "legno_vivo",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "frammento_eco",
+        "probabilita": 1
+      }
+    ],
+    "leggendari": [
+      "corazza_quercia",
+      "amuleto_quercia"
+    ],
+    "esoticoFirma": "guanti_predatore",
+    "eco": {
+      "vita": 1.5,
+      "danno": 1.25,
+      "ricarica": 0.75,
+      "tinta": "#a0ffb8"
+    },
+    "monete": [
+      260,
+      380
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": [
+          {
+            "tipo": "crollo_massi",
+            "ricaricaMs": 6000,
+            "quanti": 4,
+            "preavvisoMs": 1000,
+            "raggio": 13,
+            "danno": "1d10"
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 4500,
+            "colpi": 4,
+            "ventaglioGradi": 60,
+            "velocita": 155,
+            "gittata": 195,
+            "dimensione": 3,
+            "colore": "#70e890",
+            "danno": "1d10"
+          }
+        ]
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Le radici della Quercia tremano: l’infezione scatena tutta la sua furia!",
+        "attacchi": [
+          {
+            "tipo": "crollo_massi",
+            "ricaricaMs": 4800,
+            "quanti": 6,
+            "preavvisoMs": 900,
+            "raggio": 14,
+            "danno": "2d6"
+          },
+          {
+            "tipo": "incantesimo",
+            "ricaricaMs": 3600,
+            "colpi": 5,
+            "ventaglioGradi": 80,
+            "velocita": 165,
+            "gittata": 200,
+            "dimensione": 3,
+            "colore": "#70e890",
+            "danno": "1d10"
+          },
+          {
+            "tipo": "evoca",
+            "nemico": "eco_lupo",
+            "quanti": 2,
+            "massimo": 3,
+            "ricaricaMs": 9000
+          }
+        ]
+      }
+    ]
   }
 }

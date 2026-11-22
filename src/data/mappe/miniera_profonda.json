@@ -1,0 +1,132 @@
+{
+  "id": "miniera_profonda",
+  "nome": "Il Pozzo Profondo",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#18141e",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#706880" }
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#383448",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#9890b0" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#60586c",
+      "tessera": { "immagine": "terra", "tinta": "#a8a0b8" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#60586c",
+      "tessera": { "immagine": "terra", "tinta": "#a8a0b8" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "miniera_tana",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "golem",
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "K": {
+      "tipo": "nemico",
+      "nemico": "ragno",
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "A": {
+      "tipo": "nemico",
+      "nemico": "goblin_arciere",
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "l": {
+      "tipo": "vena",
+      "materiale": "pietra_lunare",
+      "quantita": [1, 2],
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "c": {
+      "tipo": "vena",
+      "materiale": "cristallo_miniera",
+      "quantita": [1, 2],
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "s": {
+      "tipo": "vena",
+      "materiale": "argento",
+      "quantita": [1, 2],
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#4c465a",
+      "coloreMuro": "#383448",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#9890b0" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "frammento_eco",
+        "pietra_lunare",
+        "pozione_forza"
+      ],
+      "monete": 110,
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "frammento_eco",
+        "cristallo_miniera",
+        "pozione_resistenza"
+      ],
+      "monete": 140,
+      "colore": "#4c465a",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#9890b0" }
+    }
+  },
+  "griglia": [
+    "#############n##############",
+    "#RRRRRRRRRRR:a:RRRRRRRRRRRR#",
+    "#RRRRRRRRRRR:::RRRRRRRRRRRR#",
+    "#RRRRRRRRRRR:::RRRRRRRRRRRR#",
+    "#RRRR.......:::.......RRRRR#",
+    "#RR..l......:::......c..RRR#",
+    "#R..........:::..........RR#",
+    "#R...RRRR...:::...RRRR....R#",
+    "#R...R..R...:::...R..R....R#",
+    "#R.K........:::........K..R#",
+    "#R.....:::::::::::::......R#",
+    "#R....s:::::::::::::s.....R#",
+    "#R.....:::::::::::::......R#",
+    "#R...G......:::......G....R#",
+    "#R..........:::..........RR#",
+    "#RR..c......:::......l..RRR#",
+    "#RRRR.......:::.......RRRRR#",
+    "#RRRRRR.....:::.....RRRRRRR#",
+    "#RRRRRR.A...:::...A.RRRRRRR#",
+    "#RRRRRR..X..:::..RWRRRRRRRR#",
+    "#RRRRRRRRRRRRRRRRR.RRRRRRRR#",
+    "#RRRRRRRRRRRRRRRR.Y.RRRRRRR#",
+    "#RRRRRRRRRRRRRRRR...RRRRRRR#",
+    "############################"
+  ]
+}

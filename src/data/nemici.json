@@ -713,5 +713,109 @@
       "dimensione": 2,
       "colore": "#e0b0ff"
     }
+  },
+  "eco_lupo": {
+    "nome": "Eco del Lupo",
+    "comportamento": "inseguitore",
+    "vita": 40,
+    "armatura": 2,
+    "danno": "2d6",
+    "velocita": 72,
+    "raggioVista": 115,
+    "raggioAbbandono": 210,
+    "dimensione": 13,
+    "colore": "#5a8a6a",
+    "storditoMs": 180,
+    "pausaDopoAttaccoMs": 450,
+    "esperienza": 42,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pelle_lupo",
+        "probabilita": 0.4
+      },
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.2
+      }
+    ],
+    "monete": [
+      12,
+      22
+    ],
+    "opacita": 0.85
+  },
+  "eco_golem": {
+    "nome": "Eco del Golem",
+    "comportamento": "inseguitore",
+    "vita": 85,
+    "armatura": 5,
+    "danno": "2d8",
+    "velocita": 24,
+    "raggioVista": 115,
+    "raggioAbbandono": 210,
+    "dimensione": 18,
+    "colore": "#4c7a62",
+    "storditoMs": 90,
+    "pausaDopoAttaccoMs": 950,
+    "esperienza": 60,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "cristallo_miniera",
+        "probabilita": 0.3
+      },
+      {
+        "oggetto": "frammento_eco",
+        "probabilita": 0.25
+      }
+    ],
+    "monete": [
+      16,
+      28
+    ],
+    "opacita": 0.85
+  },
+  "eco_spettro": {
+    "nome": "Eco dello Spettro",
+    "comportamento": "tiratore",
+    "vita": 32,
+    "armatura": 1,
+    "danno": "2d6",
+    "velocita": 56,
+    "raggioVista": 135,
+    "raggioAbbandono": 215,
+    "dimensione": 12,
+    "colore": "#6ad8a8",
+    "storditoMs": 180,
+    "pausaDopoAttaccoMs": 480,
+    "esperienza": 48,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "essenza_ombra",
+        "probabilita": 0.45
+      },
+      {
+        "oggetto": "pozione_mana",
+        "probabilita": 0.2
+      }
+    ],
+    "monete": [
+      14,
+      24
+    ],
+    "opacita": 0.7,
+    "tiro": {
+      "distanzaMin": 48,
+      "distanzaMax": 110,
+      "ricaricaMs": 1450,
+      "velocita": 165,
+      "gittata": 165,
+      "dimensione": 3,
+      "colore": "#78f0b8"
+    }
   }
 }

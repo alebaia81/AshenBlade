@@ -125,6 +125,25 @@
       "monete": 50,
       "colore": "#3e3848",
       "tessera": { "immagine": "pietra_chiara", "tinta": "#807898" }
+    },
+    "R": {
+      "tipo": "porta",
+      "runica": true,
+      "aspetto": "cancello",
+      "nome": "la stanza runica di Orvald",
+      "colore": "#4a4258",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#9890b0" }
+    },
+    "T": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pergamena_pozione_forza_alchimia",
+        "pergamena_pozione_resistenza_alchimia",
+        "inchiostro_luna"
+      ],
+      "monete": 90,
+      "colore": "#3e3848",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#807898" }
     }
   },
   "griglia": [
@@ -149,10 +168,10 @@
     "#K.....K..C.......C..K.....#",
     "#K.k.....................S.#",
     "#K.....K.............K.....#",
-    "#KKKKKKK.............KKKKKK#",
-    "#KKKKKKKKKKKK:::KKKKKKKKKKK#",
-    "#KKKKKKKKKKKK:::KKKKKKKKKKK#",
-    "#KKKKKKKKKKKK:a:KKKKKKKKKKK#",
+    "#KKKKKKK.............KKRKKK#",
+    "#KKKKKKKKKKKK:::KKKKKK,,,KK#",
+    "#KKKKKKKKKKKK:::KKKKKK,T,KK#",
+    "#KKKKKKKKKKKK:a:KKKKKK,,,KK#",
     "##############n#############"
   ]
 }

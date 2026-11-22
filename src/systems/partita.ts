@@ -364,3 +364,35 @@ export function leggiRicordo(p: Partita, chiave: string): Partita {
   return visti.includes(chiave) ? p : { ...p, ricordiVisti: [...visti, chiave] };
 }
 
+/**
+ * Fase 13c: compone le pagine del finale arricchendole con il Quaderno di Lia
+ * (se portato a Selva o ancora nello zaino) e le battute dei compagni di viaggio
+ * uniti lungo l'avventura (Tessa, Grisk, Selva).
+ */
+export function componiPagineFinale(base: readonly string[], p: Partita): string[] {
+  const pagine = [...base];
+  const haQuaderno = p.quest['selva_quaderno']?.stato === 'conclusa' || contaTotale(p, 'quaderno_lia') > 0;
+  if (haQuaderno && pagine.length >= 2) {
+    pagine.splice(
+      2,
+      0,
+      'Prima che il cerchio si dissolva, porgi a Orvald il quaderno di scuola di Lia. Le sue dita tremano sfogliando i disegni infantili della Quercia Antica: una lacrima cade sull’inchiostro sbiadito.',
+    );
+  }
+  const frasiCompagni: string[] = [];
+  const uniti = p.compagni.ingaggiati;
+  if (uniti.includes('tessa')) {
+    frasiCompagni.push('Tessa accarezza Brina e guarda l’alba: «Anch’io avrei voluto riavere mio padre… ma lasciarlo andare è l’unico modo per ricordare davvero chi era.»');
+  }
+  if (uniti.includes('grisk')) {
+    frasiCompagni.push('Grisk si asciuga il naso con la manica: «Umani piangono troppo! Ma Grisk felice che il vecchio della torre non sia più solo. Ora festa a Pietrafonda!»');
+  }
+  if (uniti.includes('selva')) {
+    frasiCompagni.push('Selva chiude gli occhi e sorride con malinconia: «Addio, maestro. Tornerò al cimitero a posare un fiore d’erica accanto al germoglio di Lia.»');
+  }
+  if (frasiCompagni.length > 0 && pagine.length >= 1) {
+    pagine.splice(pagine.length - 1, 0, frasiCompagni.join('\n\n'));
+  }
+  return pagine;
+}
+

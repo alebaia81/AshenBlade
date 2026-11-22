@@ -1,0 +1,148 @@
+{
+  "id": "radici_alte",
+  "nome": "Le Radici – gallerie alte",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#142216",
+      "tessera": { "immagine": "tronco", "tinta": "#587858" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#203824",
+      "tessera": { "immagine": "tronco", "tinta": "#709870" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "borgo",
+      "arrivo": "k",
+      "tessera": "scale"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "d": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radici_cuore",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "L": {
+      "tipo": "nemico",
+      "nemico": "eco_lupo",
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "eco_golem",
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "eco_spettro",
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "R": {
+      "tipo": "porta",
+      "runica": true,
+      "aspetto": "cancello",
+      "nome": "il sigillo delle radici antiche",
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#324a36",
+      "coloreMuro": "#203824",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" },
+      "tesseraMuro": { "immagine": "tronco", "tinta": "#709870" }
+    },
+    "c": {
+      "tipo": "vena",
+      "materiale": "cristallo_miniera",
+      "quantita": [1, 2],
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "r": {
+      "tipo": "vena",
+      "materiale": "erica",
+      "quantita": [1, 2],
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "frammento_eco",
+        "inchiostro_luna",
+        "pozione_vita"
+      ],
+      "monete": 120,
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "frammento_eco",
+        "pietra_lunare",
+        "pozione_forza"
+      ],
+      "monete": 130,
+      "colore": "#324a36",
+      "tessera": { "immagine": "terra", "tinta": "#88a888" }
+    }
+  },
+  "griglia": [
+    "###############n################",
+    "#KKKKKKKKKKKKK:a:KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKK.........:::.........KKKKK#",
+    "#KK..r........:::........c..KKK#",
+    "#K............:::............KK#",
+    "#K...KKK......:::......KKK....K#",
+    "#K...K.K...L..:::..L...K.K....K#",
+    "#K..KXK.......:::.......KYK...K#",
+    "#K..KRK.......:::.......KWK...K#",
+    "#K.....:::::::::::::::::......K#",
+    "#K....S:::::::::::::::::S.....K#",
+    "#K.....:::::::::::::::::......K#",
+    "#K............:::.............K#",
+    "#K....G.......:::.......G.....K#",
+    "#K............:::.............K#",
+    "#KK..c........:::........r..KKK#",
+    "#KKKK.........:::.........KKKKK#",
+    "#KKKKKKK......:::......KKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:::KKKKKKKKKKKKKK#",
+    "#KKKKKKKKKKKKK:b:KKKKKKKKKKKKKK#",
+    "###############d################"
+  ]
+}

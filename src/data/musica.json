@@ -86,8 +86,11 @@
     "cripta_tomba": "dungeon",
     "miniera_gallerie": "dungeon",
     "miniera_tana": "dungeon",
+    "miniera_profonda": "dungeon",
     "torre_piani": "dungeon",
-    "torre_cima": "dungeon"
+    "torre_cima": "dungeon",
+    "radici_alte": "dungeon",
+    "radici_cuore": "dungeon"
   },
   "effetti": {
     "clic": [{ "onda": "square", "da": 900, "a": 900, "durata": 0.025, "volume": 0.08 }],

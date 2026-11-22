@@ -750,5 +750,98 @@
     "prezzo": 0,
     "colore": "#e8dcc0",
     "forma": "lettera"
+  },
+  "mappa_luna": {
+    "id": "mappa_luna",
+    "nome": "Mappa della luna",
+    "descrizione": "«Nella Brughiera della Torre, nell’angolo a nord-est sotto i pini violacei, brilla un tesoro sepolto alla luce della luna nera.» Usala dallo zaino per guardarla.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 90,
+    "colore": "#e8d9b0",
+    "forma": "mappa",
+    "effetto": {
+      "tipo": "mappa",
+      "quest": "tesoro_luna"
+    }
+  },
+  "pergamena_pozione_vita_alchimia": {
+    "id": "pergamena_pozione_vita_alchimia",
+    "nome": "Formula alchemica: Pozione di vita",
+    "descrizione": "Insegna a Selva a distillare nel Banco di alchimia: Pozione di vita. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "non_comune",
+    "pila": 5,
+    "prezzo": 60,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "alchimia_pozione_vita"
+    }
+  },
+  "pergamena_pozione_mana_alchimia": {
+    "id": "pergamena_pozione_mana_alchimia",
+    "nome": "Formula alchemica: Pozione di mana",
+    "descrizione": "Insegna a Selva a distillare nel Banco di alchimia: Pozione di mana. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "non_comune",
+    "pila": 5,
+    "prezzo": 60,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "alchimia_pozione_mana"
+    }
+  },
+  "pergamena_pozione_forza_alchimia": {
+    "id": "pergamena_pozione_forza_alchimia",
+    "nome": "Formula alchemica: Pozione di forza",
+    "descrizione": "Insegna a Selva a distillare nel Banco di alchimia: Pozione di forza. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 95,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "alchimia_pozione_forza"
+    }
+  },
+  "pergamena_pozione_resistenza_alchimia": {
+    "id": "pergamena_pozione_resistenza_alchimia",
+    "nome": "Formula alchemica: Pozione di resistenza",
+    "descrizione": "Insegna a Selva a distillare nel Banco di alchimia: Pozione di resistenza. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 95,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "alchimia_pozione_resistenza"
+    }
+  },
+  "legno_vivo": {
+    "id": "legno_vivo",
+    "nome": "Legno vivo della Quercia",
+    "descrizione": "Un frammento verdeggiante e pulsante strappato al cuore risanato della Quercia Antica.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 180,
+    "colore": "#60c868",
+    "forma": "frammento"
+  },
+  "sigillo_eco_radice_marcia": {
+    "id": "sigillo_eco_radice_marcia",
+    "nome": "Sigillo dell’Eco: La Radice Marcia",
+    "descrizione": "Un sigillo inciso nel legno vivo. Usalo sull’altare nel Cuore delle Radici per affrontare l’Eco della Radice Marcia.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0ffb8",
+    "forma": "frammento"
   }
 }

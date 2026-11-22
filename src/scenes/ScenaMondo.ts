@@ -103,6 +103,7 @@ import {
   apriMuro,
   attivaPietra,
   caratteristicheTotali,
+  componiPagineFinale,
   contaTotale,
   forziereAperto,
   guarisci,
@@ -531,12 +532,13 @@ export class ScenaMondo extends Phaser.Scene {
     this.scene.pause();
   }
 
-  /** Il finale della storia: pagine di testo, poi si torna a giocare (fase 8c). */
+  /** Il finale della storia: pagine di testo, arricchite con quaderno di Lia e compagni di viaggio (fasi 8c, 13c). */
   apriFinale(): void {
     if (this.eroe.sconfitto || !this.scene.isActive()) return;
     this.guida.annulla();
     this.eroe.ferma();
-    this.scene.launch(SCENA_FINALE);
+    const pagine = componiPagineFinale(this.dati.finale, this.partita);
+    this.scene.launch(SCENA_FINALE, { pagine });
     this.scene.pause();
   }
 

@@ -607,6 +607,156 @@
       "esperienza": 320
     }
   },
+  "confronto_berta": {
+    "id": "confronto_berta",
+    "nome": "Il segreto della sindaca",
+    "tipo": "principale",
+    "daChi": "selva",
+    "richiede": [
+      "selva_liberata"
+    ],
+    "descrizione": "I ricordi della Casa sul Colle hanno rivelato che vent’anni fa fu la sindaca Berta a dare fuoco al laboratorio di Orvald. Prima di salire in cima alla torre, guarda Berta negli occhi a Borgo Quercia.",
+    "passi": [
+      {
+        "descrizione": "Torna a Borgo Quercia e affronta la sindaca Berta sul segreto dell'incendio",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "borgo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 100,
+      "esperienza": 250
+    },
+    "concludeDa": "berta"
+  },
+  "selva_quaderno": {
+    "id": "selva_quaderno",
+    "nome": "Il quaderno di Lia",
+    "tipo": "secondaria",
+    "daChi": "selva",
+    "richiede": [
+      "selva_liberata"
+    ],
+    "descrizione": "Nell’Osservatorio di Orvald è custodito il quaderno di scuola della piccola Lia. Selva vuole che tu glielo porti prima di affrontare Orvald in cima alla torre.",
+    "passi": [
+      {
+        "descrizione": "Porta il Quaderno di Lia (trovato nell'Osservatorio) a Selva",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "quaderno_lia",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 120,
+      "esperienza": 300,
+      "oggetti": [
+        {
+          "id": "ciondolo_lia",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "ultime_lettere": {
+    "id": "ultime_lettere",
+    "nome": "Le ultime lettere di Orvald",
+    "tipo": "secondaria",
+    "daChi": "anselmo",
+    "richiede": [
+      "traghetto_orsola"
+    ],
+    "descrizione": "Nella Casa sul Colle sono rimaste tre lettere mai spedite di Orvald, indirizzate a frate Anselmo e al borgo prima della notte dell’incendio.",
+    "passi": [
+      {
+        "descrizione": "Porta le Lettere mai spedite di Orvald (dalla Casa sul Colle) a frate Anselmo",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "lettere_orvald",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 90,
+      "esperienza": 220,
+      "oggetti": [
+        {
+          "id": "pozione_vita",
+          "quantita": 2
+        },
+        {
+          "id": "pozione_mana",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "erbe_palude": {
+    "id": "erbe_palude",
+    "nome": "Le erbe della palude",
+    "tipo": "secondaria",
+    "daChi": "selva",
+    "richiede": [
+      "selva_liberata"
+    ],
+    "descrizione": "Selva ha bisogno di Giunco di palude fresco per rimettere in funzione gli alambicchi del suo Banco di alchimia al Guado delle Lanterne.",
+    "passi": [
+      {
+        "descrizione": "Porta 4 Giunchi di palude a Selva",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "giunco_palude",
+          "quantita": 4
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 80,
+      "esperienza": 180,
+      "oggetti": [
+        {
+          "id": "pergamena_pozione_vita_alchimia",
+          "quantita": 1
+        },
+        {
+          "id": "pergamena_pozione_mana_alchimia",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "tesoro_luna": {
+    "id": "tesoro_luna",
+    "nome": "La mappa della luna",
+    "tipo": "secondaria",
+    "daChi": "gemma",
+    "descrizione": "La Mappa della luna venduta da Gemma indica un tesoro sepolto nell’angolo a nord-est della Brughiera della Torre.",
+    "passi": [
+      {
+        "descrizione": "Dissotterra con la pala il tesoro sepolto nell'angolo nord-est della Brughiera",
+        "obiettivo": {
+          "tipo": "trova",
+          "forziere": "brughiera:31:2"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 0,
+      "esperienza": 180,
+      "oggetti": [
+        {
+          "id": "ghianda_oro",
+          "quantita": 1
+        }
+      ]
+    },
+    "siAccettaCon": "mappa_luna",
+    "automatica": true
+  },
   "lettera_bruno": {
     "id": "lettera_bruno",
     "nome": "La lettera di Bruno",
@@ -674,7 +824,7 @@
     "richiede": [
       "atto1_cimitero"
     ],
-    "descrizione": "La chiave di Berta apre il cancello della cripta. Laggiù qualcuno risveglia i morti della valle: bisogna scendere e fermarlo. Livello consigliato: 3–5.",
+    "descrizione": "La chiave di Berta apre il cancello della cripta. Laggiù qualcuno risveglia i morti della valle: bisogna scendere e fermarlo. Livello consigliato: 5–7.",
     "passi": [
       {
         "descrizione": "Entra nella Cripta dei Non Morti (il cancello del cimitero)",
@@ -715,7 +865,7 @@
     "richiede": [
       "atto1_cripta"
     ],
-    "descrizione": "Orvald cerca l'ossidiana nera della miniera. I goblin sono scesi nelle gallerie, e qualcuno dice che laggiù c'è qualcosa di molto più grosso. La strada nelle Colline Grigie è di nuovo libera. Livello consigliato: 6–8.",
+    "descrizione": "Orvald cerca l'ossidiana nera della miniera. I goblin sono scesi nelle gallerie, e qualcuno dice che laggiù c'è qualcosa di molto più grosso. La strada nelle Colline Grigie è di nuovo libera. Livello consigliato: 9–12.",
     "passi": [
       {
         "descrizione": "Entra nella Miniera dei Goblin (a est, nelle Colline Grigie)",
@@ -755,7 +905,7 @@
     "richiede": [
       "atto2_miniera"
     ],
-    "descrizione": "Orvald ha tutto ciò che gli serve, e la luna nera è vicina. La sua torre sta oltre la Brughiera, a ovest delle Colline Grigie. Livello consigliato: 9–11.",
+    "descrizione": "Orvald ha tutto ciò che gli serve, e la luna nera è vicina. La sua torre sta oltre la Brughiera, a ovest delle Colline Grigie. Livello consigliato: 14–17.",
     "passi": [
       {
         "descrizione": "Attraversa la Brughiera della Torre (a ovest delle Colline Grigie)",
@@ -785,5 +935,340 @@
       "esperienza": 600
     },
     "concludeDa": "berta"
+  },
+  "eco_valle": {
+    "id": "eco_valle",
+    "nome": "Dopo-storia: gli Echi della Valle",
+    "tipo": "secondaria",
+    "daChi": "bruno",
+    "richiede": [
+      "atto3_torre"
+    ],
+    "descrizione": "Bruno ha imparato a forgiare i Sigilli dell’Eco della Valle. Evoca l’Eco del Re Scheletro sul suo altare nella Tomba del Re per ottenere la sua arma esotica firma.",
+    "passi": [
+      {
+        "descrizione": "Forgia il Sigillo dell'Eco da Bruno e sconfiggi l'Eco del Re Scheletro sul suo altare",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "re_scheletro",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 200,
+      "esperienza": 450,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "eco_colline": {
+    "id": "eco_colline",
+    "nome": "Dopo-storia: gli Echi delle Colline",
+    "tipo": "secondaria",
+    "daChi": "ugo",
+    "richiede": [
+      "atto3_torre"
+    ],
+    "descrizione": "Ugo forgia i Sigilli dell’Eco delle Colline a Pietrafonda. Evoca l’Eco del Troll delle Caverne sul suo altare nella Tana del Troll per mettere alla prova le tue armature.",
+    "passi": [
+      {
+        "descrizione": "Forgia il Sigillo dell'Eco da Ugo e sconfiggi l'Eco del Troll delle Caverne sul suo altare",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "troll_caverne",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 240,
+      "esperienza": 520,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "eco_brughiera": {
+    "id": "eco_brughiera",
+    "nome": "Dopo-storia: gli Echi della Brughiera",
+    "tipo": "secondaria",
+    "daChi": "selva",
+    "richiede": [
+      "atto3_torre",
+      "selva_liberata"
+    ],
+    "descrizione": "Al Banco di alchimia Selva può tracciare i Sigilli dell’Eco della Brughiera. Affronta l’Eco del Negromante in cima alla Torre per conquistare il suo arco esotico firma.",
+    "passi": [
+      {
+        "descrizione": "Forgia il Sigillo dell'Eco da Selva e sconfiggi l'Eco del Negromante in cima alla Torre",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "negromante",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 300,
+      "esperienza": 650,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "radici_quercia": {
+    "id": "radici_quercia",
+    "nome": "Dopo-storia: le Radici della Quercia",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "richiede": [
+      "atto3_torre"
+    ],
+    "descrizione": "Anche dopo la caduta del Negromante, un resto del rito spezzato marcisce sotto le radici della Quercia Antica di Borgo Quercia. Scendi con Selva oltre la porta runica a sud della piazza e sconfiggi La Radice Marcia.",
+    "passi": [
+      {
+        "descrizione": "Scendi nelle Radici della Quercia (porta runica a sud di Borgo Quercia)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "radici_alte"
+        }
+      },
+      {
+        "descrizione": "Sconfiggi La Radice Marcia nel Cuore delle Radici",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "radice_marcia",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 400,
+      "esperienza": 900,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 3
+        }
+      ]
+    }
+  },
+  "ghiande_3": {
+    "id": "ghiande_3",
+    "nome": "Le Ghiande d’oro (3 / 12)",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "descrizione": "Nonna Rosalba custodisce la leggenda delle dodici Ghiande d’oro della Quercia Antica. Portagliene tre per ricevere il primo dono del borgo.",
+    "passi": [
+      {
+        "descrizione": "Porta 3 Ghiande d'oro a nonna Rosalba",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "ghianda_oro",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 100,
+      "esperienza": 150,
+      "oggetti": [
+        {
+          "id": "zaino_24",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "ghiande_6": {
+    "id": "ghiande_6",
+    "nome": "Le Ghiande d’oro (6 / 12)",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "richiede": [
+      "ghiande_3"
+    ],
+    "descrizione": "Con altre tre Ghiande d’oro (sei in tutto), nonna Rosalba ti affiderà la Corazza della Quercia custodita dagli anziani.",
+    "passi": [
+      {
+        "descrizione": "Porta altre 3 Ghiande d'oro a nonna Rosalba",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "ghianda_oro",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 180,
+      "esperienza": 250,
+      "oggetti": [
+        {
+          "id": "corazza_quercia",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "ghiande_9": {
+    "id": "ghiande_9",
+    "nome": "Le Ghiande d’oro (9 / 12)",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "richiede": [
+      "ghiande_6"
+    ],
+    "descrizione": "Con altre tre Ghiande d’oro (nove in tutto), la Quercia Antica ricompenserà la tua costanza con il Talismano della Quercia.",
+    "passi": [
+      {
+        "descrizione": "Porta altre 3 Ghiande d'oro a nonna Rosalba",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "ghianda_oro",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 260,
+      "esperienza": 450,
+      "oggetti": [
+        {
+          "id": "amuleto_quercia",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "ghiande_12": {
+    "id": "ghiande_12",
+    "nome": "Le Ghiande d’oro (12 / 12)",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "richiede": [
+      "ghiande_9"
+    ],
+    "descrizione": "Con le ultime tre Ghiande d’oro (tutte e dodici del mondo!), nonna Rosalba ti donerà l’amuleto esotico Cuore della Quercia.",
+    "passi": [
+      {
+        "descrizione": "Porta le ultime 3 Ghiande d'oro a nonna Rosalba",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "ghianda_oro",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 400,
+      "esperienza": 700,
+      "oggetti": [
+        {
+          "id": "cuore_quercia",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "commissione_spada": {
+    "id": "commissione_spada",
+    "nome": "Bacheca di Tobia: balestra per le guardie",
+    "tipo": "secondaria",
+    "daChi": "tobia",
+    "richiede": [
+      "atto1_cimitero"
+    ],
+    "descrizione": "Sulla bacheca del Cinghiale Zoppo c’è una richiesta delle guardie del cancello: cercano una Balestra forgiata da Bruno.",
+    "passi": [
+      {
+        "descrizione": "Porta 1 Balestra a Tobia per le guardie del borgo",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "balestra",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 120,
+      "esperienza": 140,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "commissione_corazza": {
+    "id": "commissione_corazza",
+    "nome": "Bacheca di Tobia: corazza d’argento",
+    "tipo": "secondaria",
+    "daChi": "tobia",
+    "richiede": [
+      "atto2_pietrafonda"
+    ],
+    "descrizione": "Un mercante di passaggio ha affisso una commissione alla taverna: paga bene per una Corazza d’argento forgiata da Ugo a Pietrafonda.",
+    "passi": [
+      {
+        "descrizione": "Porta 1 Corazza d'argento a Tobia alla taverna",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "corazza_argento",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 260,
+      "esperienza": 280,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 2
+        }
+      ]
+    }
+  },
+  "commissione_pozioni": {
+    "id": "commissione_pozioni",
+    "nome": "Bacheca di Tobia: scorte d’alchimia",
+    "tipo": "secondaria",
+    "daChi": "tobia",
+    "richiede": [
+      "selva_liberata"
+    ],
+    "descrizione": "Tobia raccoglie scorte per i viaggiatori della Brughiera: cerca 3 Pozioni di forza (distillabili da Selva o acquistabili).",
+    "passi": [
+      {
+        "descrizione": "Porta 3 Pozioni di forza a Tobia alla taverna",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "pozione_forza",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 240,
+      "esperienza": 320,
+      "oggetti": [
+        {
+          "id": "frammento_eco",
+          "quantita": 2
+        }
+      ]
+    }
   }
 }

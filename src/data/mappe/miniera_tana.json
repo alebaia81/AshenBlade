@@ -45,6 +45,25 @@
       "nemico": "troll_caverne",
       "colore": "#5e4a38",
       "tessera": { "immagine": "terra", "tinta": "#d0c0b0" }
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#5e4a38",
+      "coloreMuro": "#4a3a2a",
+      "tessera": { "immagine": "terra", "tinta": "#d0c0b0" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#b89878" }
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#5e4a38",
+      "tessera": { "immagine": "terra", "tinta": "#d0c0b0" }
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "miniera_profonda",
+      "arrivo": "a",
+      "tessera": "scale"
     }
   },
   "griglia": [
@@ -64,9 +83,9 @@
     "#R......................R#",
     "#R......................R#",
     "#R....R...........RR....R#",
-    "#R......................R#",
-    "#R......................R#",
-    "#R......................R#",
-    "##########################"
+    "#R.................RRRRRR#",
+    "#R.................R...b.#",
+    "#R.................W.....#",
+    "#######################u##"
   ]
 }

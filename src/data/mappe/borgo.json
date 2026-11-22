@@ -162,6 +162,26 @@
       "nome": "Borgo Quercia",
       "colore": "#a39e92",
       "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    },
+    "R": {
+      "tipo": "porta",
+      "runica": true,
+      "aspetto": "cancello",
+      "nome": "la porta runica delle Radici della Quercia",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "k": {
+      "tipo": "arrivo",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "d": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radici_alte",
+      "arrivo": "a",
+      "tessera": "scale"
     }
   },
   "griglia": [
@@ -190,8 +210,8 @@
     "#..rrrrrrr..T...........rrrrrrrrr..B...#",
     "#..HHHHHHHff........T...HHHHHHHHH..B...#",
     "#..HHHHHHHff............HHHHHHHHH...T..#",
-    "#..HHHHHHH....T.......T.HHHHHHHHH......#",
-    "#......................................#",
-    "########################################"
+    "#..HHHHHHH.....TTRTT..T.HHHHHHHHH......#",
+    "#...............TkT....................#",
+    "#################d######################"
   ]
 }

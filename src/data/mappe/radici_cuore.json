@@ -1,0 +1,75 @@
+{
+  "id": "radici_cuore",
+  "nome": "Le Radici – il cuore marcio",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#142216",
+      "tessera": { "immagine": "tronco", "tinta": "#587858" }
+    },
+    "K": {
+      "tipo": "muro",
+      "colore": "#203824",
+      "tessera": { "immagine": "tronco", "tinta": "#709870" }
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#2a402e",
+      "tessera": { "immagine": "terra", "tinta": "#80a080" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radici_alte",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "!": {
+      "tipo": "barriera",
+      "boss": "radice_marcia",
+      "colore": "#3e5842",
+      "tessera": { "immagine": "sassi_scuri", "tinta": "#98b898" }
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "radice_marcia",
+      "colore": "#2a402e",
+      "tessera": { "immagine": "terra", "tinta": "#80a080" }
+    }
+  },
+  "griglia": [
+    "#############n##############",
+    "#KKKKKKKKKKK:a:KKKKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKKKK#",
+    "#KKKKKKKKKKK:::KKKKKKKKKKKK#",
+    "#KKKKKKKKKKK!!!KKKKKKKKKKKK#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K....KK............KK....K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K...........B............K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K....KK............KK....K#",
+    "#K........................K#",
+    "#K........................K#",
+    "#K........................K#",
+    "############################"
+  ]
+}

@@ -1,6 +1,6 @@
 # Piano della fase 13: Atto III espanso — La Brughiera e Guado delle Lanterne
 
-Stato: **in corso** (13a e 13b completate; 13c da fare)
+Stato: **completata** (13a, 13b e 13c completate)
 
 ## Obiettivo
 
