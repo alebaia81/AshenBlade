@@ -39,6 +39,7 @@ export interface StatoBarra {
 export class GestoreBoss {
   private ingaggiato = false;
   private fase = 0;
+  private ultimaVita = 0;
   private ultimoUso: Record<number, number> = {};
   private evocati: Nemico[] = [];
   /** La carica in corso (mira o scatto): finché dura non parte nessun altro attacco. */
@@ -60,6 +61,7 @@ export class GestoreBoss {
     scena.registry.set(CHIAVE_BOSS, null);
     this.segni = scena.add.graphics().setDepth(4);
     this.casa = { x: nemico.forma.x, y: nemico.forma.y };
+    this.ultimaVita = nemico.vitaAttuale.attuale;
   }
 
   get inCorso(): boolean {
@@ -82,12 +84,15 @@ export class GestoreBoss {
     }
     const fasi = d.fasi ?? [];
     const { attuale, massima } = this.nemico.vitaAttuale;
+    const colpitoOra = attuale < this.ultimaVita;
+    this.ultimaVita = attuale;
     const fase = faseDi(fasi, attuale, massima);
     if (fase !== this.fase) {
       this.fase = fase;
       this.ultimoUso = {};
       if (fasi[fase]?.avviso) this.avvisa(fasi[fase]!.avviso!);
     }
+    if (colpitoOra) this.subitoColpo();
     this.aggiornaCarica(adesso);
     const attuali = fasi[fase];
     if (attuali && !this.carica) {
@@ -124,6 +129,9 @@ export class GestoreBoss {
       case 'crollo_massi':
         this.crolloMassi(a);
         return true;
+      case 'bomba':
+        this.lanciaBombe(a);
+        return true;
       case 'teletrasporto': {
         const candidati: Vettore[] = [];
         for (let r = 0; r < this.griglia.altezza; r++)
@@ -142,13 +150,30 @@ export class GestoreBoss {
         for (const dir of ventaglio(verso, a.colpi, a.ventaglioGradi)) this.ambiente.tira(this.nemico, dir, a, a.danno);
         return true;
       }
-      case 'evoca': {
+      case 'evoca':
+      case 'dividi': {
         this.evocati = this.evocati.filter((n) => n.vivo);
         const quanti = quantiEvocare(a, this.evocati.length);
         const posti = this.celleLibereVicine(quanti);
         for (const p of posti) this.evocati.push(this.nemici.aggiungi(this.definizioni[a.nemico]!, p));
         return true;
       }
+    }
+  }
+
+  /** Fase 11b (Re Melma): quando il boss subisce un colpo in una fase con 'dividi', può scindersi subito. */
+  subitoColpo(): void {
+    if (!this.inCorso) return;
+    const attuali = this.nemico.definizione.fasi?.[this.fase];
+    if (!attuali) return;
+    for (const a of attuali.attacchi) {
+      if (a.tipo !== 'dividi') continue;
+      if (this.ambiente.casuale() > (a.probabilita ?? 0.5)) continue;
+      this.evocati = this.evocati.filter((n) => n.vivo);
+      const quanti = quantiEvocare({ ...a, quanti: 1 }, this.evocati.length);
+      if (quanti <= 0) continue;
+      const posti = this.celleLibereVicine(quanti);
+      for (const p of posti) this.evocati.push(this.nemici.aggiungi(this.definizioni[a.nemico]!, p));
     }
   }
 
@@ -217,6 +242,37 @@ export class GestoreBoss {
           if (!this.nemico.vivo) return;
           const masso = this.scena.add.circle(p.x, p.y, a.raggio * 0.8, 0x7a7a7a).setDepth(9).setStrokeStyle(1, 0x3a3a3a);
           this.scena.tweens.add({ targets: masso, alpha: 0, delay: 250, duration: 300, onComplete: () => masso.destroy() });
+          const eroe = this.ambiente.eroe();
+          if (Math.hypot(eroe.x - p.x, eroe.y - p.y) <= a.raggio + 4) this.ambiente.colpisci(this.nemico, a.danno, p);
+        },
+      });
+    }
+  }
+
+  /** Fase 12a (Ferrante): lancia bombe di zolfo che esplodono dopo il preavviso lasciando una nube gialla. */
+  private lanciaBombe(a: Extract<AttaccoBoss, { tipo: 'bomba' }>): void {
+    const punti = puntiCrollo(
+      this.ambiente.eroe(),
+      a.quanti,
+      this.ambiente.casuale,
+      (x, y) => {
+        const c = cellaDaPixel(x, y, TESSERA);
+        return this.griglia.calpestabile(c.col, c.riga);
+      },
+      48,
+    );
+    for (const p of punti) {
+      const mirino = this.scena.add.circle(p.x, p.y, a.raggio, 0xf0c030, 0.25).setDepth(3).setStrokeStyle(1.5, 0xff8020, 0.8).setScale(0.35);
+      this.scena.tweens.add({
+        targets: mirino,
+        scale: 1,
+        alpha: 0.6,
+        duration: a.preavvisoMs,
+        onComplete: () => {
+          mirino.destroy();
+          if (!this.nemico.vivo) return;
+          const nube = this.scena.add.circle(p.x, p.y, a.raggio, 0xd8c830, 0.55).setDepth(8).setStrokeStyle(1, 0xffa020);
+          this.scena.tweens.add({ targets: nube, scale: 1.35, alpha: 0, duration: 1200, onComplete: () => nube.destroy() });
           const eroe = this.ambiente.eroe();
           if (Math.hypot(eroe.x - p.x, eroe.y - p.y) <= a.raggio + 4) this.ambiente.colpisci(this.nemico, a.danno, p);
         },

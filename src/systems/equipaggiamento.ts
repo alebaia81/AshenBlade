@@ -10,7 +10,7 @@ import type { Rarita } from './oggetti';
 import { modificatoreArma, probabilitaCriticoDi } from './personaggio';
 import type { DefinizioneArma, DefinizioneArmatura } from './tipi';
 
-export const PEZZI_ARMATURA = ['elmo', 'corazza', 'guanti', 'stivali'] as const;
+export const PEZZI_ARMATURA = ['elmo', 'corazza', 'guanti', 'stivali', 'amuleto'] as const;
 export type PezzoArmatura = (typeof PEZZI_ARMATURA)[number];
 
 export const SPAZI_EQUIPAGGIAMENTO = ['primaria', 'secondaria', ...PEZZI_ARMATURA] as const;
@@ -47,7 +47,7 @@ export interface StatoZaino {
 export type EsitoEquipaggiamento = { ok: true; stato: StatoZaino } | { ok: false; errore: string };
 
 export function creaEquipaggiamento(armaIniziale: string): Equipaggiamento {
-  return { primaria: armaIniziale, secondaria: null, elmo: null, corazza: null, guanti: null, stivali: null };
+  return { primaria: armaIniziale, secondaria: null, elmo: null, corazza: null, guanti: null, stivali: null, amuleto: null };
 }
 
 const ERRORE_ESOTICA = {

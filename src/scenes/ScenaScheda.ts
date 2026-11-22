@@ -30,7 +30,7 @@ import type { ScenaMondo } from './ScenaMondo';
 import { leggiPartita, scriviPartita } from './statoCondiviso';
 
 const PANNELLO = { larghezza: 680, altezza: 470 };
-const RIGA_SPAZIO = 50;
+const RIGA_SPAZIO = 42;
 const numero = (colore: string) => parseInt(colore.replace('#', ''), 16);
 
 function badgeConfronto(confronto: ConfrontoEquipaggiamento | null): { testo: string; colore: string } {
@@ -172,26 +172,26 @@ export class ScenaScheda extends Phaser.Scene {
     const partita = leggiPartita(this);
     const equip = partita.equipaggiamento;
 
-    pagina.add(this.add.text(sinistra + 24, alto + 100, `Armatura totale: ${armaturaTotale(equip, this.dati.indossabili)}`, { ...STILE_TESTO, fontStyle: 'bold' }));
+    pagina.add(this.add.text(sinistra + 24, alto + 96, `Armatura totale: ${armaturaTotale(equip, this.dati.indossabili)}`, { ...STILE_TESTO, fontStyle: 'bold' }));
     SPAZI_EQUIPAGGIAMENTO.forEach((spazio, i) => {
-      const y = alto + 150 + i * RIGA_SPAZIO;
+      const y = alto + 140 + i * RIGA_SPAZIO;
       const id = equip[spazio];
       const oggetto = id ? this.dati.oggetti[id] : undefined;
       const scelto = spazio === this.spazioScelto;
-      const sfondo = this.add.rectangle(sinistra + 24 + 150, y, 300, RIGA_SPAZIO - 6, scelto ? 0x3e4a5c : 0x10141c);
+      const sfondo = this.add.rectangle(sinistra + 24 + 150, y, 300, RIGA_SPAZIO - 5, scelto ? 0x3e4a5c : 0x10141c);
       sfondo.setStrokeStyle(scelto ? 3 : 2, oggetto ? numero(colorePerRarita(oggetto.rarita)) : 0x4a5568);
       sfondo.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.scegliSpazio(spazio));
       pagina.add(sfondo);
       if (oggetto) {
         const icona = this.add.graphics({ x: sinistra + 46, y });
-        disegnaOggetto(icona, oggetto, 34);
+        disegnaOggetto(icona, oggetto, 30);
         pagina.add(icona);
       }
-      pagina.add(this.add.text(sinistra + 72, y - 18, NOMI_SPAZI[spazio]!, { ...STILE_TESTO, fontSize: '12px', color: '#9aa7b8' }));
+      pagina.add(this.add.text(sinistra + 72, y - 16, NOMI_SPAZI[spazio]!, { ...STILE_TESTO, fontSize: '11px', color: '#9aa7b8' }));
       pagina.add(
         this.add.text(sinistra + 72, y - 2, oggetto?.nome ?? '— vuoto —', {
           ...STILE_TESTO,
-          fontSize: '15px',
+          fontSize: '14px',
           color: oggetto ? colorePerRarita(oggetto.rarita) : '#6b7686',
         }),
       );

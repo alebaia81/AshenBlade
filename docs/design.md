@@ -98,6 +98,8 @@ Lupi, banditi e slime.
 
 Dialoghi e personaggi arrivano nella fase 5, quest e registro nella fase 7, dungeon e boss nella fase 8, il testo introduttivo nella fase 9 (menu). I testi stanno in `data/` come tutti gli altri contenuti.
 
+> **Edizione estesa (5–6 ore, fasi 10–15):** la trama completa divisa in Prologo, tre Regioni (La Valle, Le Colline, La Brughiera) e Dopo-storia, con i nuovi personaggi, i tre compagni di viaggio e le 27 mappe, è descritta in dettaglio in `docs/storia.md` e `docs/espansione.md`.
+
 ## 4. Architettura del codice
 
 ```
@@ -210,36 +212,50 @@ Sei caratteristiche D&D. Modificatore = arrotondato per difetto di (valore − 1
 - **Inventario:** griglia con spazi limitati (12 all'inizio); pozioni e materiali si impilano. Si amplia con borse e zaini più grandi (fino a 24 spazi): una borsa si trova in un forziere, gli altri si comprano dal mercante.
 - **Raccolta:** gli oggetti a terra (bottino dei nemici, contenuto dei forzieri) si raccolgono passandoci sopra, se lo zaino ha spazio.
 - **Pozioni:** vita, mana, forza temporanea, resistenza.
-- **Armature:** quattro pezzi indossabili, cioè **elmo, corazza, guanti e stivali**, con le stesse rarità delle armi. Ogni pezzo dà armatura; i leggendari danno anche un bonus alle caratteristiche; gli esotici hanno un **effetto speciale** (es. stivali con due capriole di fila, corazza che rimanda parte del danno, elmo che mostra i tesori nascosti vicini). Le armature si cambiano **solo dalla scheda del personaggio**, non dalla barra dei preferiti.
-- **Limite delle esotiche:** si può equipaggiare **al massimo un'arma esotica** (tra primaria e secondaria) e **al massimo un pezzo di armatura esotico**. Senza questo limite, un eroe tutto esotico sarebbe troppo squilibrato.
+- **Armature e amuleto:** quattro pezzi di armatura indossabili (**elmo, corazza, guanti e stivali**) più un quinto spazio accessorio (**amuleto**, fase 10b), con le stesse rarità delle armi. Ogni pezzo dà armatura (o effetti passivi nel caso dell'amuleto); i leggendari danno anche un bonus alle caratteristiche; gli esotici hanno un **effetto speciale** (es. stivali con due capriole di fila, corazza che rimanda parte del danno, elmo che mostra i tesori nascosti vicini, amuleto che rigenera vita o salva da un colpo fatale). Le armature e l'amuleto si cambiano **solo dalla scheda del personaggio**, non dalla barra dei preferiti.
+- **Limite delle esotiche:** si può equipaggiare **al massimo un'arma esotica** (tra primaria e secondaria) e **al massimo un pezzo di armatura/amuleto esotico**. Senza questo limite, un eroe tutto esotico sarebbe troppo squilibrato.
+- **Bottino dei boss ed Eco (fase 10a):** alla prima sconfitta ogni boss garantisce **1 pezzo leggendario** (scelto a caso dalla sua lista), il **25% di probabilità** del suo **esotico "firma"** e **1 frammento d'eco**. Forgiando il **Sigillo dell'Eco** del boss presso l'artigiano della sua regione, lo si può riaffrontare sull'altare nella sua stanza in versione potenziata (**Eco**): la prima vittoria contro l'Eco **garantisce l'esotico firma** (o un esotico errante non ancora posseduto).
 - **Barra dei preferiti:** 6 spazi in fondo allo schermo (tasti 1–6) per **pozioni e armi**: un clic beve la pozione o impugna l'arma (quella di prima torna nello zaino). Si riempie trascinando gli oggetti dallo zaino; lo spazio è un collegamento all'oggetto, non lo sposta. Cambiare arma dalla barra ha una breve attesa (mezzo secondo).
-- **Tesori nascosti:** muri segreti, forzieri fuori percorso, mappe del tesoro (quest secondarie).
+- **Tesori nascosti:** muri segreti, forzieri fuori percorso, **tesori sepolti** (scavabili con la pala), **rocce crepate** (distruttibili con le bombe di Grisk), **porte runiche** (apribili con Selva o leve), mappe del tesoro e la collezione delle **12 Ghiande d'oro** (fasi 10–14).
 
 ## 9. Crafting ed economia
 
-- **Fabbro:** crea armi da ricette con materiali raccolti da nemici, forzieri e minerali. Le ricette si trovano come pergamene o si comprano. Potenziamento delle armi da +1 a +5.
-- **Monete:** da nemici, forzieri, quest e vendite.
-- **Mercante:** vende pozioni, armi, borse e zaini; ricompra a metà prezzo. CAR migliora i prezzi in entrambe le direzioni.
+- **Banchi di crafting:** tre artigiani specializzati (fase 10b):
+  - **Bruno** (`fucina`, Borgo Quercia): crea armi da ricette, potenzia le armi da +1 a +5 e forgia i Sigilli dell'Eco della Valle.
+  - **Ugo** (`armature`, Pietrafonda): forgia armature e i Sigilli dell'Eco delle Colline.
+  - **Selva** (`alchimia`, Guado delle Lanterne): distilla pozioni speciali e forgia i Sigilli dell'Eco della Brughiera.
+  Le ricette si trovano come pergamene, si ricevono dalle quest o si comprano.
+- **Monete:** da nemici, forzieri, quest, commissioni della bacheca e vendite.
+- **Mercante:** vende pozioni, armi, borse, pala e zaini; ricompra a metà prezzo. CAR migliora i prezzi in entrambe le direzioni.
 
 ## 10. Taverna e compagni
 
-- Un compagno per ciascuna delle 4 classi, ingaggiabile a pagamento in taverna. Uno alla volta, sostituibile.
+- **Compagni della taverna:** un compagno per ciascuna delle 4 classi, ingaggiabile a pagamento in taverna.
+- **Compagni di viaggio (fasi 10b–13):** tre compagni che si uniscono gratis avanzando nella storia, uno per regione, ciascuno con una quest personale e un'abilità che interagisce anche con i segreti del mondo:
+  - **Tessa e Brina** (Valle): tiratrice con l'arco; il cane Brina non combatte ma con **Fiuta!** rivela tutti i segreti entro 12 tessere (tesori sepolti, muri segreti, rocce crepate, forzieri nascosti).
+  - **Grisk** (Colline): goblin esperto di esplosivi; con **Polvere nera** lancia una bomba ad area che rompe anche le **rocce crepate**.
+  - **Selva** (Brughiera): incantatrice d'ombra; con **Velo d'ombra** fa perdere le tracce dell'eroe ai nemici vicini e fuori dal combattimento apre le **porte runiche**.
+- Si porta **un solo compagno alla volta** (scelto in taverna o presso le **pietre di passaggio**).
 - Il compagno segue l'eroe e **combatte da solo**: attacca il nemico più vicino, riusando l'intelligenza artificiale dei nemici con bersagli invertiti. Infligge meno danni dell'eroe (circa la metà) per non risolvere i combattimenti al suo posto.
-- Ha un bonus fisso e un'**abilità speciale** con ricarica, attivata dal giocatore con il pulsante del compagno nella barra in basso:
+- Ha un bonus fisso e un'**abilità speciale** con ricarica, attivata dal giocatore con il pulsante del compagno nella barra in basso (scorciatoia Q):
   - Chierico: cura l'eroe
   - Ladro: apre forzieri chiusi a chiave e segnala i tesori vicini
   - Guerriero: para un colpo al posto dell'eroe
   - Mago: scudo magico
+  - Tessa e Brina: fiuta tutti i tesori e segreti vicini (inclusi i tesori sepolti)
+  - Grisk: bomba di polvere nera (danno ad area + apre rocce crepate)
+  - Selva: velo d'ombra (invisibilità di gruppo) + apertura porte runiche
 - Se viene messo al tappeto si rialza a fine combattimento. Non si perde mai.
 
 ## 11. Mondo e quest
 
-- **Borgo Quercia** (villaggio base): mercante, fabbro, taverna, abitanti con quest.
-- **Zone aperte** collegano il villaggio ai dungeon.
-- **Dungeon:** più stanze, chiavi e porte chiuse, muri segreti, un tesoro nascosto, stanza del boss. Difficoltà crescente.
-- I nemici normali ricompaiono rientrando in una zona; i boss no.
-- **Quest principale:** ogni boss sconfitto sblocca il dungeon successivo; il Negromante è il boss finale.
-- **Quest secondarie:** tipi riutilizzabili definiti nei dati: elimina nemici, raccogli oggetti, consegna, trova un tesoro.
+- **Tre regioni (fasi 11–14):** La Valle (Borgo Quercia), Le Colline (Pietrafonda), La Brughiera (Guado delle Lanterne), precedute dalla Strada Maestra (Prologo) e seguite da Le Radici (Dopo-storia).
+- **Pietre di passaggio (fase 10c):** ogni villaggio o avamposto ha una pietra di passaggio che permette il **viaggio rapido** verso le altre pietre già attivate e il cambio del compagno attivo.
+- **Zone aperte** collegano i villaggi ai dungeon di mezzo (con mini-boss) e ai dungeon principali.
+- **Dungeon:** più stanze, chiavi e porte chiuse (o porte runiche), muri segreti, rocce crepate, tesori sepolti, un tesoro nascosto, stanza del boss. Difficoltà crescente.
+- I nemici normali ricompaiono rientrando in una zona; i boss no, ma dopo la sconfitta compare nella loro stanza un **altare** che permette di evocare la loro **Eco** potenziata consumando il relativo Sigillo dell'Eco (fase 10a).
+- **Quest principale:** ogni boss sconfitto sblocca il passo successivo; il Negromante chiude la storia di Orvald, mentre la Radice Marcia è il boss segreto del dopo-storia.
+- **Quest secondarie, commissioni e ricordi:** tipi riutilizzabili definiti nei dati (elimina nemici, raccogli oggetti, consegna, trova un tesoro, ricordi della Casa sul Colle).
 - Chi ha una quest mostra un punto esclamativo; un registro delle quest tiene traccia dei progressi.
 - Il mondo deve poter crescere: nuovi villaggi e dungeon si aggiungono con nuove mappe e dati.
 
@@ -296,3 +312,12 @@ Ogni fase produce un `gioco.html` giocabile e una nota di lezione in `docs/lezio
 7. **Quest:** quest principale e secondarie, registro.
 8. **Dungeon e boss:** i 3 dungeon completi con i loro boss.
 9. **Rifinitura:** salvataggio con dischetto e 3 slot, menu, grafica pixel art, suoni e musica.
+10. **Fondamenta dell'espansione**, in tre consegne:
+   - **10a – Bottino dei boss ed Eco:** lista leggendari garantiti, esotico firma al 25%, frammento d'eco, altare e Sigillo dell'Eco (provati sui 3 boss esistenti), migrazione salvataggio v2.
+   - **10b – Compagni di viaggio, amuleto e banchi di crafting:** compagni sbloccabili con la storia e le loro abilità (*Fiuta!*, *Polvere nera*, *Velo d'ombra*), quinto slot equipaggiamento (`amuleto`), banchi specializzati (`fucina`, `armature`, `alchimia`).
+   - **10c – Segreti del mondo e pietre di passaggio:** tesori sepolti e pala, rocce crepate, porte runiche e leve, pietre di passaggio (viaggio rapido e cambio compagno), cartelli "ricordo".
+11. **Prologo e Atto I espanso (La Valle):** Strada Maestra, Teodoro e difesa del cancello; Mulino del Ponte, Cantine del Mulino e mini-boss Re Melma; Tessa e Brina, radura nascosta, tesori sepolti e prime Ghiande d'oro.
+12. **Atto II espanso (Le Colline):** Accampamento, Passo del Corvo, Cave di Zolfo, mini-boss Ferrante e salvataggio di Matteo; Pietrafonda (occupata e liberata), banco armature di Ugo e liberazione di Grisk; quest del clan Pietrarossa e segreti delle Colline.
+13. **Atto III espanso (La Brughiera):** Guado e Palude delle Lanterne; Casa sul Colle (ricordi), Osservatorio e mini-boss/compagna Selva; confronto con Berta, banco di alchimia, quaderno di Lia e finale esteso.
+14. **Dopo-storia:** Sigilli ed Eco di tutti i 6 boss; dungeon segreto Le Radici e boss facoltativo La Radice Marcia; collezione completa delle 12 Ghiande d'oro, Pozzo Profondo e bacheca delle commissioni di Tobia.
+15. **Bilanciamento e durata (5–6 ore):** verifica completa delle curve di esperienza, economia, difficoltà e durata complessiva.

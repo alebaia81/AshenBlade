@@ -16,7 +16,7 @@ import type { EffettoAttivo } from './effettiTemporanei';
 import { guarisci, type Partita } from './partita';
 import { creaStatoCompagni } from './taverna';
 
-export const VERSIONE_SALVATAGGIO = 1;
+export const VERSIONE_SALVATAGGIO = 2;
 export const NUMERO_SLOT = 3;
 /** Prefisso delle chiavi nel localStorage: le distingue da quelle di altri siti/giochi aperti da file. */
 const PREFISSO = 'quercia-slot-';
@@ -141,11 +141,29 @@ export interface DatiGrezzi {
 export type Migrazioni = Readonly<Record<number, (dati: DatiGrezzi) => DatiGrezzi>>;
 
 /**
- * Le migrazioni vere. Oggi è vuota: esiste solo la versione 1. Quando la Partita
- * cambierà forma, si alza VERSIONE_SALVATAGGIO e si aggiunge qui il passaggio,
- * per esempio: 1: (d) => ({ ...d, versione: 2, partita: { ...d.partita, reputazione: 0 } }).
+ * Le migrazioni vere.
+ * 1 → 2 (fase 10a): aggiunge gli elenchi per l'Eco dei boss, i tesori sepolti,
+ * le pietre di passaggio, i ricordi e i commenti dei compagni di viaggio.
  */
-const MIGRAZIONI: Migrazioni = {};
+const MIGRAZIONI: Migrazioni = {
+  1: (d) => {
+    const p = èOggetto(d['partita']) ? d['partita'] : {};
+    const equip = èOggetto(p['equipaggiamento']) ? { amuleto: null, ...p['equipaggiamento'] } : p['equipaggiamento'];
+    return {
+      ...d,
+      versione: 2,
+      partita: {
+        ecoSconfitti: [],
+        sepoltiScavati: [],
+        pietre: [],
+        ricordiVisti: [],
+        commentiVisti: [],
+        ...p,
+        ...(equip ? { equipaggiamento: equip } : {}),
+      },
+    };
+  },
+};
 
 /** Applica in ordine le migrazioni dalla versione del salvataggio fino a "versione". */
 export function aggiorna(
@@ -208,7 +226,13 @@ function controllaForma(d: DatiGrezzi): EsitoLettura {
     porteAperte: [],
     bossSconfitti: [],
     tascaMissioni: [],
+    ecoSconfitti: [],
+    sepoltiScavati: [],
+    pietre: [],
+    ricordiVisti: [],
+    commentiVisti: [],
     ...p,
+    equipaggiamento: { amuleto: null, ...(p['equipaggiamento'] as Record<string, unknown>) },
   } as unknown as Partita;
   return {
     ok: true,

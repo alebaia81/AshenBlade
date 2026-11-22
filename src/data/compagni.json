@@ -106,5 +106,142 @@
       "ricaricaMs": 20000,
       "quantita": 8
     }
+  },
+  "tessa": {
+    "id": "tessa",
+    "nome": "Tessa e Brina",
+    "classe": "ladro",
+    "viaggio": true,
+    "descrizione": "Cacciatrice dei boschi, figlia del boscaiolo Aldo. Combatte con l'arco mentre il suo cane Brina fiuta ogni pista.",
+    "colore": "#6fbf5a",
+    "vita": 26,
+    "velocita": 82,
+    "danno": 5,
+    "portata": 110,
+    "ricaricaMs": 950,
+    "prezzo": 0,
+    "proiettile": {
+      "velocita": 220,
+      "gittata": 130,
+      "dimensione": 2,
+      "colore": "#e8d9a8",
+      "costoMana": 0
+    },
+    "bonus": {
+      "tipo": "critico",
+      "valore": 0.05,
+      "descrizione": "+5% probabilità di critico"
+    },
+    "abilita": {
+      "id": "fiuta_tutto",
+      "nome": "Fiuta!",
+      "descrizione": "Per 10 secondi Brina fiuta e rivela tutti i segreti entro 12 tessere: tesori sepolti, muri segreti, rocce crepate e forzieri.",
+      "ricaricaMs": 20000,
+      "durataMs": 10000,
+      "raggio": 192
+    },
+    "commenti": [
+      {
+        "mappa": "bosco",
+        "testo": "Tessa: «Qui mio padre tagliava la legna. Stiamo attenti ai lupi.»"
+      },
+      {
+        "mappa": "cimitero",
+        "testo": "Tessa: «Brina ringhia… sente l’odore della cripta.»"
+      },
+      {
+        "mappa": "torre_cima",
+        "testo": "Tessa: «Finiamola qui, Orvald. Per mio padre e per tutti.»"
+      }
+    ]
+  },
+  "grisk": {
+    "id": "grisk",
+    "nome": "Grisk",
+    "classe": "guerriero",
+    "viaggio": true,
+    "descrizione": "Goblin chiacchierone ed ex esperto di esplosivi del clan Pietrarossa. «Grisk non scava più. Grisk fa BUM!»",
+    "colore": "#e09050",
+    "vita": 28,
+    "velocita": 90,
+    "danno": 5,
+    "portata": 13,
+    "ricaricaMs": 650,
+    "prezzo": 0,
+    "bonus": {
+      "tipo": "armatura",
+      "valore": 1,
+      "descrizione": "+1 alla tua armatura"
+    },
+    "abilita": {
+      "id": "polvere_nera",
+      "nome": "Polvere nera",
+      "descrizione": "Lancia una bomba esplosiva (12 danni ad area) che rompe anche le rocce crepate vicine.",
+      "ricaricaMs": 16000,
+      "quantita": 12,
+      "raggio": 40
+    },
+    "commenti": [
+      {
+        "mappa": "miniera_gallerie",
+        "testo": "Grisk: «Grisk non scava più per il Troll. Ora Grisk fa BUM!»"
+      },
+      {
+        "mappa": "borgo",
+        "testo": "Grisk: «Umani guardano strano Grisk. Grisk è amico!»"
+      },
+      {
+        "mappa": "torre_piani",
+        "testo": "Grisk: «Il vecchio della torre non vuole i morti. Vuole non essere più solo.»"
+      }
+    ]
+  },
+  "selva": {
+    "id": "selva",
+    "nome": "Selva",
+    "classe": "mago",
+    "viaggio": true,
+    "descrizione": "Ex allieva di Orvald. Lancia dardi d'ombra e conosce il linguaggio segreto delle rune del maestro.",
+    "colore": "#b46bff",
+    "vita": 24,
+    "velocita": 78,
+    "danno": 6,
+    "portata": 100,
+    "ricaricaMs": 1000,
+    "prezzo": 0,
+    "proiettile": {
+      "velocita": 180,
+      "gittata": 125,
+      "dimensione": 3,
+      "colore": "#b46bff",
+      "costoMana": 0
+    },
+    "bonus": {
+      "tipo": "rigenerazione_mana",
+      "valore": 0.25,
+      "descrizione": "+25% rigenerazione del mana (chi non ha mana: i suoi dardi fanno +1)"
+    },
+    "abilita": {
+      "id": "velo_ombra",
+      "nome": "Velo d’ombra",
+      "descrizione": "Per 6 secondi avvolge il gruppo nell’ombra: i nemici perdono le tue tracce. Apre le porte runiche.",
+      "ricaricaMs": 22000,
+      "durataMs": 6000,
+      "raggio": 96
+    },
+    "commenti": [
+      {
+        "mappa": "brughiera",
+        "testo": "Selva: «Vent’anni fa studiavo le stelle con Orvald. Non era un mostro.»"
+      },
+      {
+        "mappa": "torre_piani",
+        "testo": "Selva: «Conosco queste rune: le abbiamo incise insieme.»"
+      },
+      {
+        "mappa": "cimitero",
+        "testo": "Selva: «Piccola Lia… tutto questo dolore è nato qui.»"
+      }
+    ]
   }
 }

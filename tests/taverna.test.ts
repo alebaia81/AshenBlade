@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { congeda, creaStatoCompagni, ingaggia } from '../src/systems/taverna';
+import { commentoAllIngresso, congeda, creaStatoCompagni, ingaggia, unisciCompagno } from '../src/systems/taverna';
 
 const iniziale = () => ({ monete: 200, compagni: creaStatoCompagni() });
 
@@ -49,5 +49,25 @@ describe('taverna', () => {
     const e = ingaggia(iniziale(), 'agata', 80);
     if (!e.ok) throw new Error(e.errore);
     expect(congeda(e.stato).compagni).toEqual({ ingaggiati: ['agata'], attivo: null });
+  });
+
+  it('unisciCompagno (fase 10b): unisce gratis un compagno di viaggio e lo rende attivo senza duplicati', () => {
+    const s0 = iniziale();
+    const s1 = unisciCompagno(s0, 'tessa');
+    expect(s1.monete).toBe(200);
+    expect(s1.compagni).toEqual({ ingaggiati: ['tessa'], attivo: 'tessa' });
+    const s2 = unisciCompagno(s1, 'tessa');
+    expect(s2.compagni.ingaggiati).toEqual(['tessa']);
+  });
+
+  it('commentoAllIngresso (fase 10b): mostra il commento legato alla mappa una sola volta', () => {
+    const commenti = [
+      { mappa: 'bosco', testo: 'Qui mio padre tagliava la legna.' },
+      { mappa: 'cimitero', testo: 'Brina ringhia…' },
+    ];
+    const primo = commentoAllIngresso('tessa', commenti, 'bosco', []);
+    expect(primo).toEqual({ chiave: 'tessa:bosco', testo: 'Qui mio padre tagliava la legna.' });
+    expect(commentoAllIngresso('tessa', commenti, 'bosco', ['tessa:bosco'])).toBeNull();
+    expect(commentoAllIngresso('tessa', commenti, 'radura', [])).toBeNull();
   });
 });

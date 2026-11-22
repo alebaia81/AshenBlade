@@ -86,6 +86,16 @@
       "colore": "#6a5440",
       "tessera": "terra"
     },
+    "l": {
+      "tipo": "vena",
+      "materiale": "pietra_lunare",
+      "quantita": [
+        1,
+        2
+      ],
+      "colore": "#5a4636",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" }
+    },
     "x": {
       "tipo": "forziere",
       "contenuto": [
@@ -116,19 +126,42 @@
       "monete": 40,
       "colore": "#5a4636",
       "tessera": { "immagine": "terra", "tinta": "#c0b0a0" }
+    },
+    "J": {
+      "tipo": "abitante",
+      "abitante": "grisk",
+      "colore": "#6a5440",
+      "tessera": "terra"
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#5a4636",
+      "coloreMuro": "#4a3a2a",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" },
+      "tesseraMuro": { "immagine": "muro_pietra", "tinta": "#b89878" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pergamena_guanti_titano",
+        "ghianda_oro"
+      ],
+      "monete": 55,
+      "colore": "#5a4636",
+      "tessera": { "immagine": "terra", "tinta": "#c0b0a0" }
     }
   },
   "griglia": [
     "####################################",
-    "#RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR#",
-    "#RRRRRRRRR.........RRRRRRR........R#",
+    "#RRRRRRRRRRRRlYlRRRRRRRRRRRRRRRRRRR#",
+    "#RRRRRRRRR...RWR...RRRRRRR........R#",
     "#RRRRRRRRR.......A.RRRRRRR....A...R#",
     "#:::::::::...G.....RRRRRRR.......cR#",
     "wa::::::::.........:::::::........R#",
     "#:::::::::.........:::::::.....G..R#",
     "#RRRRRRRRR......G..RRRRRRR........R#",
     "#RRRRRRRRR.........RRRRRRR........R#",
-    "#RRRRRRRRR.........RRRRRRR..A.....R#",
+    "#RRRRRRRRR.........RRRRRRR..A..J..R#",
     "#RRRRRRRRRRRR:::RRRRRRRRRR........R#",
     "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",
     "#RRRRRRRRRRRR:::RRRRRRRRRRRRR:::RRR#",

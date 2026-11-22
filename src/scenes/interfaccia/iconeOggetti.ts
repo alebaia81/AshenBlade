@@ -103,6 +103,12 @@ const stivali: Disegno = (g, u, colore) => {
   g.fillRect(-2.5 * u, 1.5 * u, 6 * u, 2.5 * u); // piede
 };
 
+const amuleto: Disegno = (g, u, colore) => {
+  g.lineStyle(0.9 * u, 0xd8c890, 1).strokeCircle(0, -1.2 * u, 2.8 * u); // catenina
+  g.fillStyle(colore, 1).fillCircle(0, 1.6 * u, 2.2 * u); // gemma
+  g.fillStyle(0xffffff, 0.7).fillCircle(-0.6 * u, 1 * u, 0.7 * u); // riflesso
+};
+
 // ---- materiali e pergamene ----
 
 const minerale: Disegno = (g, u, colore) => {
@@ -195,6 +201,7 @@ const PER_FORMA: Record<string, Disegno> = {
   corazza,
   guanti,
   stivali,
+  amuleto,
 };
 
 export function disegnaOggetto(g: Phaser.GameObjects.Graphics, oggetto: DefinizioneOggetto, lato: number): void {

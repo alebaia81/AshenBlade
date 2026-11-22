@@ -85,6 +85,8 @@ export class Eroe {
   invulnerabileSviluppatore = false;
   /** Chiamata quando un'arma a distanza tira: la scena crea il proiettile. */
   quandoTira: (da: Vettore, direzione: Vettore) => void = () => {};
+  /** Fase 10b: chiamata quando parte una capriola (serve a Velo di Selva per l'invisibilità). */
+  quandoSchiva: (adesso: number) => void = () => {};
 
   constructor(scena: Phaser.Scene, x: number, y: number, profilo: ProfiloEroe) {
     const lato = datiEroe.dimensione;
@@ -147,6 +149,7 @@ export class Eroe {
         const m = comandi.movimento;
         this.spinta = comandi.direzioneSchivata ?? (m.x === 0 && m.y === 0 ? VERSI[this.direzione] : m);
         suoni.effetto('capriola');
+        this.quandoSchiva(adesso);
       }
       this.stato = nuovo;
     }

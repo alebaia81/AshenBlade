@@ -432,5 +432,150 @@
       "colore": "#7a3ab0",
       "costoMana": 2
     }
+  },
+  "mazza_mugnaio": {
+    "id": "mazza_mugnaio",
+    "nome": "Mazza del mugnaio",
+    "descrizione": "Leggendaria: pesante mazza cerchiata d’ambra del vecchio mulino. Rallenta i nemici colpiti.",
+    "tipo": "mazza",
+    "slot": "primaria",
+    "rarita": "leggendaria",
+    "prezzo": 340,
+    "effetti": [
+      "rallentamento"
+    ],
+    "dado": "1d10",
+    "caratteristica": "FOR",
+    "portata": 14,
+    "larghezzaColpo": 19,
+    "durataMs": 180,
+    "ricaricaMs": 160,
+    "bonusCritico": 0.05,
+    "respinta": 210
+  },
+  "bastone_melma": {
+    "id": "bastone_melma",
+    "nome": "Bastone della melma",
+    "descrizione": "Esotico: ogni attacco scaglia due dardi di gelatina arcana che si dividono a ventaglio.",
+    "tipo": "bastone",
+    "slot": "primaria",
+    "rarita": "esotica",
+    "prezzo": 800,
+    "effetti": [
+      "dardo_diviso"
+    ],
+    "dado": "1d6",
+    "caratteristica": "INT",
+    "portata": 18,
+    "larghezzaColpo": 14,
+    "durataMs": 220,
+    "ricaricaMs": 220,
+    "bonusCritico": 0.05,
+    "respinta": 120,
+    "proiettile": {
+      "velocita": 175,
+      "gittata": 125,
+      "dimensione": 3,
+      "colore": "#68e898",
+      "costoMana": 1
+    }
+  },
+  "arco_aldo": {
+    "id": "arco_aldo",
+    "nome": "Arco di Aldo",
+    "descrizione": "Leggendario: riforgiato da Bruno con il legno e l’acciaio dell’ascia del padre di Tessa. Colpi rapidi e precisi.",
+    "tipo": "arco",
+    "slot": "secondaria",
+    "rarita": "leggendaria",
+    "prezzo": 380,
+    "effetti": [],
+    "dado": "1d10",
+    "caratteristica": "DES",
+    "portata": 10,
+    "larghezzaColpo": 10,
+    "durataMs": 150,
+    "ricaricaMs": 480,
+    "bonusCritico": 0.1,
+    "respinta": 110,
+    "proiettile": {
+      "velocita": 250,
+      "gittata": 165,
+      "dimensione": 2,
+      "colore": "#ffd880",
+      "costoMana": 0
+    }
+  },
+  "balestra_contrabbandiere": {
+    "id": "balestra_contrabbandiere",
+    "nome": "Balestra del contrabbandiere",
+    "descrizione": "Leggendaria: la balestra pesante da montagna di Ferrante, con arco d’acciaio rinforzato.",
+    "tipo": "balestra",
+    "slot": "secondaria",
+    "rarita": "leggendaria",
+    "prezzo": 390,
+    "effetti": [],
+    "dado": "2d6",
+    "caratteristica": "DES",
+    "portata": 10,
+    "larghezzaColpo": 10,
+    "durataMs": 150,
+    "ricaricaMs": 680,
+    "bonusCritico": 0.1,
+    "respinta": 150,
+    "proiettile": {
+      "velocita": 250,
+      "gittata": 155,
+      "dimensione": 3,
+      "colore": "#e0c890",
+      "costoMana": 0
+    }
+  },
+  "balestra_zolfo": {
+    "id": "balestra_zolfo",
+    "nome": "Balestra di zolfo",
+    "descrizione": "Esotica: i dardi sono caricati con polvere di zolfo; all’impatto esplodono danneggiando e incendiando i nemici vicini.",
+    "tipo": "balestra",
+    "slot": "secondaria",
+    "rarita": "esotica",
+    "prezzo": 850,
+    "effetti": [
+      "esplosione",
+      "fuoco"
+    ],
+    "dado": "1d10",
+    "caratteristica": "DES",
+    "portata": 10,
+    "larghezzaColpo": 10,
+    "durataMs": 150,
+    "ricaricaMs": 680,
+    "bonusCritico": 0.05,
+    "respinta": 160,
+    "proiettile": {
+      "velocita": 240,
+      "gittata": 150,
+      "dimensione": 3,
+      "colore": "#ffcf40",
+      "costoMana": 0
+    }
+  },
+  "pugnali_pietrarossa": {
+    "id": "pugnali_pietrarossa",
+    "nome": "Pugnali di Pietrarossa",
+    "descrizione": "Leggendari: lame gemelle dei cacciatori goblin di Pietrarossa, intinte nello zolfo. Incendiano il bersaglio.",
+    "tipo": "pugnale",
+    "slot": "primaria",
+    "rarita": "leggendaria",
+    "prezzo": 410,
+    "effetti": [
+      "fuoco"
+    ],
+    "dado": "1d8",
+    "caratteristica": "DES",
+    "portata": 11,
+    "larghezzaColpo": 15,
+    "durataMs": 110,
+    "ricaricaMs": 60,
+    "bonusCritico": 0.12,
+    "respinta": 100
   }
 }

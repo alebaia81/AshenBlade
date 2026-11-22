@@ -5,7 +5,24 @@
 import type { Griglia } from './percorso';
 import type { AspettoCartello, Cella, DefinizioneMappa, Destinazione, Mappa, TipoCella, VoceLegenda } from './tipi';
 
-const TIPI_VALIDI: readonly TipoCella[] = ['muro', 'pavimento', 'partenza', 'arrivo', 'uscita', 'nemico', 'forziere', 'segreto', 'abitante', 'vena', 'cartello', 'porta', 'barriera'];
+const TIPI_VALIDI: readonly TipoCella[] = [
+  'muro',
+  'pavimento',
+  'partenza',
+  'arrivo',
+  'uscita',
+  'nemico',
+  'forziere',
+  'segreto',
+  'abitante',
+  'vena',
+  'cartello',
+  'porta',
+  'barriera',
+  'sepolto',
+  'crepata',
+  'pietra',
+];
 
 /** Errore con un messaggio pensato per essere letto da una persona. */
 export class ErroreMappa extends Error {
@@ -67,8 +84,8 @@ function controllaLegenda(def: DefinizioneMappa): void {
     if (voce.tipo === 'uscita' && (!voce.verso || !voce.arrivo)) {
       throw new ErroreMappa(def.id, `l'uscita "${simbolo}" deve indicare "verso" e "arrivo"`);
     }
-    if (voce.tipo === 'forziere' && !Array.isArray(voce.contenuto)) {
-      throw new ErroreMappa(def.id, `il forziere "${simbolo}" deve indicare il suo "contenuto" (anche vuoto: [])`);
+    if ((voce.tipo === 'forziere' || voce.tipo === 'sepolto') && !Array.isArray(voce.contenuto)) {
+      throw new ErroreMappa(def.id, `il ${voce.tipo} "${simbolo}" deve indicare il suo "contenuto" (anche vuoto: [])`);
     }
     if (voce.tipo === 'abitante' && !voce.abitante) {
       throw new ErroreMappa(def.id, `l'abitante "${simbolo}" deve indicare chi è ("abitante": "gemma")`);
@@ -76,10 +93,15 @@ function controllaLegenda(def: DefinizioneMappa): void {
     if (voce.tipo === 'vena' && (!voce.materiale || !Array.isArray(voce.quantita))) {
       throw new ErroreMappa(def.id, `la vena "${simbolo}" deve indicare "materiale" e "quantita" ([minimo, massimo])`);
     }
-    if (voce.tipo === 'cartello' && (!voce.testo || !['cartello', 'cancello', 'frana', 'ramo', 'nebbia', 'lapide', 'germoglio'].includes(voce.aspetto ?? ''))) {
+    if (
+      voce.tipo === 'cartello' &&
+      (!voce.testo || !['cartello', 'cancello', 'frana', 'ramo', 'nebbia', 'lapide', 'germoglio', 'ricordo', 'leva'].includes(voce.aspetto ?? ''))
+    ) {
       throw new ErroreMappa(def.id, `il cartello "${simbolo}" deve indicare "testo" e "aspetto" (cartello, cancello o frana)`);
     }
-    if (voce.tipo === 'porta' && !voce.chiave) throw new ErroreMappa(def.id, `la porta "${simbolo}" deve indicare la sua "chiave"`);
+    if (voce.tipo === 'porta' && !voce.chiave && !voce.runica) {
+      throw new ErroreMappa(def.id, `la porta "${simbolo}" deve indicare la sua "chiave" oppure "runica": true`);
+    }
     if (voce.tipo === 'barriera' && !voce.boss) throw new ErroreMappa(def.id, `la barriera "${simbolo}" deve indicare il suo "boss"`);
     if (voce.tipo === 'nemico' && !voce.nemico) {
       throw new ErroreMappa(def.id, `il nemico "${simbolo}" deve indicare quale nemico è ("nemico": "slime")`);
@@ -97,9 +119,9 @@ export function voceIn(mappa: Mappa, col: number, riga: number): VoceLegenda | u
 export function èCalpestabile(mappa: Mappa, col: number, riga: number): boolean {
   const voce = voceIn(mappa, col, riga);
   // Anche i forzieri sono "pieni": non si attraversano, si aprono da vicino.
-  // I muri segreti sono pieni finché restano chiusi (la scena sa quali sono aperti).
-  // Anche le persone del villaggio non si attraversano: ci si parla da vicino.
-  return voce !== undefined && !['muro', 'forziere', 'segreto', 'abitante', 'vena', 'cartello', 'porta'].includes(voce.tipo);
+  // I muri segreti e le rocce crepate sono pieni finché restano chiusi (la scena sa quali sono aperti).
+  // I tesori sepolti ("sepolto") invece sono calpestabili e invisibili finché non vengono rivelati.
+  return voce !== undefined && !['muro', 'forziere', 'segreto', 'crepata', 'abitante', 'vena', 'cartello', 'porta', 'pietra'].includes(voce.tipo);
 }
 
 /** Prima cella che contiene il simbolo indicato (partenza o punto d'arrivo). */
@@ -171,6 +193,45 @@ export function celleSegrete(mappa: Mappa): Cella[] {
   return risultato;
 }
 
+/** Fase 10c: dove sono le rocce crepate (si aprono solo con la Polvere nera di Grisk). */
+export function celleCrepate(mappa: Mappa): Cella[] {
+  const risultato: Cella[] = [];
+  mappa.simboli.forEach((riga, r) =>
+    riga.forEach((simbolo, c) => {
+      if (mappa.legenda[simbolo]?.tipo === 'crepata') risultato.push({ col: c, riga: r });
+    }),
+  );
+  return risultato;
+}
+
+/** Fase 10c: dove sono i tesori sepolti (invisibili, scavabili con la pala). */
+export function celleSepolte(mappa: Mappa): { cella: Cella; contenuto: string[]; monete: number }[] {
+  const risultato: { cella: Cella; contenuto: string[]; monete: number }[] = [];
+  mappa.simboli.forEach((riga, r) =>
+    riga.forEach((simbolo, c) => {
+      const voce = mappa.legenda[simbolo];
+      if (voce?.tipo === 'sepolto') {
+        risultato.push({ cella: { col: c, riga: r }, contenuto: voce.contenuto ?? [], monete: voce.monete ?? 0 });
+      }
+    }),
+  );
+  return risultato;
+}
+
+/** Fase 10c: dove sono le pietre di passaggio (viaggio rapido e cambio compagno). */
+export function cellePietra(mappa: Mappa): { cella: Cella; nome: string }[] {
+  const risultato: { cella: Cella; nome: string }[] = [];
+  mappa.simboli.forEach((riga, r) =>
+    riga.forEach((simbolo, c) => {
+      const voce = mappa.legenda[simbolo];
+      if (voce?.tipo === 'pietra') {
+        risultato.push({ cella: { col: c, riga: r }, nome: voce.nome ?? mappa.nome });
+      }
+    }),
+  );
+  return risultato;
+}
+
 /** Dove sono i forzieri e cosa contengono (oggetti e monete). */
 export function celleForziere(mappa: Mappa): { cella: Cella; contenuto: string[]; monete: number; chiusoCon?: string }[] {
   const risultato: { cella: Cella; contenuto: string[]; monete: number; chiusoCon?: string }[] = [];
@@ -223,6 +284,8 @@ export interface CellaCartello {
   testo: string;
   oggetto?: string;
   testoConOggetto?: string;
+  /** Fase 10c: per una leva, la porta che apre ("col:riga" o "mappa:col:riga"). */
+  aprePorta?: string;
 }
 
 export function celleCartello(mappa: Mappa): CellaCartello[] {
@@ -231,20 +294,42 @@ export function celleCartello(mappa: Mappa): CellaCartello[] {
     riga.forEach((simbolo, c) => {
       const voce = mappa.legenda[simbolo];
       if (voce?.tipo !== 'cartello') return;
-      const { oggetto, testoConOggetto } = voce;
-      risultato.push({ cella: { col: c, riga: r }, aspetto: voce.aspetto as AspettoCartello, testo: voce.testo!, ...(oggetto ? { oggetto, testoConOggetto } : {}) });
+      const { oggetto, testoConOggetto, aprePorta } = voce;
+      risultato.push({
+        cella: { col: c, riga: r },
+        aspetto: voce.aspetto as AspettoCartello,
+        testo: voce.testo!,
+        ...(oggetto ? { oggetto, testoConOggetto } : {}),
+        ...(aprePorta ? { aprePorta } : {}),
+      });
     }),
   );
   return risultato;
 }
 
-/** Le porte chiuse a chiave (fase 8a). */
-export function cellePorte(mappa: Mappa): { cella: Cella; chiave: string; nome: string; aspetto: 'legno' | 'cancello' }[] {
-  const risultato: { cella: Cella; chiave: string; nome: string; aspetto: 'legno' | 'cancello' }[] = [];
+/** Le porte chiuse a chiave (fase 8a) o runiche (fase 10c). */
+export interface CellaPorta {
+  cella: Cella;
+  chiave?: string;
+  runica?: boolean;
+  nome: string;
+  aspetto: 'legno' | 'cancello';
+}
+
+export function cellePorte(mappa: Mappa): CellaPorta[] {
+  const risultato: CellaPorta[] = [];
   mappa.simboli.forEach((riga, r) =>
     riga.forEach((simbolo, c) => {
       const voce = mappa.legenda[simbolo];
-      if (voce?.tipo === 'porta') risultato.push({ cella: { col: c, riga: r }, chiave: voce.chiave!, nome: voce.nome ?? 'la porta', aspetto: voce.aspetto === 'cancello' ? 'cancello' : 'legno' });
+      if (voce?.tipo === 'porta') {
+        risultato.push({
+          cella: { col: c, riga: r },
+          ...(voce.chiave ? { chiave: voce.chiave } : {}),
+          ...(voce.runica ? { runica: true } : {}),
+          nome: voce.nome ?? 'la porta',
+          aspetto: voce.aspetto === 'cancello' ? 'cancello' : 'legno',
+        });
+      }
     }),
   );
   return risultato;

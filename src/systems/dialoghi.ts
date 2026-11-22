@@ -4,7 +4,7 @@
 // taverna) oppure chiude. Come pagine di un sito collegate da link.
 // I testi stanno in data/dialoghi.json: scrivere nuove frasi non richiede codice.
 
-export const COSE_APRIBILI = ['negozio', 'taverna', 'fucina'] as const;
+export const COSE_APRIBILI = ['negozio', 'taverna', 'fucina', 'armature', 'alchimia'] as const;
 export type CosaApribile = (typeof COSE_APRIBILI)[number];
 
 /** Fase 7: una risposta può comparire solo se una quest è in un certo stato. */
@@ -14,8 +14,12 @@ export interface Condizione {
   stato: string | string[];
 }
 
-/** Fase 7: cosa fa una risposta oltre a portare altrove. */
-export type AzioneDialogo = { accetta: string } | { concludi: string };
+/** Fase 7, 10b e 11a: cosa fa una risposta oltre a portare altrove (accetta/concludi quest, unisci compagno, apri porta). */
+export type AzioneDialogo =
+  | { accetta: string; unisci?: string; aprePorta?: string }
+  | { concludi: string; unisci?: string; aprePorta?: string }
+  | { unisci: string; aprePorta?: string }
+  | { aprePorta: string };
 
 export interface Risposta {
   testo: string;
@@ -81,7 +85,10 @@ export function validaDialogo(chi: string, d: Dialogo, quest: readonly string[] 
     else if (nodo.risposte.every((r) => r.se)) errori.push(`${prefisso}: il nodo "${id}" deve avere almeno una risposta senza condizione`);
     for (const r of nodo.risposte) {
       if (r.va && !d.nodi[r.va]) errori.push(`${prefisso}, nodo "${id}": la risposta "${r.testo}" porta a "${r.va}", che non esiste`);
-      const citate = [r.se?.quest, r.azione && ('accetta' in r.azione ? r.azione.accetta : r.azione.concludi)];
+      const citate = [
+        r.se?.quest,
+        r.azione && ('accetta' in r.azione ? r.azione.accetta : 'concludi' in r.azione ? r.azione.concludi : undefined),
+      ];
       for (const q of citate) if (q && !quest.includes(q)) errori.push(`${prefisso}, nodo "${id}": la quest "${q}" non esiste`);
       if (r.apri && !(COSE_APRIBILI as readonly string[]).includes(r.apri)) {
         errori.push(`${prefisso}, nodo "${id}": "${r.apri}" non si può aprire`);

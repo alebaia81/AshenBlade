@@ -32,6 +32,18 @@ describe('ricette conosciute', () => {
     expect(prima).toEqual({ ricette: ['arco_cacciatore'], nuova: true });
     expect(impara(prima.ricette, 'arco_cacciatore').nuova).toBe(false);
   });
+
+  it('filtra le ricette per banco (fucina, armature, alchimia) e sblocca quelle dei boss sconfitti (fase 10b)', () => {
+    const corazza: Ricetta = { id: 'corazza_ferro', risultato: 'corazza_ferro', materiali: { ferro: 4 }, monete: 30, conosciutaDallInizio: true, banco: 'armature' };
+    const pozione: Ricetta = { id: 'pozione_rigenerazione', risultato: 'pozione_rigenerazione', materiali: { erba: 2 }, monete: 20, conosciutaDallInizio: true, banco: 'alchimia' };
+    const sigillo: Ricetta = { id: 'sigillo_re', risultato: 'sigillo_re', materiali: { osso: 3 }, monete: 80, conosciutaDallInizio: false, sbloccataDaBoss: 're_scheletro', banco: 'fucina' };
+    const tutte = [spada, corazza, pozione, sigillo];
+
+    expect(ricetteConosciute(tutte, [], [], 'fucina').map((r) => r.id)).toEqual(['spada_lunga']);
+    expect(ricetteConosciute(tutte, [], ['re_scheletro'], 'fucina').map((r) => r.id)).toEqual(['spada_lunga', 'sigillo_re']);
+    expect(ricetteConosciute(tutte, [], [], 'armature').map((r) => r.id)).toEqual(['corazza_ferro']);
+    expect(ricetteConosciute(tutte, [], [], 'alchimia').map((r) => r.id)).toEqual(['pozione_rigenerazione']);
+  });
 });
 
 describe('cosa manca', () => {

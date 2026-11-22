@@ -1,0 +1,173 @@
+{
+  "id": "mulino_ponte",
+  "nome": "Il Mulino del Ponte",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#23401f",
+      "tessera": ["erba", "pino"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2e5a28",
+      "tessera": ["erba", "albero"]
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#3a6ea5",
+      "tessera": ["#3a6ea5", { "immagine": "onde", "alfa": 0.25 }]
+    },
+    "P": {
+      "tipo": "muro",
+      "colore": "#8a6a3a",
+      "tessera": ["erba", "staccionata"]
+    },
+    "t": {
+      "tipo": "muro",
+      "colore": "#8c3b2e",
+      "tessera": "tetto_rosso"
+    },
+    "H": {
+      "tipo": "muro",
+      "colore": "#b08a5a",
+      "tessera": "muro_legno"
+    },
+    "D": {
+      "tipo": "muro",
+      "colore": "#4a3020",
+      "tessera": "porta_casa"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#78a856",
+      "tessera": "erba_fiori"
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "r": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radura",
+      "arrivo": "p",
+      "tessera": "sentiero"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cantine_mulino",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "O": {
+      "tipo": "abitante",
+      "abitante": "ottone",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "E": {
+      "tipo": "abitante",
+      "abitante": "tessa",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "slime",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "erba_medicinale"
+      ],
+      "monete": 20,
+      "colore": "#78a856",
+      "tessera": "erba_fiori"
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "ghianda_oro",
+        "pozione_vita"
+      ],
+      "monete": 30,
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "M": {
+      "tipo": "segreto",
+      "colore": "#a39e92",
+      "coloreMuro": "#b08a5a",
+      "tessera": "pietra_chiara",
+      "tesseraMuro": "muro_legno"
+    },
+    "Z": {
+      "tipo": "sepolto",
+      "contenuto": [
+        "ambra",
+        "pozione_forza"
+      ],
+      "monete": 35,
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "C": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "testo": "«Mulino del Ponte». Accanto alla ruota ferma la terra vicino alla riva ovest sembra stata scavata di recente.",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    }
+  },
+  "griglia": [
+    "################################",
+    "#..,....T.........ttttttttHHHHH#",
+    "#.T..PPPPPPP......ttttttttHpYpH#",
+    "#....P,,,,,P......HHHHHHHHHpppH#",
+    "#....P,X,,,P..T...HHHHHHHHHHMHH#",
+    "#....P,,,,,P......HpppppppppppH#",
+    "#....PPP.PPP..S...HppOppppppppH#",
+    "#..,..............HpppppppppppH#",
+    "#.......S.....,...HpppppbuppppH#",
+    "#..T..............HHHHHDHHHHHHH#",
+    "#....Z...:::C.E.......:::......#",
+    "~~~~~~~~~:::~~~~~~~~~~:::~~~~~~~",
+    "~~~~~~~~~:::~~~~~~~~~~:::~~~~~~~",
+    "#........:::..........:::....T.#",
+    "#.....S..:::.............,.....#",
+    "#........:::...S...............#",
+    "#,..T....:::........PPPPPPP....#",
+    "#........:::........P,,,,,P..T.#",
+    "#........:::....T...P,,,,,P....#",
+    "#...T....:::........PPPPPPP....#",
+    "#..,.....:::...............,...#",
+    "#........:::......T............#",
+    "#....T...:a:............T......#",
+    "##########r#####################"
+  ]
+}

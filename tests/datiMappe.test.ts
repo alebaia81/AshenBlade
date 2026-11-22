@@ -182,8 +182,91 @@ describe('dati del gioco', () => {
     expect(accanto(nascosto!.cella).some((k) => aperto.has(k))).toBe(true);
   });
 
-  it('la partita inizia nella piazza di Borgo Quercia (design §3)', () => {
-    expect(mondo.mappaIniziale).toBe('borgo');
+  it('la partita inizia sulla Strada Maestra, collegata a Borgo Quercia (fase 11a)', () => {
+    expect(mondo.mappaIniziale).toBe('strada_maestra');
+    expect(mondo.mappe['borgo']).toBeDefined();
+    expect(mondo.mappe['strada_maestra']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'borgo', arrivo: 'o' });
+    expect(mondo.mappe['borgo']!.legenda['s']).toMatchObject({ tipo: 'uscita', verso: 'strada_maestra', arrivo: 'b' });
+    expect(celleAbitante(mondo.mappe['strada_maestra']!).map((a) => a.idAbitante).sort()).toEqual(['fausto', 'teodoro']);
+    expect(mondo.negozi['teodoro']!.merce).toContain('pala');
+    expect(mondo.quest['prologo_strada']?.concludeDa).toBe('berta');
+  });
+
+  it('il Mulino del Ponte e le Cantine del Mulino sono collegati alla Radura e ospitano Ottone e il Re Melma (fase 11b)', () => {
+    expect(mondo.mappe['radura']!.legenda['m']).toMatchObject({ tipo: 'uscita', verso: 'mulino_ponte', arrivo: 'a' });
+    expect(mondo.mappe['mulino_ponte']!.legenda['r']).toMatchObject({ tipo: 'uscita', verso: 'radura', arrivo: 'p' });
+    expect(mondo.mappe['mulino_ponte']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'cantine_mulino', arrivo: 'a' });
+    expect(mondo.mappe['cantine_mulino']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'mulino_ponte', arrivo: 'b' });
+    expect(celleAbitante(mondo.mappe['mulino_ponte']!).map((a) => a.idAbitante)).toContain('ottone');
+    const reMelma = mondo.nemici['re_melma']!;
+    expect(reMelma.fasi?.length).toBe(2);
+    expect(reMelma.leggendari).toEqual(['mazza_mugnaio', 'guanti_ambra']);
+    expect(reMelma.esoticoFirma).toBe('bastone_melma');
+    expect(mondo.armi['bastone_melma']!.effetti).toContain('dardo_diviso');
+    expect(mondo.ricette['sigillo_eco_re_melma']?.sbloccataDaBoss).toBe('re_melma');
+    expect(mondo.quest['atto1_becchino']?.concludeDa).toBe('ottone');
+  });
+
+  it('Tessa e Brina, la Radura nascosta e le nuove missioni della Valle funzionano insieme (fase 11c)', () => {
+    expect(mondo.mappe['bosco']!.legenda['4']).toMatchObject({ tipo: 'uscita', verso: 'radura_nascosta', arrivo: 'a' });
+    expect(mondo.mappe['radura_nascosta']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'bosco', arrivo: 'd' });
+    expect(celleAbitante(mondo.mappe['mulino_ponte']!).map((a) => a.idAbitante)).toContain('tessa');
+    expect(mondo.quest['tessa_tracce']?.daChi).toBe('tessa');
+    expect(mondo.quest['tessa_ascia']?.concludeDa).toBe('bruno');
+    expect(mondo.quest['fausto_forcone']?.daChi).toBe('fausto');
+    expect(mondo.quest['pozzo_desideri']?.daChi).toBe('rosalba');
+    expect(mondo.quest['tesoro_mugnaio']?.siAccettaCon).toBe('mappa_mugnaio');
+    expect(mondo.negozi['gemma']!.merce).toContain('mappa_mugnaio');
+    expect(mondo.ricette['arco_aldo']?.risultato).toBe('arco_aldo');
+    expect(mondo.ricette['corazza_cuoio_rinforzata']?.risultato).toBe('corazza_cuoio_rinforzata');
+  });
+
+  it('il Passo del Corvo e le Cave di Zolfo ospitano Ferrante, Matteo e i nuovi materiali (fase 12a)', () => {
+    expect(mondo.mappe['colline']!.legenda['p']).toMatchObject({ tipo: 'uscita', verso: 'passo_corvo', arrivo: 'a' });
+    expect(mondo.mappe['passo_corvo']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'colline', arrivo: 'q' });
+    expect(mondo.mappe['passo_corvo']!.legenda['u']).toMatchObject({ tipo: 'uscita', verso: 'cave_zolfo', arrivo: 'a' });
+    expect(mondo.mappe['cave_zolfo']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'passo_corvo', arrivo: 'b' });
+    expect(celleAbitante(mondo.mappe['cave_zolfo']!).map((a) => a.idAbitante)).toContain('matteo');
+    const ferrante = mondo.nemici['ferrante']!;
+    expect(ferrante.fasi?.length).toBe(2);
+    expect(ferrante.leggendari).toEqual(['balestra_contrabbandiere', 'corazza_ferrante']);
+    expect(ferrante.esoticoFirma).toBe('balestra_zolfo');
+    expect(mondo.armi['balestra_zolfo']!.effetti).toContain('esplosione');
+    expect(mondo.ricette['sigillo_eco_ferrante']?.sbloccataDaBoss).toBe('ferrante');
+    expect(mondo.quest['ritorno_matteo']?.concludeDa).toBe('bruno');
+  });
+
+  it('Pietrafonda ha la Pietra di passaggio, il banco armature di Ugo e Grisk si libera nella miniera (fase 12b)', () => {
+    expect(mondo.mappe['colline']!.legenda['v']).toMatchObject({ tipo: 'uscita', verso: 'pietrafonda', arrivo: 'a' });
+    expect(mondo.mappe['pietrafonda']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'colline', arrivo: 't' });
+    expect(mondo.mappe['pietrafonda']!.legenda['P']).toMatchObject({ tipo: 'pietra', nome: 'Pietrafonda' });
+    const liberata = applicaCondizioni(mondo.mappe['pietrafonda']!, (c) => c.quest === 'atto2_pietrafonda');
+    expect(celleNemico(liberata).length).toBe(0);
+    expect(celleAbitante(mondo.mappe['miniera_gallerie']!).map((a) => a.idAbitante)).toContain('grisk');
+    expect(mondo.quest['grisk_liberato']?.daChi).toBe('grisk');
+    expect(mondo.ricette['corazza_argento']?.banco).toBe('armature');
+    expect(mondo.ricette['guanti_titano']?.banco).toBe('armature');
+  });
+
+  it('il clan Pietrarossa, il negozio goblin di Krak, la Pietra lunare e le secondarie delle Colline sono completi (fase 12c)', () => {
+    expect(celleAbitante(mondo.mappe['pietrafonda']!).map((a) => a.idAbitante)).toContain('krak');
+    expect(mondo.negozi['krak']!.merce).toEqual(expect.arrayContaining(['zolfo', 'argento', 'pietra_lunare', 'mappa_ferrante']));
+    expect(mondo.quest['grisk_clan']?.concludeDa).toBe('krak');
+    expect(mondo.quest['argento_ugo']?.daChi).toBe('ugo');
+    expect(mondo.quest['lanterne_minatori']?.daChi).toBe('ugo');
+    expect(mondo.quest['tesoro_ferrante']?.siAccettaCon).toBe('mappa_ferrante');
+    expect(mondo.armi['pugnali_pietrarossa']?.rarita).toBe('leggendaria');
+  });
+
+  it('il Guado e la Palude delle Lanterne sono collegati alla Brughiera con Mamma Orsola e i Fuochi fatui (fase 13a)', () => {
+    expect(mondo.mappe['brughiera']!.legenda['g']).toMatchObject({ tipo: 'uscita', verso: 'guado', arrivo: 'a' });
+    expect(mondo.mappe['guado']!.legenda['n']).toMatchObject({ tipo: 'uscita', verso: 'brughiera', arrivo: 'c' });
+    expect(mondo.mappe['guado']!.legenda['o']).toMatchObject({ tipo: 'uscita', verso: 'palude_lanterne', arrivo: 'a' });
+    expect(mondo.mappe['palude_lanterne']!.legenda['e']).toMatchObject({ tipo: 'uscita', verso: 'guado', arrivo: 'b' });
+    expect(mondo.mappe['guado']!.legenda['P']).toMatchObject({ tipo: 'pietra', nome: 'Guado delle Lanterne' });
+    expect(celleAbitante(mondo.mappe['guado']!).map((a) => a.idAbitante)).toContain('orsola');
+    expect(mondo.nemici['fuoco_fatuo']?.comportamento).toBe('tiratore');
+    expect(mondo.quest['traghetto_orsola']?.daChi).toBe('orsola');
   });
 
   it('il borgo ha i sei personaggi del design, ognuno con il suo dialogo', () => {
@@ -217,11 +300,16 @@ describe('dati del gioco', () => {
     expect(Math.max(...spazi)).toBe(24);
   });
 
-  it('in taverna c’è un compagno per ciascuna delle 4 classi (design §10)', () => {
-    const classi = Object.values(mondo.compagni).map((c) => c.classe).sort();
+  it('in taverna c’è un compagno per ciascuna delle 4 classi (design §10), più i 3 compagni di viaggio (fase 10b)', () => {
+    const inTaverna = Object.values(mondo.compagni).filter((c) => !c.viaggio);
+    const classi = inTaverna.map((c) => c.classe).sort();
     expect(classi).toEqual(['chierico', 'guerriero', 'ladro', 'mago']);
-    const abilita = Object.values(mondo.compagni).map((c) => c.abilita.id).sort();
+    const abilita = inTaverna.map((c) => c.abilita.id).sort();
     expect(abilita).toEqual(['cura_eroe', 'para_colpo', 'scudo_magico', 'segnala_tesori']);
+
+    const diViaggio = Object.values(mondo.compagni).filter((c) => c.viaggio);
+    expect(diViaggio.map((c) => c.id).sort()).toEqual(['grisk', 'selva', 'tessa']);
+    expect(diViaggio.map((c) => c.abilita.id).sort()).toEqual(['fiuta_tutto', 'polvere_nera', 'velo_ombra']);
   });
 
   it('i compagni fanno meno danni dell’eroe della stessa classe (circa la metà)', () => {
@@ -246,8 +334,8 @@ describe('dati del gioco', () => {
       ...Object.values(mondo.mappe).flatMap((m) => celleVena(m).map((v) => v.materiale)),
       ...Object.values(mondo.mappe).flatMap((m) => celleForziere(m).flatMap((f) => f.contenuto)),
     ]);
-    // Cristallo e frammento della corona arriveranno con la miniera e il Re Scheletro (fase 8).
-    const piuAvanti = ['cristallo_miniera', 'frammento_corona'];
+    // Cristallo, frammento della corona e frammento d'eco arrivano dai dungeon e dai boss (fasi 8 e 10a).
+    const piuAvanti = ['cristallo_miniera', 'frammento_corona', 'frammento_eco'];
     for (const o of Object.values(mondo.oggetti).filter((x) => x.tipo === 'materiale' && !piuAvanti.includes(x.id))) {
       expect(fonti.has(o.id), o.id).toBe(true);
     }
@@ -336,7 +424,7 @@ describe('il mondo si allarga (fase 7b)', () => {
     expect(uscite('bosco')).toContain('cimitero');
     expect(uscite('radura')).toContain('colline');
     expect(uscite('cimitero')).toEqual(['bosco', 'cripta_sale']); // dalla fase 8a, dietro il cancello
-    expect(uscite('colline')).toEqual(['radura', 'miniera_gallerie', 'brughiera']); // 8b oltre la frana, 8c oltre la nebbia
+    expect(uscite('colline')).toEqual(expect.arrayContaining(['radura', 'miniera_gallerie', 'brughiera', 'passo_corvo']));
   });
 
   it('il cimitero ha scheletri e il cancello della cripta, che si apre con la chiave di Berta (fase 8a)', () => {
@@ -410,7 +498,9 @@ describe('la Cripta dei Non Morti (fase 8a)', () => {
     expect(re.fasi?.length).toBe(2);
     const sicuri = re.bottino.filter((b) => b.probabilita === 1).map((b) => b.oggetto);
     expect(sicuri).toEqual(expect.arrayContaining(['frammento_corona', 'pagina_diario']));
-    expect(sicuri.some((id) => dati.oggetti[id]?.rarita === 'leggendaria')).toBe(true);
+    expect(re.leggendari?.length).toBeGreaterThanOrEqual(2);
+    expect(re.leggendari?.every((id) => dati.oggetti[id]?.rarita === 'leggendaria')).toBe(true);
+    expect(dati.oggetti[re.esoticoFirma!]?.rarita).toBe('esotica');
   });
 
   it('lo scontro comincia solo DENTRO la stanza: da fuori le barriere nessun boss vede l’eroe (vale per ogni boss)', () => {
@@ -471,7 +561,9 @@ describe('la Miniera dei Goblin (fase 8b)', () => {
     expect(troll.fasi!.flatMap((f) => f.attacchi.map((a) => a.tipo))).toEqual(expect.arrayContaining(['carica', 'crollo_massi']));
     const sicuri = troll.bottino.filter((b) => b.probabilita === 1).map((b) => b.oggetto);
     expect(sicuri).toContain('zanna_troll');
-    expect(sicuri.some((id) => dati.oggetti[id]?.rarita === 'leggendaria')).toBe(true);
+    expect(troll.leggendari?.length).toBeGreaterThanOrEqual(2);
+    expect(troll.leggendari?.every((id) => dati.oggetti[id]?.rarita === 'leggendaria')).toBe(true);
+    expect(dati.oggetti[troll.esoticoFirma!]?.rarita).toBe('esotica');
     expect(dati.ricette['ascia_troll']!.materiali['zanna_troll']).toBe(1);
   });
 
@@ -539,7 +631,9 @@ describe('la Torre del Negromante (fase 8c)', () => {
     expect(n.finale).toBe(true);
     expect(n.fasi![0]!.attacchi.map((a) => a.tipo)).toEqual(expect.arrayContaining(['teletrasporto', 'incantesimo']));
     expect(n.fasi![1]!.attacchi.some((a) => a.tipo === 'evoca' && a.nemico === 'ombra')).toBe(true);
-    expect(n.bottino.filter((b) => b.probabilita === 1).map((b) => b.oggetto)).toEqual(expect.arrayContaining(['ossidiana_nera', 'corazza_quercia']));
+    expect(n.bottino.filter((b) => b.probabilita === 1).map((b) => b.oggetto)).toEqual(expect.arrayContaining(['ossidiana_nera']));
+    expect(n.leggendari).toEqual(['mantello_orvald', 'elmo_luna_nera']);
+    expect(n.esoticoFirma).toBe('arco_rimbalzo');
     expect(dati.ricette['bastone_orvald']!.materiali['ossidiana_nera']).toBe(1);
     expect(dati.finale.length).toBeGreaterThanOrEqual(3);
   });

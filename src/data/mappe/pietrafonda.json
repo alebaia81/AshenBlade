@@ -1,0 +1,156 @@
+{
+  "id": "pietrafonda",
+  "nome": "Pietrafonda",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#3a3a36",
+      "tessera": "muro_pietra"
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#4a5a36",
+      "tessera": [{ "immagine": "erba", "tinta": "#d8d8a8" }, "albero_autunno"]
+    },
+    "t": {
+      "tipo": "muro",
+      "colore": "#686e78",
+      "tessera": "tetto_grigio"
+    },
+    "C": {
+      "tipo": "muro",
+      "colore": "#d8d0c0",
+      "tessera": "muro_pietra_chiara"
+    },
+    "D": {
+      "tipo": "muro",
+      "colore": "#4a3828",
+      "tessera": "porta_casa_pietra"
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d0702a",
+      "tessera": "braciere"
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#3a6ea5",
+      "tessera": ["#3a6ea5", { "immagine": "onde", "alfa": 0.25 }]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "@": {
+      "tipo": "partenza",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "colline",
+      "arrivo": "t",
+      "tessera": "sentiero"
+    },
+    "P": {
+      "tipo": "pietra",
+      "nome": "Pietrafonda",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "U": {
+      "tipo": "abitante",
+      "abitante": "ugo",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "M": {
+      "tipo": "abitante",
+      "abitante": "teodoro",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "K": {
+      "tipo": "abitante",
+      "abitante": "krak",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "G": {
+      "tipo": "nemico",
+      "nemico": "goblin",
+      "cambiaCon": {
+        "quest": "atto2_pietrafonda",
+        "stato": ["pronta", "conclusa"]
+      },
+      "diventa": "p",
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    },
+    "v": {
+      "tipo": "vena",
+      "materiale": "argento",
+      "quantita": [1, 2],
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "argento",
+        "zolfo"
+      ],
+      "monete": 40,
+      "colore": "#a39e92",
+      "tessera": "pietra_chiara"
+    }
+  },
+  "griglia": [
+    "########################################",
+    "#...T................................T.#",
+    "#..ttttttt......tttttttt....ttttttt....#",
+    "#..ttttttt..T...tttttttt....ttttttt....#",
+    "#..CCCCCCC......CCCCCCCC....CCCCCCC....#",
+    "#..CCCCCCC......CCCCCCCC....CCCCCCC..v.#",
+    "#..CCCDCCC......CCCDCCCC....CCCDCCC....#",
+    "#.....:............::..........:.......#",
+    "#.....:.U.f........::.G........:...G...#",
+    "#..T..::::::pppppppppppppppp::::.......#",
+    "#...........pppppppppppppppp...........#",
+    "#...........pppppp~~pppppppp.....G.....#",
+    "#....P......pppppp~~pppppppp...........#",
+    "#...pppp::::pppppppppppppppp...::::....#",
+    "na::@ppp::::ppppGpppppppGppp...::::....#",
+    "#...pppp::::pppppppppppppppp...........#",
+    "#...........pppppppppppppppp...........#",
+    "#....M......pppppppppppppppp.....G.....#",
+    "#..T..::::::pppppppppppppppp::::.......#",
+    "#.....:............::..........:.......#",
+    "#.....:..........K.::..........:...X...#",
+    "#..ttttttt......tttttttt....ttttttt....#",
+    "#..ttttttt......tttttttt....ttttttt..T.#",
+    "#..CCCCCCCff....CCCCCCCC....CCCCCCC....#",
+    "#..CCCCCCCff....CCCCCCCC....CCCCCCC....#",
+    "#..CCCDCCC..T...CCCDCCCC....CCCDCCC..v.#",
+    "#......................................#",
+    "########################################"
+  ]
+}

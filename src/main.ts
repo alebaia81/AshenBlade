@@ -25,6 +25,7 @@ import { leggiOpzioni } from './systems/opzioni';
 import { ScenaIntro } from './scenes/ScenaIntro';
 import { ScenaPausa } from './scenes/ScenaPausa';
 import { ScenaOpzioni } from './scenes/ScenaOpzioni';
+import { ScenaPietra } from './scenes/ScenaPietra';
 
 installaGestoreErrori();
 
@@ -84,6 +85,7 @@ try {
       new ScenaFucina(dati),
       new ScenaRegistro(dati),
       new ScenaMappaTesoro(dati),
+      new ScenaPietra(dati),
       new ScenaFinale(dati),
       new ScenaPausa(),
       new ScenaOpzioni(),

@@ -6,6 +6,17 @@
         "testo": "Un forestiero? Di questi tempi! Benvenuto a Borgo Quercia. Io sono Berta, la sindaca. Scusa le barricate: la strada principale è piena di morti che camminano.",
         "risposte": [
           {
+            "testo": "Vengo dalla Strada Maestra: ho aiutato Fausto a respingere gli scheletri al cancello.",
+            "va": "accoglienza_prologo",
+            "se": {
+              "quest": "prologo_strada",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "prologo_strada"
+            }
+          },
+          {
             "testo": "Morti che camminano?",
             "va": "morti"
           },
@@ -38,6 +49,25 @@
             },
             "azione": {
               "concludi": "atto1_cimitero"
+            }
+          },
+          {
+            "testo": "Dov'è Ottone il becchino con la seconda chiave?",
+            "va": "becchino",
+            "se": {
+              "quest": "atto1_becchino",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto cercando Ottone al Mulino del Ponte.",
+            "va": "attesaBecchino",
+            "se": {
+              "quest": "atto1_becchino",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
             }
           },
           {
@@ -115,6 +145,23 @@
           }
         ]
       },
+      "accoglienza_prologo": {
+        "testo": "Cerchi riparo? Qui servono spade, non ospiti. Ma Fausto mi ha fatto segno che hai difeso il cancello… prendi queste monete. Se vuoi guadagnarti un tetto a Borgo Quercia, ho un lavoro per te.",
+        "risposte": [
+          {
+            "testo": "Quale lavoro?",
+            "va": "lavoro",
+            "se": {
+              "quest": "atto1_cimitero",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Grazie, sindaca.",
+            "va": "saluto"
+          }
+        ]
+      },
       "sospetto": {
         "testo": "Io? Io so solo che questo villaggio ha già sofferto abbastanza. Ora scusami, ho molto da fare.",
         "risposte": [
@@ -181,10 +228,54 @@
         ]
       },
       "nonChiedere": {
-        "testo": "Non chiedermelo. Scendi là sotto e ferma tutto questo, ti prego. Per il resto… ci sarà tempo.",
+        "testo": "Non chiedermelo. C'è anche una seconda serratura interna: la tiene Ottone il becchino, che è scappato al Mulino del Ponte. Scendi là sotto e ferma tutto questo, ti prego.",
+        "risposte": [
+          {
+            "testo": "Vado a cercare Ottone al Mulino.",
+            "va": "becchinoOk",
+            "se": {
+              "quest": "atto1_becchino",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "atto1_becchino"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "becchino": {
+        "testo": "Ottone il becchino custodisce la seconda chiave della cripta, ma quando i morti si sono alzati è fuggito al Mulino del Ponte, a nord della Radura. Dicono che le cantine del mulino siano invase dalle melme.",
+        "risposte": [
+          {
+            "testo": "Vado al Mulino a prendere la chiave di Ottone.",
+            "va": "becchinoOk",
+            "azione": {
+              "accetta": "atto1_becchino"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "becchinoOk": {
+        "testo": "Il sentiero per il Mulino del Ponte sale verso nord dalla Radura. Trova Ottone e fatti dare quella chiave.",
         "risposte": [
           {
             "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaBecchino": {
+        "testo": "Il Mulino del Ponte è a nord della Radura. Ottone sarà rintanato lì dentro per la paura.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
           }
         ]
       },
@@ -466,7 +557,7 @@
         ]
       },
       "verita4": {
-        "testo": "Perché la vergogna pesa più di una spada, figliolo. Vai, ora. E che il Signore abbia pietà di lui… e di noi.",
+        "testo": "Perché la vergogna pesa più di una spada, figliolo. E c'era anche una ragazza che lo aiutava nel laboratorio, Selva… io la nascosi quella notte, ma poi fuggì verso la Brughiera. Non so che fine abbia fatto. Vai, ora.",
         "risposte": [
           {
             "testo": "Arrivederci"
@@ -700,6 +791,28 @@
             }
           },
           {
+            "testo": "Tessa mi ha chiesto di portarti l'ascia di suo padre Aldo.",
+            "va": "asciaAldo",
+            "se": {
+              "quest": "tessa_ascia",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "tessa_ascia"
+            }
+          },
+          {
+            "testo": "Bruno! Tuo figlio Matteo è vivo: l'ho liberato dalle Cave di Zolfo!",
+            "va": "matteoVivo",
+            "se": {
+              "quest": "ritorno_matteo",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "ritorno_matteo"
+            }
+          },
+          {
             "testo": "Arrivederci"
           }
         ]
@@ -814,6 +927,26 @@
             "testo": "Arrivederci"
           }
         ]
+      },
+      "asciaAldo": {
+        "testo": "L'ascia di Aldo… L'avevo forgiata io, dieci anni fa. Il legno di tasso del manico è ancora vivo, e l'acciaio è sano. Tessa tira con l'arco, vero? Ecco il disegno per riforgiarla nell'Arco di Aldo.",
+        "risposte": [
+          {
+            "testo": "Lavoriamo.",
+            "apri": "fucina"
+          },
+          {
+            "testo": "Grazie, Bruno."
+          }
+        ]
+      },
+      "matteoVivo": {
+        "testo": "Matteo… mio figlio è vivo?! È appena entrato dalla porta del retro, sporco di zolfo ma tutto intero! Non ho parole, forestiero. Prendi tutto quello che ho messo da parte: la mia forgia è casa tua.",
+        "risposte": [
+          {
+            "testo": "Sono felice per voi, Bruno."
+          }
+        ]
       }
     }
   },
@@ -830,6 +963,37 @@
           {
             "testo": "Conosci storie di tesori?",
             "va": "tesoro"
+          },
+          {
+            "testo": "Cosa sono le Ghiande d'oro?",
+            "va": "ghiande"
+          },
+          {
+            "testo": "Mi parlavi del vecchio pozzo del borgo?",
+            "va": "pozzo",
+            "se": {
+              "quest": "pozzo_desideri",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto cercando la gelatina per la carrucola del pozzo.",
+            "va": "attesaPozzo",
+            "se": {
+              "quest": "pozzo_desideri",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho portato la gelatina per sbloccare il pozzo!",
+            "va": "graziePozzo",
+            "se": {
+              "quest": "pozzo_desideri",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "pozzo_desideri"
+            }
           },
           {
             "testo": "Nonna, la Quercia… un ramo è stato tagliato!",
@@ -895,6 +1059,56 @@
         "risposte": [
           {
             "testo": "Grazie, nonna."
+          }
+        ]
+      },
+      "ghiande": {
+        "testo": "La leggenda dice che la Quercia Antica lasciò cadere dodici Ghiande d'oro nella valle, nelle colline e nella brughiera, per chi un giorno l'avrebbe salvata. Se le trovi, tienile da parte: quando la Quercia avrà bisogno di te, ti ricompenseranno!",
+        "risposte": [
+          {
+            "testo": "Ne terrò conto, nonna.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "pozzo": {
+        "testo": "Quando ero bambina gettavamo monete nel pozzo della piazza. Sul fondo ho visto brillare una Ghianda d'oro! Ma la carrucola del secchio è bloccata dalla ruggine: portami tre pezzi di gelatina di slime per ungerla e tiriamo su il secchio!",
+        "risposte": [
+          {
+            "testo": "Vado a prendere la gelatina.",
+            "va": "pozzoOk",
+            "azione": {
+              "accetta": "pozzo_desideri"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "pozzoOk": {
+        "testo": "Gli slime nella Radura e al Mulino ne lasciano sempre. Torna presto!",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaPozzo": {
+        "testo": "Tre pezzi di gelatina di slime, e quella vecchia carrucola girerà liscia come l'olio!",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "graziePozzo": {
+        "testo": "Ecco fatto… tira la corda… Guarda nel secchio! Una vera Ghianda d'oro della Quercia Antica! Tienila stretta, figliolo: ce ne sono dodici in tutto il mondo.",
+        "risposte": [
+          {
+            "testo": "Grazie, nonna Rosalba!"
           }
         ]
       },
@@ -1057,8 +1271,12 @@
     "inizio": "saluto",
     "nodi": {
       "saluto": {
-        "testo": "Chi va là? …Un viaggiatore. Scusa, di questi tempi non si sa mai. Sono Ugo. Vivevo a Borgo Quercia, una volta.",
+        "testo": "Chi va là? …Un viaggiatore. Sono Ugo, fabbro d'armature di Pietrafonda. Mio fratello Bruno lavora le armi al borgo, io batto corazze ed elmi.",
         "risposte": [
+          {
+            "testo": "Mostrami il banco delle armature (Fucina d'armature)",
+            "apri": "armature"
+          },
           {
             "testo": "Ho una lettera di tuo fratello Bruno.",
             "va": "letto",
@@ -1068,6 +1286,87 @@
             },
             "azione": {
               "concludi": "lettera_bruno"
+            }
+          },
+          {
+            "testo": "Ti aiuto a liberare Pietrafonda dai goblin.",
+            "va": "pietrafonda",
+            "se": {
+              "quest": "atto2_pietrafonda",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto liberando Pietrafonda dai goblin.",
+            "va": "attesaPietrafonda",
+            "se": {
+              "quest": "atto2_pietrafonda",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho scacciato i goblin dalle strade di Pietrafonda!",
+            "va": "pietrafondaLibera",
+            "se": {
+              "quest": "atto2_pietrafonda",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto2_pietrafonda"
+            }
+          },
+          {
+            "testo": "Ti serve dell'argento per la fucina d'armature?",
+            "va": "chiedeArgento",
+            "se": {
+              "quest": "argento_ugo",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Quanto argento ti serve?",
+            "va": "attesaArgento",
+            "se": {
+              "quest": "argento_ugo",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ti ho portato i 4 pezzi di Minerale d'argento.",
+            "va": "grazieArgento",
+            "se": {
+              "quest": "argento_ugo",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "argento_ugo"
+            }
+          },
+          {
+            "testo": "Come illuminavate le gallerie di Pietrafonda?",
+            "va": "chiedeLanterne",
+            "se": {
+              "quest": "lanterne_minatori",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Dove trovo la Pietra lunare per le lanterne?",
+            "va": "attesaLanterne",
+            "se": {
+              "quest": "lanterne_minatori",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho estratto le 2 Pietre lunari dietro le rocce crepate!",
+            "va": "grazieLanterne",
+            "se": {
+              "quest": "lanterne_minatori",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "lanterne_minatori"
             }
           },
           {
@@ -1088,7 +1387,862 @@
         ]
       },
       "perche": {
-        "testo": "La strada per la miniera è franata, e dal bosco arrivano i morti. Qui sulle colline, almeno, vedo chi arriva.",
+        "testo": "La strada per la miniera era franata e i goblin hanno occupato Pietrafonda, qui a est. E non scappano solo dai morti: c'è qualcuno che compra l'ossidiana nera tramite i banditi del Passo del Corvo!",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "pietrafonda": {
+        "testo": "Il sentiero qui a destra porta dritto a Pietrafonda. Se scacci i sei goblin che bloccano la piazza, riaccendo subito la mia fucina d'armature in paese e ti insegno a battere l'argento!",
+        "risposte": [
+          {
+            "testo": "Vado a liberare Pietrafonda.",
+            "va": "pietrafondaOk",
+            "azione": {
+              "accetta": "atto2_pietrafonda"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "pietrafondaOk": {
+        "testo": "All'ingresso di Pietrafonda troverai anche la nostra Pietra di passaggio: attivala e potrai viaggiare in un lampo fino a Borgo Quercia!",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaPietrafonda": {
+        "testo": "Sei goblin nella piazza di Pietrafonda, qui a est. Poi potremo lavorare in pace!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "pietrafondaLibera": {
+        "testo": "Pietrafonda è di nuovo nostra! Ho riacceso il banco delle armature. Prendi la pergamena della Corazza d'argento: leggila dallo zaino e vieni a forgiarla quando vuoi!",
+        "risposte": [
+          {
+            "testo": "Mostrami il banco delle armature",
+            "apri": "armature"
+          },
+          {
+            "testo": "Grazie, Ugo."
+          }
+        ]
+      },
+      "chiedeArgento": {
+        "testo": "Per rimettere in moto i forni di Pietrafonda mi servono quattro pezzi di Minerale d'argento. Se me li porti, ti regalo un Elmo d'acciaio forgiato da me!",
+        "risposte": [
+          {
+            "testo": "Ti porto 4 pezzi di Minerale d'argento.",
+            "va": "argentoOk",
+            "azione": {
+              "accetta": "argento_ugo"
+            }
+          },
+          {
+            "testo": "Più tardi.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "argentoOk": {
+        "testo": "Trovi le vene d'argento qui intorno a Pietrafonda, sul Passo del Corvo e nelle Cave di Zolfo.",
+        "risposte": [
+          {
+            "testo": "A presto."
+          }
+        ]
+      },
+      "attesaArgento": {
+        "testo": "Quattro pezzi di Minerale d'argento, e la fucina d'armature tornerà a pieno regime!",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "grazieArgento": {
+        "testo": "Argento puro delle nostre montagne! Tieni queste monete e l'Elmo d'acciaio che ti avevo promesso.",
+        "risposte": [
+          {
+            "testo": "Mostrami il banco delle armature",
+            "apri": "armature"
+          },
+          {
+            "testo": "Grazie, Ugo."
+          }
+        ]
+      },
+      "chiedeLanterne": {
+        "testo": "Usavamo la Pietra lunare: brilla al buio senza fumo! Ma le vene migliori sono rimaste chiuse dietro le pareti di roccia crepata nella Miniera e sul Passo del Corvo. Con le bombe di Grisk potresti aprirle e portarmene due pezzi!",
+        "risposte": [
+          {
+            "testo": "Troverò 2 Pietre lunari per le lanterne di Pietrafonda.",
+            "va": "lanterneOk",
+            "azione": {
+              "accetta": "lanterne_minatori"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "lanterneOk": {
+        "testo": "Fai saltare le rocce crepate con la Polvere nera di Grisk: dietro troverai le vene azzurre di Pietra lunare!",
+        "risposte": [
+          {
+            "testo": "Vado."
+          }
+        ]
+      },
+      "attesaLanterne": {
+        "testo": "Due Pietre lunari: cerca le rocce crepate sul Passo del Corvo e nelle gallerie della Miniera con Grisk!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "grazieLanterne": {
+        "testo": "Guarda che luce azzurra! Le lanterne di Pietrafonda brilleranno per anni. E tieni: i minatori hanno trovato questa Ghianda d'oro scavando le fondamenta della fucina!",
+        "risposte": [
+          {
+            "testo": "Grazie mille, Ugo!"
+          }
+        ]
+      }
+    }
+  },
+  "teodoro": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Per tutte le ruote spezzate! Meno male che passi di qui, viandante! Gli scheletri sono usciti dal buio e hanno rovesciato il mio carro. Io sono Teodoro, mercante ambulante.",
+        "risposte": [
+          {
+            "testo": "Fammi vedere cosa hai salvato dal carro (Negozio)",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Ti aiuto a liberare la strada fino a Borgo Quercia.",
+            "va": "consigli",
+            "se": {
+              "quest": "prologo_strada",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "prologo_strada"
+            }
+          },
+          {
+            "testo": "Hai qualche consiglio per sopravvivere?",
+            "va": "consigli"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "consigli": {
+        "testo": "Qui accanto c'è un forziere con qualche pozione: aprilo pure! Con il tasto destro fai una capriola per schivare i colpi. E se vedi della terra smossa, compra la mia pala: nella valle ci sono tesori sepolti ovunque!",
+        "risposte": [
+          {
+            "testo": "Mostrami la tua merce (Negozio)",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Grazie, Teodoro."
+          }
+        ]
+      }
+    }
+  },
+  "fausto": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Alt! Chi va là?! …Un vivo, per la Quercia! Io sono Fausto. La sindaca Berta mi ha ordinato di tenere chiuso il cancello finché gli scheletri infestano la Strada Maestra.",
+        "risposte": [
+          {
+            "testo": "Ho abbattuto gli scheletri sulla strada: apri il cancello!",
+            "va": "aperto",
+            "se": {
+              "quest": "prologo_strada",
+              "stato": ["attiva", "pronta", "conclusa"]
+            },
+            "azione": {
+              "aprePorta": "strada_maestra:35:8"
+            }
+          },
+          {
+            "testo": "Perché il borgo è barricato?",
+            "va": "barricate"
+          },
+          {
+            "testo": "Ti serve ancora un'arma vera al posto del forcone?",
+            "va": "chiedeSpada",
+            "se": {
+              "quest": "fausto_forcone",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto procurando la Spada lunga per te.",
+            "va": "attesaSpada",
+            "se": {
+              "quest": "fausto_forcone",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Tieni, Fausto: ecco una Spada lunga per difendere il cancello.",
+            "va": "grazieSpada",
+            "se": {
+              "quest": "fausto_forcone",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "fausto_forcone"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "aperto": {
+        "testo": "Ti ho visto combattere dal cancello: che braccio! Tiro subito il chiavistello. Entra pure a Borgo Quercia e vai a parlare con la sindaca Berta, davanti al municipio.",
+        "risposte": [
+          {
+            "testo": "Grazie, Fausto."
+          }
+        ]
+      },
+      "barricate": {
+        "testo": "Da una settimana i morti scendono dal cimitero sulla collina. Io faccio la guardia con un vecchio forcone… darei qualsiasi cosa per una lancia vera!",
+        "risposte": [
+          {
+            "testo": "Tornerò a parlarti.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "chiedeSpada": {
+        "testo": "Dici sul serio?! Con questo forcone faccio il solletico agli scheletri! Se mi porti una Spada lunga — Bruno sa forgiarla con ferro e carbone — ti do i miei risparmi e una pergamena d'armatura che teneva mio zio!",
+        "risposte": [
+          {
+            "testo": "Ti porterò una Spada lunga.",
+            "va": "spadaOk",
+            "azione": {
+              "accetta": "fausto_forcone"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "spadaOk": {
+        "testo": "Grazie! Bruno alla fucina del borgo ne forgia di ottime con tre pezzi di ferro e uno di carbone.",
+        "risposte": [
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "attesaSpada": {
+        "testo": "Una Spada lunga! La aspetto qui al cancello.",
+        "risposte": [
+          {
+            "testo": "A presto.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "grazieSpada": {
+        "testo": "Senti come è bilanciata! Adesso sì che gli scheletri ci penseranno due volte! Prendi queste monete e la pergamena per la Corazza di cuoio rinforzata.",
+        "risposte": [
+          {
+            "testo": "Buona guardia, Fausto."
+          }
+        ]
+      }
+    }
+  },
+  "ottone": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "S-senti quel gorgoglio sotto il pavimento?! Io sono Ottone, il becchino di Borgo Quercia! Sono scappato dal cimitero, ma nelle cantine del mulino è cresciuta una melma grande come un bue!",
+        "risposte": [
+          {
+            "testo": "Ho sconfitto il Re Melma nelle cantine: il mulino è sicuro.",
+            "va": "salvato",
+            "se": {
+              "quest": "atto1_becchino",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "atto1_becchino"
+            }
+          },
+          {
+            "testo": "Perché sei scappato dal cimitero?",
+            "va": "racconto"
+          },
+          {
+            "testo": "Scendo nelle cantine a sistemare quella melma.",
+            "va": "botola",
+            "se": {
+              "quest": "atto1_becchino",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "botola": {
+        "testo": "La scala per le cantine è qui a fianco. Stai attento: quando la colpisci forte, quella bestia gelatinosa si divide in melme più piccole!",
+        "risposte": [
+          {
+            "testo": "Tornerò presto."
+          }
+        ]
+      },
+      "salvato": {
+        "testo": "Non sento più tremare le assi! Sia lodata la Quercia! Tieni la mia chiave della cripta, e ascoltami bene: la notte prima che i morti si alzassero ho visto un vecchio col mantello viola davanti alla tomba della piccola Lia…",
+        "risposte": [
+          {
+            "testo": "Un vecchio col mantello viola?",
+            "va": "racconto"
+          },
+          {
+            "testo": "Grazie della chiave, Ottone."
+          }
+        ]
+      },
+      "racconto": {
+        "testo": "Portava un bastone scuro e parlava da solo davanti alla lapide in fondo al cimitero. Io ho gettato la lanterna e sono corso via fino al Mulino del Ponte!",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "tessa": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Cuccia, Brina! …Sei un cacciatore? Io sono Tessa, e lei è Brina. Mio padre Aldo è entrato nel bosco tre giorni fa per tagliare legna e non è più tornato.",
+        "risposte": [
+          {
+            "testo": "Ti aiuto a cercare tuo padre nel bosco.",
+            "va": "cerca",
+            "se": {
+              "quest": "tessa_tracce",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Dove portano le tracce di Aldo?",
+            "va": "attesaTracce",
+            "se": {
+              "quest": "tessa_tracce",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho trovato la radura nel bosco e scacciato i lupi… c'è la tomba di Aldo.",
+            "va": "unione",
+            "se": {
+              "quest": "tessa_tracce",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "tessa_tracce",
+              "unisci": "tessa"
+            }
+          },
+          {
+            "testo": "Brina fiutava la terra accanto alla tomba di tuo padre…",
+            "va": "ascia",
+            "se": {
+              "quest": "tessa_ascia",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Come facciamo a trovare l'ascia di Aldo?",
+            "va": "attesaAscia",
+            "se": {
+              "quest": "tessa_ascia",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "cerca": {
+        "testo": "Brina ha fiutato la sua pista sul sentiero del bosco: a metà strada, sul lato ovest, gli alberi si aprono verso una radura nascosta. Ma c'è un branco di lupi feroci. Vai a controllare, ti prego!",
+        "risposte": [
+          {
+            "testo": "Vado a cercare la radura.",
+            "va": "cercaOk",
+            "azione": {
+              "accetta": "tessa_tracce"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "cercaOk": {
+        "testo": "Nel sentiero del bosco, a metà strada sul lato sinistro. Torna a dirmi cosa trovi.",
+        "risposte": [
+          {
+            "testo": "A presto."
+          }
+        ]
+      },
+      "attesaTracce": {
+        "testo": "La pista entra a ovest, a metà del sentiero nel bosco. Brina non si sbaglia mai.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "unione": {
+        "testo": "…Lo sapevo, in fondo al cuore. Quei maledetti morti del cimitero hanno spinto i lupi fuori dalle tane. Non resterò qui a piangere: io e Brina veniamo con te finché non avremo fermato chi ha causato tutto questo!",
+        "risposte": [
+          {
+            "testo": "Benvenute nel gruppo. E accanto alla tomba Brina fiutava qualcosa…",
+            "va": "ascia",
+            "se": {
+              "quest": "tessa_ascia",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Benvenute con me, Tessa e Brina."
+          }
+        ]
+      },
+      "ascia": {
+        "testo": "Nella radura c'è ancora sepolta l'ascia di mio padre! Con l'abilità Fiuta! di Brina (tasto Q o pulsante del compagno) vedrai la terra smossa, e con la pala di Teodoro potrai dissotterrarla e portarla a Bruno il fabbro.",
+        "risposte": [
+          {
+            "testo": "Troveremo l'ascia di tuo padre e la porteremo a Bruno.",
+            "va": "asciaOk",
+            "azione": {
+              "accetta": "tessa_ascia"
+            }
+          },
+          {
+            "testo": "Più tardi.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "asciaOk": {
+        "testo": "Andiamo nella radura di Aldo, premi il pulsante dell'abilità di Brina per farle fiutare il punto esatto accanto alla tomba, poi scava con la pala e porta l'ascia a Bruno!",
+        "risposte": [
+          {
+            "testo": "Andiamo!"
+          }
+        ]
+      },
+      "attesaAscia": {
+        "testo": "Usa Fiuta! con Brina accanto alla tomba nella radura del bosco, scava con la pala e porta l'ascia spezzata a Bruno a Borgo Quercia.",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      }
+    }
+  },
+  "matteo": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Viandante! Sono Matteo, il figlio di Bruno il fabbro! Quando la miniera è franata sono uscito da un cunicolo sul Passo del Corvo, ma i banditi di Ferrante mi hanno catturato per farmi scavare zolfo e ossidiana!",
+        "risposte": [
+          {
+            "testo": "Eliminerò Ferrante così potrai tornare da tuo padre Bruno a Borgo Quercia.",
+            "va": "promessa",
+            "se": {
+              "quest": "ritorno_matteo",
+              "stato": "disponibile"
+            },
+            "azione": {
+              "accetta": "ritorno_matteo"
+            }
+          },
+          {
+            "testo": "Chi è Ferrante?",
+            "va": "ferrante"
+          },
+          {
+            "testo": "Resta al riparo finché non avrò sistemato Ferrante.",
+            "se": {
+              "quest": "ritorno_matteo",
+              "stato": [
+                "attiva",
+                "pronta",
+                "conclusa"
+              ]
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "promessa": {
+        "testo": "Grazie! Ferrante è nella caverna grande qui a est: fai attenzione, sotto metà vita lancia bombe di zolfo che esplodono dopo un istante! Appena la via sarà libera correrò da mio padre al borgo!",
+        "risposte": [
+          {
+            "testo": "Vado a fermarlo."
+          }
+        ]
+      },
+      "ferrante": {
+        "testo": "Un contrabbandiere senza scrupoli: compra l'ossidiana nera scavata nella miniera e la spedisce con i suoi carri verso la Brughiera, dove la aspetta un vecchio col mantello viola.",
+        "risposte": [
+          {
+            "testo": "Orvald.",
+            "va": "saluto"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      }
+    }
+  },
+  "grisk": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Pssst! Umano! Non fare rumore o il grosso Troll sente! Io sono Grisk, artificiere del clan Pietrarossa. Il Troll col collare viola ha incatenato Grisk a scavare pietra nera!",
+        "risposte": [
+          {
+            "testo": "Come posso liberarti da quelle catene?",
+            "va": "chiedeZolfo",
+            "se": {
+              "quest": "grisk_liberato",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Quanto zolfo ti serve per far saltare la catena?",
+            "va": "attesaZolfo",
+            "se": {
+              "quest": "grisk_liberato",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Tieni lo zolfo, Grisk: fai saltare quella catena!",
+            "va": "libero",
+            "se": {
+              "quest": "grisk_liberato",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "grisk_liberato",
+              "unisci": "grisk"
+            }
+          },
+          {
+            "testo": "Perché il Troll scava l'ossidiana?",
+            "va": "troll"
+          },
+          {
+            "testo": "Possiamo fare pace con il tuo clan Pietrarossa?",
+            "va": "clan",
+            "se": {
+              "quest": "grisk_clan",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Cosa dobbiamo portare a Krak a Pietrafonda?",
+            "va": "attesaClan",
+            "se": {
+              "quest": "grisk_clan",
+              "stato": [
+                "attiva",
+                "pronta"
+              ]
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "chiedeZolfo": {
+        "testo": "Il Troll ha tolto la borsa a Grisk, ma Grisk ha ancora gli inneschi! Se porti a Grisk due pezzi di Zolfo giallo, Grisk prepara Polvere nera e fa BUM sulla catena!",
+        "risposte": [
+          {
+            "testo": "Ti porto due pezzi di Zolfo giallo.",
+            "va": "zolfoOk",
+            "azione": {
+              "accetta": "grisk_liberato"
+            }
+          },
+          {
+            "testo": "Più tardi.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "zolfoOk": {
+        "testo": "Zolfo giallo si trova sul Passo del Corvo e nelle Cave di Zolfo! Fai presto: Grisk odia il piccone!",
+        "risposte": [
+          {
+            "testo": "Torno subito."
+          }
+        ]
+      },
+      "attesaZolfo": {
+        "testo": "Due pezzi di Zolfo giallo! Poi Grisk non scava più, Grisk fa BUM!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "libero": {
+        "testo": "BUM! Catena rotta! Grisk è libero! Ora Grisk viene con te: quando vedi una parete di roccia crepata, chiama l'abilità Polvere nera di Grisk (tasto Q o pulsante compagno) e la roccia salta in aria!",
+        "risposte": [
+          {
+            "testo": "Benvenuto in squadra, Grisk!"
+          }
+        ]
+      },
+      "troll": {
+        "testo": "Il vecchio della torre ha messo un sigillo al collo del Troll. Il Troll piange quando scava, ma non può fermarsi. Il vecchio della torre non vuole i morti: vuole non essere più solo.",
+        "risposte": [
+          {
+            "testo": "Capisco.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "clan": {
+        "testo": "Clan Pietrarossa non odia umani! Ma i lupi hanno invaso le nostre tane sulle colline. Se porti cinque Pelli di lupo a Krak, a Pietrafonda, Krak apre negozio goblin e regala a te il segreto dei Pugnali di Pietrarossa!",
+        "risposte": [
+          {
+            "testo": "Affare fatto: porteremo 5 pelli di lupo a Krak!",
+            "va": "clanOk",
+            "azione": {
+              "accetta": "grisk_clan"
+            }
+          },
+          {
+            "testo": "Più tardi.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "clanOk": {
+        "testo": "Krak aspetta a Pietrafonda! Con cinque Pelli di lupo il clan Pietrarossa sarà amico degli umani!",
+        "risposte": [
+          {
+            "testo": "Andiamo!"
+          }
+        ]
+      },
+      "attesaClan": {
+        "testo": "Cinque Pelli di lupo da portare a Krak, nella parte sud di Pietrafonda!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      }
+    }
+  },
+  "krak": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Salute, umano! Io sono Krak, mercante del clan Pietrarossa. Grisk ha detto che tu non picchi i goblin che vendono merce buona!",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce del clan (Negozio goblin)",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Grisk mi manda per la pace col clan: ecco 5 pelli dei lupi che infestavano le vostre tane!",
+            "va": "pace",
+            "se": {
+              "quest": "grisk_clan",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "grisk_clan"
+            }
+          },
+          {
+            "testo": "Come va la tregua a Pietrafonda?",
+            "va": "tregua",
+            "se": {
+              "quest": "grisk_clan",
+              "stato": "conclusa"
+            }
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "pace": {
+        "testo": "Cinque pelli di lupo! Le nostre tane sono libere! Da oggi il clan Pietrarossa e i minatori di Pietrafonda fanno affari insieme. Prendi la pergamena dei Pugnali di Pietrarossa: Bruno saprà forgiarli!",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce del clan (Negozio goblin)",
+            "apri": "negozio"
+          },
+          {
+            "testo": "Grazie, Krak!"
+          }
+        ]
+      },
+      "tregua": {
+        "testo": "Ugo compra il nostro zolfo e noi compriamo il pane di Teodoro. Molto meglio che tirarsi frecce!",
+        "risposte": [
+          {
+            "testo": "Fammi vedere la merce (Negozio goblin)",
+            "apri": "negozio"
+          },
+          {
+            "testo": "A presto, Krak."
+          }
+        ]
+      }
+    }
+  },
+  "orsola": {
+    "inizio": "saluto",
+    "nodi": {
+      "saluto": {
+        "testo": "Avanti, non restare sull'acqua umida! Io sono Mamma Orsola, padrona del Guado delle Lanterne. Da vent'anni tengo accese queste lanterne nella palude… e da vent'anni vedo il vecchio Orvald passare col suo mantello viola.",
+        "risposte": [
+          {
+            "testo": "Devo raggiungere la vecchia casa di Orvald oltre la palude.",
+            "va": "traghetto",
+            "se": {
+              "quest": "traghetto_orsola",
+              "stato": "disponibile"
+            }
+          },
+          {
+            "testo": "Sto spegnendo i Fuochi fatui nella Palude delle Lanterne.",
+            "va": "attesaTraghetto",
+            "se": {
+              "quest": "traghetto_orsola",
+              "stato": "attiva"
+            }
+          },
+          {
+            "testo": "Ho spento i 4 Fuochi fatui nella palude: il canale è libero!",
+            "va": "traghettoPronto",
+            "se": {
+              "quest": "traghetto_orsola",
+              "stato": "pronta"
+            },
+            "azione": {
+              "concludi": "traghetto_orsola"
+            }
+          },
+          {
+            "testo": "Conoscevi Orvald e sua figlia Lia?",
+            "va": "ricordoOrvald"
+          },
+          {
+            "testo": "Arrivederci"
+          }
+        ]
+      },
+      "traghetto": {
+        "testo": "La Casa sul Colle? È dall'altra parte della Palude delle Lanterne, qui a ovest. Ma stanotte i Fuochi fatui bruciano sull'acqua e accecano chiunque prenda la barca! Spegnine almeno quattro nella palude e ti apro il traghetto.",
+        "risposte": [
+          {
+            "testo": "Vado nella Palude delle Lanterne a spegnere i Fuochi fatui.",
+            "va": "traghettoOk",
+            "azione": {
+              "accetta": "traghetto_orsola"
+            }
+          },
+          {
+            "testo": "Non ora.",
+            "va": "saluto"
+          }
+        ]
+      },
+      "traghettoOk": {
+        "testo": "Il pontile per la palude è qui a sinistra. E ricordati di toccare la Pietra di passaggio sul pontile prima di andare!",
+        "risposte": [
+          {
+            "testo": "Grazie, Mamma Orsola."
+          }
+        ]
+      },
+      "attesaTraghetto": {
+        "testo": "Quattro Fuochi fatui nella Palude delle Lanterne, a ovest del Guado. Fai attenzione ai loro dardi azzurri!",
+        "risposte": [
+          {
+            "testo": "Ci penso io."
+          }
+        ]
+      },
+      "traghettoPronto": {
+        "testo": "L'acqua è tornata calma! La barca sul pontile in fondo alla palude è pronta: ti porterà dritto alla Casa sul Colle. Prendi queste pozioni, figliolo… quello che vedrai lassù ti stringerà il cuore.",
+        "risposte": [
+          {
+            "testo": "Grazie, Mamma Orsola."
+          }
+        ]
+      },
+      "ricordoOrvald": {
+        "testo": "Quando fuggì da Borgo Quercia nella notte dell'incendio, passò di qui col mantello bruciacchiato e gli occhi pieni di cenere. Non era cattivo, Orvald. Era solo un padre a cui avevano tolto tutto.",
         "risposte": [
           {
             "testo": "Capisco.",

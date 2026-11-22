@@ -93,5 +93,129 @@
     },
     "monete": 180,
     "conosciutaDallInizio": false
+  },
+  "sigillo_eco_re_scheletro": {
+    "id": "sigillo_eco_re_scheletro",
+    "risultato": "sigillo_eco_re_scheletro",
+    "materiali": {
+      "osso_antico": 3,
+      "frammento_corona": 1,
+      "frammento_eco": 1
+    },
+    "monete": 80,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "re_scheletro",
+    "banco": "fucina"
+  },
+  "sigillo_eco_troll_caverne": {
+    "id": "sigillo_eco_troll_caverne",
+    "risultato": "sigillo_eco_troll_caverne",
+    "materiali": {
+      "cristallo_miniera": 2,
+      "zanna_troll": 1,
+      "frammento_eco": 1
+    },
+    "monete": 120,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "troll_caverne",
+    "banco": "armature"
+  },
+  "sigillo_eco_negromante": {
+    "id": "sigillo_eco_negromante",
+    "risultato": "sigillo_eco_negromante",
+    "materiali": {
+      "ossidiana_nera": 1,
+      "osso_antico": 2,
+      "frammento_eco": 1
+    },
+    "monete": 160,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "negromante",
+    "banco": "alchimia"
+  },
+  "sigillo_eco_re_melma": {
+    "id": "sigillo_eco_re_melma",
+    "risultato": "sigillo_eco_re_melma",
+    "materiali": {
+      "ambra": 2,
+      "gelatina_slime": 3,
+      "frammento_eco": 1
+    },
+    "monete": 60,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "re_melma",
+    "banco": "fucina"
+  },
+  "arco_aldo": {
+    "id": "arco_aldo",
+    "risultato": "arco_aldo",
+    "materiali": {
+      "pelle_lupo": 3,
+      "ambra": 2,
+      "minerale_ferro": 2
+    },
+    "monete": 90,
+    "conosciutaDallInizio": false,
+    "banco": "fucina"
+  },
+  "corazza_cuoio_rinforzata": {
+    "id": "corazza_cuoio_rinforzata",
+    "risultato": "corazza_cuoio_rinforzata",
+    "materiali": {
+      "pelle_lupo": 3,
+      "minerale_ferro": 1
+    },
+    "monete": 25,
+    "conosciutaDallInizio": false,
+    "banco": "fucina"
+  },
+  "sigillo_eco_ferrante": {
+    "id": "sigillo_eco_ferrante",
+    "risultato": "sigillo_eco_ferrante",
+    "materiali": {
+      "zolfo": 3,
+      "argento": 2,
+      "frammento_eco": 1
+    },
+    "monete": 100,
+    "conosciutaDallInizio": false,
+    "sbloccataDaBoss": "ferrante",
+    "banco": "armature"
+  },
+  "corazza_argento": {
+    "id": "corazza_argento",
+    "risultato": "corazza_argento",
+    "materiali": {
+      "argento": 3,
+      "minerale_ferro": 3,
+      "carbone": 2
+    },
+    "monete": 80,
+    "conosciutaDallInizio": false,
+    "banco": "armature"
+  },
+  "guanti_titano": {
+    "id": "guanti_titano",
+    "risultato": "guanti_titano",
+    "materiali": {
+      "zanna_troll": 1,
+      "argento": 2,
+      "minerale_ferro": 3
+    },
+    "monete": 140,
+    "conosciutaDallInizio": false,
+    "banco": "armature"
+  },
+  "pugnali_pietrarossa": {
+    "id": "pugnali_pietrarossa",
+    "risultato": "pugnali_pietrarossa",
+    "materiali": {
+      "argento": 2,
+      "zolfo": 3,
+      "pelle_lupo": 3
+    },
+    "monete": 100,
+    "conosciutaDallInizio": false,
+    "banco": "fucina"
   }
 }

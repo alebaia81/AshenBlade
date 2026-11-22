@@ -27,6 +27,8 @@ const catalogo: CatalogoIndossabili = {
   corazza_spine: { categoria: 'armatura', spazio: 'corazza', rarita: 'esotica', armatura: 2, effetti: ['spine'], usaMana: false },
   stivali_vento: { categoria: 'armatura', spazio: 'stivali', rarita: 'esotica', armatura: 1, effetti: ['doppia_capriola'], usaMana: false },
   guanti_titano: { categoria: 'armatura', spazio: 'guanti', rarita: 'leggendaria', armatura: 2, bonus: { FOR: 1 }, effetti: [], usaMana: false },
+  amuleto_quercia: { categoria: 'armatura', spazio: 'amuleto', rarita: 'leggendaria', armatura: 1, bonus: { SAG: 1 }, effetti: [], usaMana: false },
+  cuore_quercia: { categoria: 'armatura', spazio: 'amuleto', rarita: 'esotica', armatura: 1, effetti: ['rigenerazione_quercia'], usaMana: false },
 };
 
 /** Zaino con questi oggetti (uno per spazio) e la spada in mano. */
@@ -42,9 +44,9 @@ function riuscito(esito: ReturnType<typeof equipaggia>): StatoZaino {
 }
 
 describe('equipaggia', () => {
-  it('si parte con l’arma della classe e il resto vuoto', () => {
+  it('si parte con l’arma della classe e il resto vuoto (incluso l’amuleto, fase 10b)', () => {
     expect(creaEquipaggiamento('spada')).toEqual({
-      primaria: 'spada', secondaria: null, elmo: null, corazza: null, guanti: null, stivali: null,
+      primaria: 'spada', secondaria: null, elmo: null, corazza: null, guanti: null, stivali: null, amuleto: null,
     });
   });
 
@@ -77,11 +79,21 @@ describe('equipaggia', () => {
     expect(equipaggia(s, 1, catalogo, { haMana: false }).ok).toBe(true);
   });
 
-  it('un secondo pezzo d’armatura esotico viene rifiutato', () => {
-    const s = riuscito(equipaggia(stato(['corazza_spine', 'stivali_vento']), 0, catalogo, { haMana: false }));
+  it('un secondo pezzo d’armatura esotico viene rifiutato (anche se è un amuleto esotico, fase 10b)', () => {
+    const s = riuscito(equipaggia(stato(['corazza_spine', 'stivali_vento', 'cuore_quercia']), 0, catalogo, { haMana: false }));
     const esito = equipaggia(s, 1, catalogo, { haMana: false });
     expect(esito.ok).toBe(false);
     if (!esito.ok) expect(esito.errore).toMatch(/un solo pezzo d’armatura esotico/);
+    const esitoAmuleto = equipaggia(s, 2, catalogo, { haMana: false });
+    expect(esitoAmuleto.ok).toBe(false);
+    if (!esitoAmuleto.ok) expect(esitoAmuleto.errore).toMatch(/un solo pezzo d’armatura esotico/);
+  });
+
+  it('un amuleto leggendario si indossa nello spazio amuleto e somma armatura e bonus (fase 10b)', () => {
+    const s = riuscito(equipaggia(stato(['amuleto_quercia']), 0, catalogo, { haMana: false }));
+    expect(s.equipaggiamento.amuleto).toBe('amuleto_quercia');
+    expect(armaturaTotale(s.equipaggiamento, catalogo)).toBe(1);
+    expect(bonusCaratteristiche(s.equipaggiamento, catalogo)).toEqual({ SAG: 1 });
   });
 
   it('si può SOSTITUIRE l’esotica indossata con un’altra dello stesso spazio', () => {

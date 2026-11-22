@@ -523,5 +523,164 @@
       1
     ],
     "opacita": 0.6
+  },
+  "ratto": {
+    "nome": "Ratto di cantina",
+    "comportamento": "inseguitore",
+    "vita": 7,
+    "armatura": 0,
+    "danno": "1d4",
+    "velocita": 62,
+    "raggioVista": 90,
+    "raggioAbbandono": 160,
+    "dimensione": 9,
+    "colore": "#8a6240",
+    "storditoMs": 200,
+    "pausaDopoAttaccoMs": 500,
+    "esperienza": 6,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.12
+      }
+    ],
+    "monete": [
+      1,
+      3
+    ]
+  },
+  "melma_piccola": {
+    "nome": "Melma piccola",
+    "comportamento": "inseguitore",
+    "vita": 6,
+    "armatura": 0,
+    "danno": "1d3",
+    "velocita": 42,
+    "raggioVista": 90,
+    "raggioAbbandono": 160,
+    "dimensione": 8,
+    "colore": "#90e8b0",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 550,
+    "esperienza": 4,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "gelatina_slime",
+        "probabilita": 0.25
+      }
+    ],
+    "monete": [
+      1,
+      2
+    ]
+  },
+  "corvo": {
+    "nome": "Corvo delle rocce",
+    "comportamento": "inseguitore",
+    "vita": 11,
+    "armatura": 0,
+    "danno": "1d6",
+    "velocita": 76,
+    "raggioVista": 115,
+    "raggioAbbandono": 190,
+    "dimensione": 9,
+    "colore": "#2e2e38",
+    "storditoMs": 180,
+    "pausaDopoAttaccoMs": 450,
+    "esperienza": 14,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.1
+      }
+    ],
+    "monete": [
+      2,
+      5
+    ]
+  },
+  "bandito_balestriere": {
+    "nome": "Bandito balestriere",
+    "comportamento": "tiratore",
+    "vita": 18,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 44,
+    "raggioVista": 130,
+    "raggioAbbandono": 195,
+    "dimensione": 11,
+    "colore": "#7a4a3a",
+    "storditoMs": 220,
+    "pausaDopoAttaccoMs": 550,
+    "esperienza": 20,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "zolfo",
+        "probabilita": 0.35
+      },
+      {
+        "oggetto": "pozione_vita",
+        "probabilita": 0.15
+      }
+    ],
+    "monete": [
+      6,
+      14
+    ],
+    "tiro": {
+      "distanzaMin": 48,
+      "distanzaMax": 105,
+      "ricaricaMs": 1700,
+      "velocita": 155,
+      "gittata": 155,
+      "dimensione": 2,
+      "colore": "#e8c878"
+    }
+  },
+  "fuoco_fatuo": {
+    "nome": "Fuoco fatuo",
+    "comportamento": "tiratore",
+    "vita": 16,
+    "armatura": 0,
+    "danno": "1d8",
+    "velocita": 64,
+    "raggioVista": 135,
+    "raggioAbbandono": 210,
+    "dimensione": 9,
+    "colore": "#70d8ff",
+    "storditoMs": 180,
+    "pausaDopoAttaccoMs": 450,
+    "esperienza": 26,
+    "etichette": [
+      "nonMorto"
+    ],
+    "bottino": [
+      {
+        "oggetto": "essenza_ombra",
+        "probabilita": 0.45
+      },
+      {
+        "oggetto": "pozione_mana",
+        "probabilita": 0.2
+      }
+    ],
+    "monete": [
+      8,
+      18
+    ],
+    "opacita": 0.75,
+    "tiro": {
+      "distanzaMin": 45,
+      "distanzaMax": 100,
+      "ricaricaMs": 1500,
+      "velocita": 160,
+      "gittata": 150,
+      "dimensione": 3,
+      "colore": "#88e8ff"
+    }
   }
 }

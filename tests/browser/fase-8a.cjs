@@ -15,7 +15,9 @@ async function main() {
   const { controlla, aspetta, schermata, pagina, clic, nelGioco } = g;
   const partita = () => nelGioco(() => window.gioco.registry.get('partita'));
   const attiva = (n) => nelGioco((n) => window.gioco.scene.isActive(n), n);
-  const conta = (p, id) => p.inventario.spazi.reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0);
+  const conta = (p, id) =>
+    p.inventario.spazi.reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0) +
+    (p.tascaMissioni || []).reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0);
   const metti = (p) => g.mondo((s, p) => s.eroe.forma.body.reset(p.x, p.y), p);
   const avviso = () => nelGioco(() => window.gioco.registry.get('avviso')?.testo ?? '');
   const barraBoss = () => nelGioco(() => window.gioco.registry.get('boss'));
@@ -147,10 +149,19 @@ async function main() {
   controlla(await g.mondo((s) => s.barriere.every((x) => !x.chiusa)), 'le barriere si riaprono');
   await svuota();
   const posto = await g.mondo((s) => s.oggettiATerra.oggetti.map((o) => ({ id: o.definizione.id, x: o.posizione.x, y: o.posizione.y })));
-  controlla(['frammento_corona', 'elmo_corona', 'pagina_diario'].every((id) => posto.some((o) => o.id === id)), `bottino: ${posto.map((o) => o.id).join(', ')}`);
+  controlla(
+    ['frammento_corona', 'pagina_diario', 'frammento_eco'].every((id) => posto.some((o) => o.id === id)) &&
+      ['elmo_corona', 'stivali_re_sepolto'].some((id) => posto.some((o) => o.id === id)),
+    `bottino: ${posto.map((o) => o.id).join(', ')}`,
+  );
   for (const o of posto) { await metti({ x: o.x, y: o.y }); await aspetta(150); }
   p = await partita();
-  controlla(conta(p, 'pagina_diario') === 1 && conta(p, 'elmo_corona') === 1 && p.quest.atto1_cripta.passo === 2, 'raccolti la pagina di diario e l’Elmo della corona; passo 2 fatto');
+  controlla(
+    conta(p, 'pagina_diario') === 1 &&
+      (conta(p, 'elmo_corona') === 1 || conta(p, 'stivali_re_sepolto') === 1) &&
+      p.quest.atto1_cripta.passo === 2,
+    'raccolti la pagina di diario e un pezzo leggendario del Re; passo 2 fatto',
+  );
   await schermata('05-bottino', { ferma: true });
   await vai('cripta_tomba');
   controlla(!(await g.mondo((s) => s.nemici.lista.some((n) => n.definizione.id === 're_scheletro'))) && (await barraBoss()) === null, 'rientrando nella tomba il re non ricompare');

@@ -63,6 +63,16 @@ export interface Partita {
   bossSconfitti: string[];
   /** Tasca separata per chiavi e oggetti di missione: peso 0, non consumano slot dello zaino. */
   tascaMissioni: Pila[];
+  /** Fase 10a: i boss già sconfitti in versione Eco. */
+  ecoSconfitti: string[];
+  /** Fase 10c: i tesori sepolti già scavati ("mappa:colonna:riga"). */
+  sepoltiScavati: string[];
+  /** Fase 10c: le pietre di passaggio già attivate (id delle mappe). */
+  pietre: string[];
+  /** Fase 10c: i ricordi già letti ("mappa:colonna:riga"). */
+  ricordiVisti: string[];
+  /** Fase 10b: i commenti dei compagni di viaggio già mostrati ("compagno:mappa"). */
+  commentiVisti: string[];
 }
 
 export function creaPartita(nome: string, classe: DefinizioneClasse, puntiLiberi: readonly NomeCaratteristica[]): Partita {
@@ -92,6 +102,11 @@ export function creaPartita(nome: string, classe: DefinizioneClasse, puntiLiberi
     porteAperte: [],
     bossSconfitti: [],
     tascaMissioni: [],
+    ecoSconfitti: [],
+    sepoltiScavati: [],
+    pietre: [],
+    ricordiVisti: [],
+    commentiVisti: [],
   };
 }
 
@@ -322,5 +337,30 @@ export function contaTotale(p: Partita, id: string): number {
   const nelloZaino = conta(p.inventario, id);
   const inTasca = (p.tascaMissioni ?? []).reduce((acc, v) => acc + (v.id === id ? v.quantita : 0), 0);
   return nelloZaino + inTasca;
+}
+
+// ---- tesori sepolti, pietre di passaggio e ricordi (fase 10c) ----
+
+export function sepoltoScavato(p: Pick<Partita, 'sepoltiScavati'>, chiave: string): boolean {
+  return (p.sepoltiScavati ?? []).includes(chiave);
+}
+
+/** Scava un tesoro sepolto se hai la pala nello zaino o nella tasca missioni. */
+export function scavaSepolto(p: Partita, chiave: string): { ok: true; partita: Partita } | { ok: false; errore: string } {
+  if (sepoltoScavato(p, chiave)) return { ok: false, errore: 'Hai già scavato qui' };
+  if (contaTotale(p, 'pala') <= 0) return { ok: false, errore: 'Qui la terra è smossa. Servirebbe una pala.' };
+  return { ok: true, partita: { ...p, sepoltiScavati: [...(p.sepoltiScavati ?? []), chiave] } };
+}
+
+/** Attiva una pietra di passaggio (id della mappa) per il viaggio rapido. */
+export function attivaPietra(p: Partita, idMappa: string): Partita {
+  const pietre = p.pietre ?? [];
+  return pietre.includes(idMappa) ? p : { ...p, pietre: [...pietre, idMappa] };
+}
+
+/** Registra un ricordo visto nella Casa sul Colle ("mappa:col:riga"). */
+export function leggiRicordo(p: Partita, chiave: string): Partita {
+  const visti = p.ricordiVisti ?? [];
+  return visti.includes(chiave) ? p : { ...p, ricordiVisti: [...visti, chiave] };
 }
 

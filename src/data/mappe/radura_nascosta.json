@@ -1,0 +1,94 @@
+{
+  "id": "radura_nascosta",
+  "nome": "La radura di Aldo",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1b3318",
+      "tessera": [{ "immagine": "erba", "tinta": "#a0c090" }, "pino"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2a5225",
+      "tessera": [{ "immagine": "erba", "tinta": "#a0c090" }, "albero"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#4d7238",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a0c090" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "bosco",
+      "arrivo": "d",
+      "tessera": "sentiero"
+    },
+    "L": {
+      "tipo": "nemico",
+      "nemico": "lupo",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "A": {
+      "tipo": "cartello",
+      "aspetto": "lapide",
+      "testo": "Una croce di rami legata con spago da cacciatore: «Aldo, boscaiolo di Borgo Quercia». Accanto alla tomba la terra è smossa: Brina continua ad annusare due passi a sud.",
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "Z": {
+      "tipo": "sepolto",
+      "contenuto": [
+        "ascia_aldo_rotta",
+        "ghianda_oro"
+      ],
+      "monete": 25,
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pelle_lupo"
+      ],
+      "monete": 20,
+      "colore": "#5f8a43",
+      "tessera": { "immagine": "erba", "tinta": "#c8e0b0" }
+    }
+  },
+  "griglia": [
+    "####################",
+    "#..T....,....T...T.#",
+    "#.T...,.....,....T.#",
+    "#...X....T.........#",
+    "#..,........,....T.#",
+    "#.T......L.........#",
+    "#....,........T....#",
+    "#..A............,..#",
+    "#....L..::::::::::au",
+    "#..Z............,..#",
+    "#....,........T....#",
+    "#.T.......L........#",
+    "#..,............T..#",
+    "#.....T....,.......#",
+    "#.T.......,....T...#",
+    "####################"
+  ]
+}

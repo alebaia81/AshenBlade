@@ -3,9 +3,13 @@ import {
   analizzaMappa,
   celleAbitante,
   celleCartello,
+  celleCrepate,
   celleForziere,
   celleNemico,
+  cellePietra,
+  cellePorte,
   celleSegrete,
+  celleSepolte,
   èCalpestabile,
   grigliaDellaMappa,
   puntoIngressoPredefinito,
@@ -214,5 +218,53 @@ describe('cartelli, cancelli e frane (fase 7b)', () => {
   it('un cartello senza testo o con un aspetto sconosciuto è un errore chiaro', () => {
     expect(() => analizzaMappa({ id: 'x', nome: 'x', legenda: { C: { tipo: 'cartello', aspetto: 'cartello' } }, griglia: ['C'] })).toThrow(/testo/);
     expect(() => analizzaMappa({ id: 'x', nome: 'x', legenda: { C: { tipo: 'cartello', aspetto: 'roccia', testo: 'x' } }, griglia: ['C'] })).toThrow(/aspetto/);
+  });
+});
+
+describe('tesori sepolti, rocce crepate, porte runiche, ricordi e pietre di passaggio (fase 10c)', () => {
+  const mappa = analizzaMappa({
+    id: 'esplorazione',
+    nome: 'Zona di esplorazione',
+    legenda: {
+      '.': { tipo: 'pavimento' },
+      S: { tipo: 'sepolto', contenuto: ['amuleto_quercia'], monete: 40 },
+      K: { tipo: 'crepata' },
+      R: { tipo: 'porta', runica: true, nome: 'la porta runica' },
+      L: { tipo: 'cartello', aspetto: 'leva', testo: 'Una leva di ferro.', aprePorta: '3:0' },
+      M: { tipo: 'cartello', aspetto: 'ricordo', testo: 'Un ricordo lontano…' },
+      P: { tipo: 'pietra', nome: 'Pietra antica' },
+    },
+    griglia: ['.S.RKLM.P'],
+  });
+
+  it('un tesoro sepolto è calpestabile (invisibile) e conserva contenuto e monete', () => {
+    expect(èCalpestabile(mappa, 1, 0)).toBe(true);
+    expect(celleSepolte(mappa)).toEqual([
+      { cella: { col: 1, riga: 0 }, contenuto: ['amuleto_quercia'], monete: 40 },
+    ]);
+  });
+
+  it('una roccia crepata non è calpestabile finché è chiusa e si elenca con celleCrepate', () => {
+    expect(èCalpestabile(mappa, 4, 0)).toBe(false);
+    expect(celleCrepate(mappa)).toEqual([{ col: 4, riga: 0 }]);
+  });
+
+  it('una porta runica non richiede un oggetto chiave e si riconosce dal flag runica', () => {
+    expect(èCalpestabile(mappa, 3, 0)).toBe(false);
+    expect(cellePorte(mappa)).toEqual([
+      { cella: { col: 3, riga: 0 }, runica: true, nome: 'la porta runica', aspetto: 'legno' },
+    ]);
+  });
+
+  it('leve e ricordi sono cartelli validi, e la leva ricorda quale porta apre', () => {
+    expect(celleCartello(mappa)).toEqual([
+      { cella: { col: 5, riga: 0 }, aspetto: 'leva', testo: 'Una leva di ferro.', aprePorta: '3:0' },
+      { cella: { col: 6, riga: 0 }, aspetto: 'ricordo', testo: 'Un ricordo lontano…' },
+    ]);
+  });
+
+  it('la pietra di passaggio non si attraversa e si trova con cellePietra', () => {
+    expect(èCalpestabile(mappa, 8, 0)).toBe(false);
+    expect(cellePietra(mappa)).toEqual([{ cella: { col: 8, riga: 0 }, nome: 'Pietra antica' }]);
   });
 });

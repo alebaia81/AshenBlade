@@ -13,6 +13,7 @@ const LATO = 16;
 export class Porta {
   readonly forma: Phaser.GameObjects.Rectangle;
   private readonly disegno: Phaser.GameObjects.Graphics | Phaser.GameObjects.Image;
+  private readonly sigilloRunico: Phaser.GameObjects.Graphics | null = null;
   private _aperta: boolean;
 
   constructor(
@@ -21,20 +22,28 @@ export class Porta {
     readonly posizione: Vettore,
     /** "mappa:colonna:riga". */
     readonly chiave: string,
-    /** Id dell'oggetto che la apre. */
-    readonly serveChiave: string,
+    /** Id dell'oggetto che la apre (undefined per le porte runiche). */
+    readonly serveChiave: string | undefined,
     /** "il cancello della cripta", "la porta d'ossa"… */
     readonly nome: string,
     aspetto: 'legno' | 'cancello',
     aperta: boolean,
     /** Fase 9b: l'immagine della porta (null = disegno a forme). */
     immagine: AspettoRisolto | null = null,
+    /** Fase 10c: vero per le porte runiche, che si aprono con Selva o con una leva. */
+    readonly runica = false,
   ) {
     this._aperta = aperta;
     const { x, y } = posizione;
     this.forma = scena.add.rectangle(x, y, LATO, LATO).setVisible(false);
     scena.physics.add.existing(this.forma, true);
     this.disegno = immagine ? aggiungiImmagine(scena, x, y, immagine).setDepth(2) : this.disegnaForme(x, y, aspetto);
+    if (runica) {
+      const g = scena.add.graphics().setDepth(2.2);
+      g.lineStyle(1.2, 0xc880ff, 0.95).strokeCircle(x, y, 4.5);
+      g.fillStyle(0xe0b8ff, 0.95).fillCircle(x, y, 1.6);
+      this.sigilloRunico = g;
+    }
     if (aperta) this.nascondi();
   }
 
@@ -64,11 +73,13 @@ export class Porta {
     if (this._aperta) return;
     this._aperta = true;
     (this.forma.body as Phaser.Physics.Arcade.StaticBody).enable = false;
+    this.sigilloRunico?.setVisible(false);
     this.scena.tweens.add({ targets: this.disegno, alpha: 0, duration: 400, onComplete: () => this.nascondi() });
   }
 
   private nascondi(): void {
     (this.forma.body as Phaser.Physics.Arcade.StaticBody).enable = false;
     this.disegno.setVisible(false);
+    this.sigilloRunico?.setVisible(false);
   }
 }

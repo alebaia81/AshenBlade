@@ -10,6 +10,7 @@ import { STILE_TESTO } from './interfaccia/testi';
 
 export class ScenaFinale extends Phaser.Scene {
   private pagina = 0;
+  private pagine: string[] = [];
   private testo!: Phaser.GameObjects.Text;
   private indicazione!: Phaser.GameObjects.Text;
 
@@ -17,8 +18,9 @@ export class ScenaFinale extends Phaser.Scene {
     super(SCENA_FINALE);
   }
 
-  create(): void {
+  create(opzioni: { pagine?: string[] } = {}): void {
     this.pagina = 0;
+    this.pagine = opzioni.pagine && opzioni.pagine.length > 0 ? opzioni.pagine : this.dati.finale;
     const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x05050a, 1).setInteractive().on('pointerdown', () => this.avanti());
@@ -34,18 +36,18 @@ export class ScenaFinale extends Phaser.Scene {
 
   /** Per le prove: a che pagina siamo e quante sono. */
   get stato(): { pagina: number; totale: number; testo: string } {
-    return { pagina: this.pagina, totale: this.dati.finale.length, testo: this.testo.text };
+    return { pagina: this.pagina, totale: this.pagine.length, testo: this.testo.text };
   }
 
   private mostra(): void {
-    this.testo.setText(this.dati.finale[this.pagina] ?? '').setAlpha(0);
+    this.testo.setText(this.pagine[this.pagina] ?? '').setAlpha(0);
     this.tweens.add({ targets: this.testo, alpha: 1, duration: 600 });
-    this.indicazione.setText(this.pagina === this.dati.finale.length - 1 ? 'Clic per tornare a giocare' : 'Clic o spazio per continuare');
+    this.indicazione.setText(this.pagina === this.pagine.length - 1 ? 'Clic per tornare a giocare' : 'Clic o spazio per continuare');
   }
 
   private avanti(): void {
     this.pagina++;
-    if (this.pagina < this.dati.finale.length) {
+    if (this.pagina < this.pagine.length) {
       this.mostra();
       return;
     }

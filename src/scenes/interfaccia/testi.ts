@@ -29,8 +29,11 @@ export const NOMI_EFFETTI_SPECIALI: Record<string, string> = {
   invisibile_dopo_uccisione: 'Invisibile dopo un’uccisione (2 s)',
   doppia_capriola: 'Due capriole di fila',
   spine: 'Spine: rimanda il 30% del danno',
-  veggente: 'Fa brillare i muri segreti vicini',
+  veggente: 'Fa brillare i muri segreti e i tesori sepolti vicini',
   predatore: 'I critici curano 2 punti vita',
+  salvavita: 'Sotto il 25% di vita ti cura del 50% (1 volta per zona)',
+  rigenerazione_quercia: 'Rigenera 1 punto vita ogni 5 secondi',
+  capriola_ombra: 'Invisibile per 1 secondo dopo una capriola',
 };
 
 export const NOMI_SPAZI: Record<string, string> = {
@@ -40,4 +43,5 @@ export const NOMI_SPAZI: Record<string, string> = {
   corazza: 'Corazza',
   guanti: 'Guanti',
   stivali: 'Stivali',
+  amuleto: 'Amuleto',
 };

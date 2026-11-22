@@ -1,0 +1,105 @@
+{
+  "id": "cantine_mulino",
+  "nome": "Cantine del Mulino",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#4a3f38",
+      "tessera": "mattoni"
+    },
+    "B": {
+      "tipo": "muro",
+      "colore": "#7a5230",
+      "tessera": ["terra", "botte"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "mulino_ponte",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "v": {
+      "tipo": "vena",
+      "materiale": "ambra",
+      "quantita": [1, 2],
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "R": {
+      "tipo": "nemico",
+      "nemico": "ratto",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "slime",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "P": {
+      "tipo": "nemico",
+      "nemico": "pipistrello",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "K": {
+      "tipo": "nemico",
+      "nemico": "re_melma",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "!": {
+      "tipo": "barriera",
+      "boss": "re_melma",
+      "colore": "#6b5848",
+      "tessera": "terra"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_resistenza",
+        "ambra"
+      ],
+      "monete": 30,
+      "colore": "#6b5848",
+      "tessera": "terra"
+    }
+  },
+  "griglia": [
+    "############################",
+    "#......#........############",
+    "#.vn...#..BB...#############",
+    "#..a...#.......#############",
+    "#......#...R...#############",
+    "#..BB..........#############",
+    "####...######..#############",
+    "#..........#...#############",
+    "#.BB.......#...###.......###",
+    "#..........#...###.......###",
+    "#......#.......###.......###",
+    "#...R..#....S....!.....K.###",
+    "#......#.......###.......###",
+    "###..#######...###.......###",
+    "#..........#...###..v....###",
+    "#.X..BB....#...#############",
+    "#..........#...#############",
+    "#.....P....#.R.#############",
+    "#.v........#...#############",
+    "#....BB........#############",
+    "#..............#############",
+    "############################"
+  ]
+}

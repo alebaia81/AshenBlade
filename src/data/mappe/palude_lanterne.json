@@ -1,0 +1,153 @@
+{
+  "id": "palude_lanterne",
+  "nome": "La Palude delle Lanterne",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1420",
+      "tessera": [{ "immagine": "erba", "tinta": "#a090b8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#283858",
+      "tessera": ["#283858", { "immagine": "onde", "alfa": 0.3 }]
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d88030",
+      "tessera": "braciere"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#4e3e5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a890b8" }
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "e": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "guado",
+      "arrivo": "b",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "F": {
+      "tipo": "nemico",
+      "nemico": "fuoco_fatuo",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "spettro",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "g": {
+      "tipo": "vena",
+      "materiale": "giunco_palude",
+      "quantita": [1, 2],
+      "aspetto": "cespuglio",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "r": {
+      "tipo": "vena",
+      "materiale": "erica",
+      "quantita": [1, 2],
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#4e3e5e",
+      "coloreMuro": "#2e2838",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a890b8" },
+      "tesseraMuro": "muro_pietra"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_mana",
+        "erica"
+      ],
+      "monete": 50,
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "ghianda_oro",
+        "essenza_ombra"
+      ],
+      "monete": 60,
+      "colore": "#4e3e5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#a890b8" }
+    },
+    "Z": {
+      "tipo": "sepolto",
+      "contenuto": [
+        "essenza_ombra",
+        "ghianda_oro"
+      ],
+      "monete": 65,
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "T": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "testo": "Il pontile del traghetto verso la Casa sul Colle. Le lanterne blu della barca brillano nella nebbia.",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    }
+  },
+  "griglia": [
+    "########################################",
+    "#~~~~~~~~~~~~~~~~###,,,###~~~~~~~~~~~~~#",
+    "#~~~~~~~~~~~~~~~~###,Y,###~~~~~~~~~~~~~#",
+    "#~~~~~~~~~~~~~~~~####W####~~~~~~~~~~~~~#",
+    "#~~~~~~.......~~~~~~...~~~~~~.......~~~#",
+    "#~~~~~...g.....~~~~~...~~~~~....r....~~#",
+    "#~~~~~.........ppppppppppppp.........~~#",
+    "#~~~~~....F....~.....f.....~....F....~~#",
+    "#~~~~~~.......~~~~~~...~~~~~~.......~~~#",
+    "#~~~~~~~~ppp~~~~~~~~...~~~~~~~~ppp~~~~~#",
+    "#~~~~~~~~ppp~~~~~~~~...~~~~~~~~ppp~~~~~#",
+    "#~~~~.........~~~~.......~~~~.........~#",
+    "#~~~...r.......~~~...f...~~~......g...~#",
+    "#~~~.....S.....ppppppppppppp..........~#",
+    "#~Tpppppp......~.....S.....~.....pppppae",
+    "#~~~...........ppppppppppppp..........~#",
+    "#~~~...g.......~~~.......~~~......r...~#",
+    "#~~~~.........~~~~.......~~~~.........~#",
+    "#~~~~~~~~ppp~~~~~~~~...~~~~~~~~ppp~~~~~#",
+    "#~~~~~~~~ppp~~~~~~~~...~~~~~~~~ppp~~~~~#",
+    "#~~~~~~.......~~~~~~...~~~~~~.......~~~#",
+    "#~~~~~.........~.....f.....~....F....~~#",
+    "#~~~~~....F....ppppppppppppp.........~~#",
+    "#~~~~~.........~~~~~...~~~~~....g....~~#",
+    "#~~~~~~..X....~~~~~~...~~~~~~.......~~~#",
+    "#~~~~~~~~~~~..Z.....~~~...r...~~~~~~~~~#",
+    "#~~~~~~~~~~~........~~~.......~~~~~~~~~#",
+    "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#",
+    "#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#",
+    "########################################"
+  ]
+}

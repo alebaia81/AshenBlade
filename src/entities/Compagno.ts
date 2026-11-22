@@ -32,6 +32,8 @@ export class Compagno {
   private indicePercorso = 0;
   private prossimoRicalcolo = 0;
   private readonly figura: Figura | null;
+  /** Fase 10b: per Tessa, il cane Brina che le trotta accanto senza combattere. */
+  private readonly brina: Phaser.GameObjects.Container | null = null;
 
   constructor(
     private readonly scena: Phaser.Scene,
@@ -46,6 +48,11 @@ export class Compagno {
     scena.physics.add.existing(this.forma);
     this.figura = aspetto ? new Figura(scena, this.forma, aspetto, { profondita: 9, sollevamento: 2 }) : null;
     if (this.figura) this.forma.setVisible(false);
+    if (definizione.id === 'tessa') {
+      const corpoCane = scena.add.ellipse(0, 1, 8, 5, 0x9aa4b0).setStrokeStyle(1, 0x3a4048);
+      const testaCane = scena.add.circle(3.5, -1.5, 2.6, 0xb4beca).setStrokeStyle(0.8, 0x3a4048);
+      this.brina = scena.add.container(x + 10, y + 3, [corpoCane, testaCane]).setDepth(9);
+    }
     this.corpo = this.forma.body as Phaser.Physics.Arcade.Body;
     this.barra = scena.add.graphics().setDepth(11);
     this.stato = creaStatoCompagno(definizione.vita);
@@ -131,7 +138,7 @@ export class Compagno {
     if (this.stato.alTappeto) this.corpo.setVelocity(0, 0);
   }
 
-  /** Una piccola barra della vita sopra la testa. */
+  /** Una piccola barra della vita sopra la testa (e Brina accanto a Tessa). */
   private disegnaBarra(): void {
     const g = this.barra.clear();
     const { attuale, massima } = this.stato.vita;
@@ -139,6 +146,9 @@ export class Compagno {
     const y = this.y - 11;
     g.fillStyle(0x000000, 0.6).fillRect(x, y, 14, 2.5);
     g.fillStyle(this.stato.alTappeto ? 0x777777 : 0x5fd35f, 1).fillRect(x, y, (14 * attuale) / massima, 2.5);
+    if (this.brina) {
+      this.brina.setPosition(this.x + 10, this.y + 3);
+    }
   }
 
   rettangolo(): Rettangolo {
@@ -147,6 +157,7 @@ export class Compagno {
 
   distruggi(): void {
     this.scena.events.off(Phaser.Scenes.Events.POST_UPDATE, this.disegnaBarra, this);
+    this.brina?.destroy();
     this.barra.destroy();
     this.forma.destroy();
   }

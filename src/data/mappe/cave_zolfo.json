@@ -1,0 +1,126 @@
+{
+  "id": "cave_zolfo",
+  "nome": "Le Cave di Zolfo",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#4a3f28",
+      "tessera": { "immagine": "muro_pietra", "tinta": "#c8b878" }
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#d8c028",
+      "tessera": ["#d8c028", { "immagine": "onde", "alfa": 0.3 }]
+    },
+    "c": {
+      "tipo": "muro",
+      "colore": "#7a5230",
+      "tessera": ["sabbia", "botte"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6840",
+      "tessera": "terra"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "passo_corvo",
+      "arrivo": "b",
+      "tessera": "scale"
+    },
+    "z": {
+      "tipo": "vena",
+      "materiale": "zolfo",
+      "quantita": [1, 2],
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "v": {
+      "tipo": "vena",
+      "materiale": "argento",
+      "quantita": [1, 2],
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "bandito",
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "A": {
+      "tipo": "nemico",
+      "nemico": "bandito_balestriere",
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "F": {
+      "tipo": "nemico",
+      "nemico": "ferrante",
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    },
+    "!": {
+      "tipo": "barriera",
+      "boss": "ferrante",
+      "colore": "#7a6840",
+      "tessera": "terra"
+    },
+    "M": {
+      "tipo": "abitante",
+      "abitante": "matteo",
+      "colore": "#7a6840",
+      "tessera": "terra"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_forza",
+        "argento"
+      ],
+      "monete": 45,
+      "colore": "#9a8858",
+      "tessera": { "immagine": "sabbia", "tinta": "#e8d898" }
+    }
+  },
+  "griglia": [
+    "##################################",
+    "#.......#........#.....###########",
+    "#.zn....#..cc....#..:::###########",
+    "#..a....#........#..:M:###########",
+    "#.......#...B....#..:::###########",
+    "#..cc............#..:..###########",
+    "#####...##########..:..###########",
+    "#...........~~~.....:..###########",
+    "#.cc..z.....~~~........###########",
+    "#...........~~~..A.....###.....###",
+    "#.......#..............###.....###",
+    "#.......#...........######.....###",
+    "#.......#....::::::..!.......F.###",
+    "#...B...#....:....:..!.........###",
+    "#.......######....########.....###",
+    "#..............A.......###.....###",
+    "#.v..cc................###..v..###",
+    "#..........~~~.........###########",
+    "#..........~~~.........###########",
+    "#....X.....~~~.....B...###########",
+    "#..cc..................###########",
+    "#.......z........v.....###########",
+    "#......................###########",
+    "#......................###########",
+    "#......................###########",
+    "##################################"
+  ]
+}

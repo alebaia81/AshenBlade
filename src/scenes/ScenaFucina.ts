@@ -8,7 +8,7 @@
 import * as Phaser from 'phaser';
 import { ALTEZZA_SCHERMO, CHIAVE_PARTITA, SCENA_FUCINA, SCENA_MONDO } from '../costanti';
 import type { DatiGioco } from '../data/caricaDati';
-import { cosaManca, crea, ricetteConosciute, type Ricetta } from '../systems/crafting';
+import { cosaManca, crea, ricetteConosciute, type BancoCrafting, type Ricetta } from '../systems/crafting';
 import { colorePerRarita } from '../systems/oggetti';
 import { costoPotenziamento, livelloDi, MASSIMO_POTENZIAMENTO, potenzia, type DoveArma } from '../systems/potenziamento';
 import { dannoBaseArma } from '../systems/combattimento';
@@ -34,11 +34,18 @@ interface ArmaInOfficina {
 
 const stessoPosto = (a: DoveArma, b: DoveArma) => JSON.stringify(a) === JSON.stringify(b);
 
+const INFO_BANCO: Record<BancoCrafting, { titolo: string; artigiano: string; azione: string; coloreBordo: number }> = {
+  fucina: { titolo: 'La fucina di Bruno', artigiano: 'Bruno', azione: 'Bruno batte il ferro…', coloreBordo: 0xc0602a },
+  armature: { titolo: 'L’officina delle armature di Ugo', artigiano: 'Ugo', azione: 'Ugo ribatte le piastre…', coloreBordo: 0x6a9ad0 },
+  alchimia: { titolo: 'Il banco d’alchimia di Selva', artigiano: 'Selva', azione: 'Selva distilla l’essenza…', coloreBordo: 0xb46bff },
+};
+
 export class ScenaFucina extends Phaser.Scene {
+  private banco: BancoCrafting = 'fucina';
   private scheda: 'crea' | 'potenzia' = 'crea';
   private scelta: string | null = null;
   private armaScelta: DoveArma | null = null;
-  private schede!: { crea: Pulsante; potenzia: Pulsante };
+  private schede!: { crea: Pulsante; potenzia?: Pulsante };
   private contenuto!: Phaser.GameObjects.Container;
   private monete!: Phaser.GameObjects.Text;
   private esito!: Phaser.GameObjects.Text;
@@ -49,7 +56,9 @@ export class ScenaFucina extends Phaser.Scene {
     super(SCENA_FUCINA);
   }
 
-  create(): void {
+  create(dati: { banco?: BancoCrafting } = {}): void {
+    this.banco = dati.banco ?? 'fucina';
+    const info = INFO_BANCO[this.banco];
     const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
@@ -60,13 +69,15 @@ export class ScenaFucina extends Phaser.Scene {
     this.scheda = 'crea';
 
     this.add.rectangle(cx, cy, this.scale.width, ALTEZZA_SCHERMO, 0x000000, 0.55).setInteractive();
-    this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x231b17, 0.97).setStrokeStyle(2, 0xc0602a);
-    this.add.text(sinistra + 24, alto + 16, 'La fucina di Bruno', { ...STILE_TITOLO, fontSize: '22px' });
-    // Le due schede, come nella scheda del personaggio.
-    this.schede = {
-      crea: new Pulsante(this, sinistra + 420, alto + 30, { larghezza: 120, altezza: 32, testo: 'Crea', dimensioneTesto: 14, alClic: () => this.mostraScheda('crea') }),
-      potenzia: new Pulsante(this, sinistra + 550, alto + 30, { larghezza: 130, altezza: 32, testo: 'Potenzia', dimensioneTesto: 14, alClic: () => this.mostraScheda('potenzia') }),
-    };
+    this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x231b17, 0.97).setStrokeStyle(2, info.coloreBordo);
+    this.add.text(sinistra + 24, alto + 16, info.titolo, { ...STILE_TITOLO, fontSize: '22px' });
+    // La scheda "Potenzia" esiste solo nella fucina delle armi di Bruno.
+    const creaBtn = new Pulsante(this, sinistra + 420, alto + 30, { larghezza: 120, altezza: 32, testo: 'Crea', dimensioneTesto: 14, alClic: () => this.mostraScheda('crea') });
+    const potenziaBtn =
+      this.banco === 'fucina'
+        ? new Pulsante(this, sinistra + 550, alto + 30, { larghezza: 130, altezza: 32, testo: 'Potenzia', dimensioneTesto: 14, alClic: () => this.mostraScheda('potenzia') })
+        : undefined;
+    this.schede = { crea: creaBtn, potenzia: potenziaBtn };
     const icona = this.add.graphics({ x: sinistra + PANNELLO.larghezza - 120, y: alto + 30 });
     disegnaOggetto(icona, this.dati.oggetti['monete']!, 20);
     this.monete = this.add.text(sinistra + PANNELLO.larghezza - 104, alto + 19, '', { ...STILE_TESTO, fontSize: '20px', color: '#ffe680', fontStyle: 'bold' });
@@ -82,10 +93,12 @@ export class ScenaFucina extends Phaser.Scene {
   }
 
   private get conosciute(): Ricetta[] {
-    return ricetteConosciute(Object.values(this.dati.ricette), leggiPartita(this).ricette);
+    const p = leggiPartita(this);
+    return ricetteConosciute(Object.values(this.dati.ricette), p.ricette, p.bossSconfitti, this.banco);
   }
 
   private mostraScheda(scheda: 'crea' | 'potenzia'): void {
+    if (scheda === 'potenzia' && this.banco !== 'fucina') return;
     this.scheda = scheda;
     this.esito.setText('');
     this.ridisegna();
@@ -93,7 +106,7 @@ export class ScenaFucina extends Phaser.Scene {
 
   private ridisegna(): void {
     this.schede.crea.impostaSelezionato(this.scheda === 'crea');
-    this.schede.potenzia.impostaSelezionato(this.scheda === 'potenzia');
+    this.schede.potenzia?.impostaSelezionato(this.scheda === 'potenzia');
     if (this.scheda === 'potenzia') this.ridisegnaPotenzia();
     else this.ridisegnaCrea();
   }
@@ -161,7 +174,8 @@ export class ScenaFucina extends Phaser.Scene {
     });
     const yMonete = alto + 226 + manca.materiali.length * 24;
     const moneteOk = manca.monete.hai >= manca.monete.servono;
-    this.contenuto.add(this.add.text(x + 26, yMonete, `${moneteOk ? '✔' : '✘'} ${r.monete} monete per il lavoro di Bruno`, { ...STILE_TESTO, fontSize: '14px', color: moneteOk ? VERDE : ROSSO }));
+    const info = INFO_BANCO[this.banco];
+    this.contenuto.add(this.add.text(x + 26, yMonete, `${moneteOk ? '✔' : '✘'} ${r.monete} monete per il lavoro di ${info.artigiano}`, { ...STILE_TESTO, fontSize: '14px', color: moneteOk ? VERDE : ROSSO }));
     const pulsante = new Pulsante(this, x + 80, alto + 370, { larghezza: 160, altezza: 40, testo: 'Crea', alClic: () => this.creaScelta() });
     pulsante.impostaAttivo(manca.ok);
     this.contenuto.add(pulsante);
@@ -172,12 +186,13 @@ export class ScenaFucina extends Phaser.Scene {
     if (!r) return;
     const partita = leggiPartita(this);
     const pile = Object.fromEntries(Object.values(this.dati.oggetti).map((o) => [o.id, o.pila]));
-    const esito = crea(partita, r, partita.ricette, pile);
+    const esito = crea(partita, r, partita.ricette, pile, partita.bossSconfitti);
     if (!esito.ok) {
       this.esito.setText(esito.errore).setColor(ROSSO);
       return;
     }
-    this.esito.setText(`Bruno batte il ferro… Ecco: ${this.dati.oggetti[r.risultato]!.nome}! È nel tuo zaino.`).setColor('#ffe680');
+    const info = INFO_BANCO[this.banco];
+    this.esito.setText(`${info.azione} Ecco: ${this.dati.oggetti[r.risultato]!.nome}! È nel tuo zaino.`).setColor('#ffe680');
     scriviPartita(this, esito.stato);
   }
 

@@ -100,6 +100,91 @@
     "lapide": { "foglio": "dungeon", "indice": 65 },
     "forziere": { "foglio": "dungeon", "indice": 90 },
     "forziere_rinforzato": { "foglio": "dungeon", "indice": 91 },
+    "botte": { "foglio": "dungeon", "indice": 82 },
+    "roccia_ambra": {
+      "disegno": [
+        "................",
+        "................",
+        "................",
+        "......kkkkk.....",
+        "....kkglllgkk...",
+        "...kgglllgggk...",
+        "..kggggggoggk...",
+        "..kgogggggggk...",
+        ".kgggggggggoggk.",
+        ".kgggogggggggggk",
+        ".kggggggggoggggk",
+        "..kggggogggggk..",
+        "...kkggggggkk...",
+        ".....kkkkkk.....",
+        "................",
+        "................"
+      ],
+      "tavolozza": { "k": "#2e2a30", "g": "#7a7068", "l": "#a49a90", "o": "#f8b830" }
+    },
+    "roccia_argento": {
+      "disegno": [
+        "................",
+        "................",
+        "................",
+        "......kkkkk.....",
+        "....kkglllgkk...",
+        "...kgglllgggk...",
+        "..kggggggoggk...",
+        "..kgogggggggk...",
+        ".kgggggggggoggk.",
+        ".kgggogggggggggk",
+        ".kggggggggoggggk",
+        "..kggggogggggk..",
+        "...kkggggggkk...",
+        ".....kkkkkk.....",
+        "................",
+        "................"
+      ],
+      "tavolozza": { "k": "#2e2a30", "g": "#7a8290", "l": "#b8c0d0", "o": "#f0f6ff" }
+    },
+    "roccia_zolfo": {
+      "disegno": [
+        "................",
+        "................",
+        "................",
+        "......kkkkk.....",
+        "....kkglllgkk...",
+        "...kgglllgggk...",
+        "..kggggggoggk...",
+        "..kgogggggggk...",
+        ".kgggggggggoggk.",
+        ".kgggogggggggggk",
+        ".kggggggggoggggk",
+        "..kggggogggggk..",
+        "...kkggggggkk...",
+        ".....kkkkkk.....",
+        "................",
+        "................"
+      ],
+      "tavolozza": { "k": "#2e2a30", "g": "#888058", "l": "#b8b078", "o": "#ffe838" }
+    },
+    "roccia_lunare": {
+      "disegno": [
+        "................",
+        "................",
+        "................",
+        "......kkkkk.....",
+        "....kkglllgkk...",
+        "...kgglllgggk...",
+        "..kggggggoggk...",
+        "..kgogggggggk...",
+        ".kgggggggggoggk.",
+        ".kgggogggggggggk",
+        ".kggggggggoggggk",
+        "..kggggogggggk..",
+        "...kkggggggkk...",
+        ".....kkkkkk.....",
+        "................",
+        "................"
+      ],
+      "tavolozza": { "k": "#283040", "g": "#687898", "l": "#98b8e0", "o": "#d8f0ff" }
+    },
     "mago": { "foglio": "dungeon", "indice": 84 },
     "paesano": { "foglio": "dungeon", "indice": 85 },
     "barbuto": { "foglio": "dungeon", "indice": 86 },
@@ -211,12 +296,15 @@
     "ladro": "bandana",
     "chierico": "soldato"
   },
-  "compagni": {
-    "corrado": "cavaliere_visiera",
-    "elisa": { "immagine": "mago", "tinta": "#e0b8ff" },
-    "volpe": { "immagine": "bandana", "tinta": "#ffd098" },
-    "agata": { "immagine": "soldato", "tinta": "#fff0a8" }
-  },
+    "compagni": {
+      "corrado": "cavaliere_visiera",
+      "elisa": { "immagine": "mago", "tinta": "#e0b8ff" },
+      "volpe": { "immagine": "bandana", "tinta": "#ffd098" },
+      "agata": { "immagine": "soldato", "tinta": "#fff0a8" },
+      "tessa": { "immagine": "donna", "tinta": "#a8e090" },
+      "grisk": { "immagine": "demone", "tinta": "#e09050" },
+      "selva": { "immagine": "incappucciato", "tinta": "#c8a0ff" }
+    },
   "abitanti": {
     "berta": "donna",
     "anselmo": "barbuto",
@@ -225,11 +313,26 @@
     "bruno": "vichingo",
     "rosalba": "anziana",
     "dario": "ragazzo",
-    "ugo": { "immagine": "paesano", "tinta": "#b0c8ff" }
+    "ugo": { "immagine": "paesano", "tinta": "#b0c8ff" },
+    "teodoro": { "immagine": "paesano", "tinta": "#ffd090" },
+    "fausto": { "immagine": "soldato", "tinta": "#a8d890" },
+    "ottone": { "immagine": "barbuto", "tinta": "#b8c8a8" },
+    "tessa": { "immagine": "donna", "tinta": "#a8e090" },
+    "matteo": { "immagine": "ragazzo", "tinta": "#a8c8f0" },
+    "grisk": { "immagine": "demone", "tinta": "#e09050" },
+    "krak": { "immagine": "demone", "tinta": "#90f080" },
+    "orsola": { "immagine": "anziana", "tinta": "#ffb890" }
   },
   "nemici": {
     "slime": "melma",
     "slime_nero": { "immagine": "melma", "tinta": "#6060a0" },
+    "ratto": { "immagine": "ratto", "tinta": "#b07848" },
+    "melma_piccola": { "immagine": "melma", "tinta": "#a8ffc0" },
+    "re_melma": { "immagine": "melma", "tinta": "#50e880" },
+    "corvo": { "immagine": "pipistrello", "tinta": "#606880" },
+    "bandito_balestriere": { "immagine": "soldato", "tinta": "#e09068" },
+    "ferrante": { "immagine": "bandana", "tinta": "#ffa858" },
+    "fuoco_fatuo": { "immagine": "fantasma", "tinta": "#80e8ff" },
     "lupo": "ratto",
     "lupo_brughiera": { "immagine": "ratto", "tinta": "#9890c0" },
     "scheletro": "fantasma",
@@ -266,6 +369,12 @@
     "minerale_ferro": "roccia_ferro",
     "carbone": "roccia_carbone",
     "cristallo_miniera": "cristallo",
-    "erba_medicinale": "cespuglio"
+    "erba_medicinale": "cespuglio",
+    "ambra": "roccia_ambra",
+    "argento": "roccia_argento",
+    "zolfo": "roccia_zolfo",
+    "pietra_lunare": "roccia_lunare",
+    "giunco_palude": "cespuglio",
+    "erica": "funghi"
   }
 }

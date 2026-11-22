@@ -135,6 +135,29 @@ describe('aggiorna: i salvataggi vecchi si aggiornano, come le migrazioni di un 
     const letto = leggiSalvataggio(JSON.stringify({ ...s, partita: senza }));
     expect(letto.ok && letto.salvataggio.partita.porteAperte).toEqual([]);
   });
+
+  it('migra automaticamente un salvataggio della versione 1 alla versione 2 (fase 10a)', () => {
+    const s = salvataggioDiProva();
+    const {
+      ecoSconfitti: _e,
+      sepoltiScavati: _s,
+      pietre: _p,
+      ricordiVisti: _r,
+      commentiVisti: _c,
+      ...partitaV1
+    } = s.partita;
+    const vecchioV1 = JSON.stringify({ ...s, versione: 1, partita: partitaV1 });
+    const letto = leggiSalvataggio(vecchioV1);
+    expect(letto.ok).toBe(true);
+    if (!letto.ok) return;
+    expect(letto.salvataggio.versione).toBe(2);
+    expect(letto.salvataggio.partita.monete).toBe(37);
+    expect(letto.salvataggio.partita.ecoSconfitti).toEqual([]);
+    expect(letto.salvataggio.partita.sepoltiScavati).toEqual([]);
+    expect(letto.salvataggio.partita.pietre).toEqual([]);
+    expect(letto.salvataggio.partita.ricordiVisti).toEqual([]);
+    expect(letto.salvataggio.partita.commentiVisti).toEqual([]);
+  });
 });
 
 describe('gli slot nel browser', () => {

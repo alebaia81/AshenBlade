@@ -16,7 +16,9 @@ async function main() {
   const { controlla, aspetta, schermata, pagina, clic, nelGioco } = g;
   const partita = () => nelGioco(() => window.gioco.registry.get('partita'));
   const attiva = (n) => nelGioco((n) => window.gioco.scene.isActive(n), n);
-  const conta = (p, id) => p.inventario.spazi.reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0);
+  const conta = (p, id) =>
+    p.inventario.spazi.reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0) +
+    (p.tascaMissioni || []).reduce((t, s) => t + (s && s.id === id ? s.quantita : 0), 0);
   const metti = (p) => g.mondo((s, p) => s.eroe.forma.body.reset(p.x, p.y), p);
   const avviso = () => nelGioco(() => window.gioco.registry.get('avviso')?.testo ?? '');
   const segno = (id) => g.mondo((s, id) => { const a = s.abitanti.find((a) => a.definizione.id === id); return a ? a.segnoAttuale : 'assente'; }, id);
@@ -163,7 +165,10 @@ async function main() {
   const bottino = await g.mondo((s) => s.oggettiATerra.oggetti.map((o) => ({ id: o.definizione.id, x: o.posizione.x, y: o.posizione.y })));
   for (const o of bottino) { await metti({ x: o.x, y: o.y }); await aspetta(150); }
   p = await partita();
-  controlla(conta(p, 'zanna_troll') === 1 && conta(p, 'guanti_titano') === 1, 'bottino: zanna del troll e Guanti del titano');
+  controlla(
+    conta(p, 'zanna_troll') === 1 && (conta(p, 'guanti_titano') === 1 || conta(p, 'elmo_troll') === 1),
+    'bottino: zanna del troll e un pezzo leggendario del Troll',
+  );
 
   // ---------------- la Quercia ferita ----------------
   await vai('borgo');

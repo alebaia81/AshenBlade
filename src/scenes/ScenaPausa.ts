@@ -9,6 +9,8 @@ import {
   SCENA_MONDO,
   SCENA_OPZIONI,
   SCENA_PAUSA,
+  SCENA_REGISTRO,
+  SCENA_SCHEDA,
   SCENA_SVILUPPATORE,
 } from '../costanti';
 import { chiediConferma } from './interfaccia/Conferma';
@@ -87,14 +89,12 @@ export class ScenaPausa extends Phaser.Scene {
 
   private apriScheda(): void {
     this.scene.stop();
-    this.scene.resume(SCENA_MONDO);
-    this.mondo.apriScheda();
+    this.scene.launch(SCENA_SCHEDA);
   }
 
   private apriRegistro(): void {
     this.scene.stop();
-    this.scene.resume(SCENA_MONDO);
-    this.mondo.apriRegistro();
+    this.scene.launch(SCENA_REGISTRO);
   }
 
   private toggleSviluppatore(): void {

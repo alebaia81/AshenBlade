@@ -2,7 +2,7 @@ import type { CondizioneCella } from './condizioniMappa';
 import type { Strato } from './sprite';
 import type { ParametriCarica } from './ia/caricatore';
 import type { ParametriTiro } from './ia/tiratore';
-import type { FaseBoss } from './boss';
+import type { FaseBoss, ParametriEco } from './boss';
 import type { VoceBottino } from './bottino';
 import type { Rarita } from './oggetti';
 import type { PezzoArmatura } from './equipaggiamento';
@@ -13,10 +13,29 @@ import type { Caratteristiche, NomeCaratteristica } from './caratteristiche';
 
 /** I tipi di cella che una legenda può usare. */
 /** "segreto" è un muro segreto: sembra un muro (con una crepa) e si apre colpendolo. */
-export type TipoCella = 'muro' | 'pavimento' | 'partenza' | 'arrivo' | 'uscita' | 'nemico' | 'forziere' | 'segreto' | 'abitante' | 'vena' | 'cartello' | 'porta' | 'barriera';
+/** "sepolto" (10c) è un tesoro sepolto invisibile, scavabile con la pala. */
+/** "crepata" (10c) è una roccia crepata che si apre solo con la Polvere nera di Grisk. */
+/** "pietra" (10c) è una pietra di passaggio per il viaggio rapido e cambio compagno. */
+export type TipoCella =
+  | 'muro'
+  | 'pavimento'
+  | 'partenza'
+  | 'arrivo'
+  | 'uscita'
+  | 'nemico'
+  | 'forziere'
+  | 'segreto'
+  | 'abitante'
+  | 'vena'
+  | 'cartello'
+  | 'porta'
+  | 'barriera'
+  | 'sepolto'
+  | 'crepata'
+  | 'pietra';
 
-/** Come si vede un cartello: un cartello di legno, un cancello, una frana. */
-export type AspettoCartello = 'cartello' | 'cancello' | 'frana' | 'ramo' | 'nebbia' | 'lapide' | 'germoglio';
+/** Come si vede un cartello: un cartello di legno, un cancello, una frana, un ricordo o una leva. */
+export type AspettoCartello = 'cartello' | 'cancello' | 'frana' | 'ramo' | 'nebbia' | 'lapide' | 'germoglio' | 'ricordo' | 'leva';
 
 /** Una voce della legenda: cosa significa un carattere della griglia. */
 export interface VoceLegenda {
@@ -39,6 +58,10 @@ export interface VoceLegenda {
   chiusoCon?: string;
   /** Solo per le porte (fase 8a): la chiave che le apre. */
   chiave?: string;
+  /** Fase 10c: vero per le porte runiche, che si aprono con Selva o con una leva. */
+  runica?: boolean;
+  /** Fase 10c: per i cartelli con aspetto "leva", quale porta apre ("col:riga" o "mappa:col:riga"). */
+  aprePorta?: string;
   /** Fase 8b: quando questa condizione è vera, al posto di questo simbolo c'è "diventa". */
   cambiaCon?: CondizioneCella;
   diventa?: string;
@@ -209,6 +232,16 @@ export interface DefinizioneNemico {
   bottino: VoceBottino[];
   /** Monete lasciate a terra: [minimo, massimo]. */
   monete: [number, number];
+  /** Fase 10a (solo boss): lista di leggendari di cui uno è garantito alla sconfitta. */
+  leggendari?: string[];
+  /** Fase 10a (solo boss): l'esotico firma (25% alla prima sconfitta, 100% alla prima Eco). */
+  esoticoFirma?: string;
+  /** Fase 10a (solo boss): moltiplicatori e tinta della versione Eco. */
+  eco?: ParametriEco;
+  /** Fase 10a: vero se questa istanza è stata evocata dall'Altare dell'Eco. */
+  èEco?: boolean;
+  /** Fase 10a: tinta esadecimale applicata alla figura in pixel art dell'Eco. */
+  tintaEco?: string;
 }
 
 /** Un personaggio del villaggio, come sta scritto in data/abitanti.json. */
@@ -239,9 +272,22 @@ export interface DefinizioneArmatura {
 /** I bonus fissi che un compagno dà all'eroe finché è con lui (design §10). */
 export const BONUS_COMPAGNO = ['armatura', 'rigenerazione_mana', 'critico', 'cura_nel_tempo'] as const;
 /** Le abilità speciali dei compagni che il codice sa eseguire. */
-export const ABILITA_COMPAGNO = ['para_colpo', 'scudo_magico', 'segnala_tesori', 'cura_eroe'] as const;
+export const ABILITA_COMPAGNO = [
+  'para_colpo',
+  'scudo_magico',
+  'segnala_tesori',
+  'cura_eroe',
+  'fiuta_tutto',
+  'polvere_nera',
+  'velo_ombra',
+] as const;
 
-/** Un compagno della taverna, come sta scritto in data/compagni.json. */
+export interface CommentoCompagno {
+  mappa: string;
+  testo: string;
+}
+
+/** Un compagno della taverna o di viaggio, come sta scritto in data/compagni.json. */
 export interface DefinizioneCompagno {
   id: string;
   nome: string;
@@ -256,8 +302,12 @@ export interface DefinizioneCompagno {
   /** Da quanto lontano colpisce (dardi di Elisa: molto). */
   portata: number;
   ricaricaMs: number;
-  /** Si paga una volta sola. */
+  /** Si paga una volta sola (0 per i compagni di viaggio). */
   prezzo: number;
+  /** Fase 10b: vero per i 3 compagni che si uniscono gratis con la storia (Tessa, Grisk, Selva). */
+  viaggio?: boolean;
+  /** Fase 10b: frasi dette una volta sola entrando in certe mappe. */
+  commenti?: CommentoCompagno[];
   proiettile?: DefinizioneProiettile;
   bonus: { tipo: (typeof BONUS_COMPAGNO)[number]; valore: number; descrizione: string };
   abilita: {

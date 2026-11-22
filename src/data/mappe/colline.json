@@ -154,6 +154,30 @@
       },
       "diventa": ".",
       "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "p": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "passo_corvo",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "q": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "v": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "pietrafonda",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "t": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
     }
   },
   "griglia": [
@@ -175,11 +199,11 @@
     "#..............:::......L......#",
     "#.....RR....B.:::::............#",
     "#..T......B.WWW.:........RR....#",
-    "#......L....WWW.:U.............#",
+    "#......L....WWW.:U::::::::::::tv",
     "#..............::f....T........#",
     "#RR......T...........B.........#",
     "#RRR..............T.......RR..R#",
-    "#RRRR.......................RRR#",
-    "################################"
+    "#RRRR..........q............RRR#",
+    "###############p################"
   ]
 }

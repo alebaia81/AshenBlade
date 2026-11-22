@@ -1,0 +1,139 @@
+{
+  "id": "strada_maestra",
+  "nome": "La Strada Maestra",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#23401f",
+      "tessera": ["erba", "pino_autunno"]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#5a3d22",
+      "tessera": ["erba", "albero_autunno"]
+    },
+    "P": {
+      "tipo": "muro",
+      "colore": "#8a6a3a",
+      "tessera": ["erba", "staccionata"]
+    },
+    "B": {
+      "tipo": "muro",
+      "colore": "#6b4a2a",
+      "tessera": ["erba", "palo"]
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#c0602a",
+      "tessera": "braciere"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#78a856",
+      "tessera": "erba_ciuffi"
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "@": {
+      "tipo": "partenza",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "borgo",
+      "arrivo": "o",
+      "tessera": "sentiero"
+    },
+    "G": {
+      "tipo": "porta",
+      "aspetto": "cancello",
+      "chiave": "chiave_cancello_borgo",
+      "nome": "il cancello di Borgo Quercia",
+      "cambiaCon": {
+        "quest": "prologo_strada",
+        "stato": ["pronta", "conclusa"]
+      },
+      "diventa": ":",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "M": {
+      "tipo": "abitante",
+      "abitante": "teodoro",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "F": {
+      "tipo": "abitante",
+      "abitante": "fausto",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "C": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "testo": "Il carro rovesciato di Teodoro: una ruota è spezzata e le casse sono sparse nell'erba. Per fortuna la pala e le pozioni sono salve.",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_vita",
+        "pozione_mana"
+      ],
+      "monete": 15,
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    },
+    "S": {
+      "tipo": "nemico",
+      "nemico": "scheletro",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
+    "e": {
+      "tipo": "vena",
+      "materiale": "erba_medicinale",
+      "quantita": [1, 2],
+      "aspetto": "cespuglio",
+      "colore": "#6b9a4b",
+      "tessera": "erba"
+    }
+  },
+  "griglia": [
+    "########################################",
+    "#..,....T.......T........,....T....B...#",
+    "#.T...,....PPPPPPP...,...........,TB...#",
+    "#..........P.,.,.P.......T.........B...#",
+    "#...,..T...P.....P..T.........T....B...#",
+    "#..T.......P..e..P......,..........B...#",
+    "#....X.....,.....,...S.............B...#",
+    "#......MC.....S.............S....FfB.T.#",
+    "#..@:::::::::::::::::::::::::::::::G:b:u",
+    "#.............f.......S......S...f.B...#",
+    "#...,..T.......S................,..B.T.#",
+    "#..T.......PPPPPPP....T............B...#",
+    "#..........P..,..P.........T..e....B...#",
+    "#.T...,....P.....P..,..............B...#",
+    "#.......,..PPPPPPP......T.....,....B...#",
+    "########################################"
+  ]
+}

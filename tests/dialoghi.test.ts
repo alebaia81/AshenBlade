@@ -87,6 +87,10 @@ describe('dialoghi con le quest (fase 7)', () => {
   it('una risposta con azione la restituisce insieme a dove porta', () => {
     expect(esitoRisposta(conQuest.nodi['offerta']!.risposte[0]!)).toEqual({ tipo: 'chiudi', azione: { accetta: 'lupi' } });
     expect(esitoRisposta(conQuest.nodi['saluto']!.risposte[1]!)).toEqual({ tipo: 'nodo', id: 'grazie', azione: { concludi: 'lupi' } });
+    expect(esitoRisposta({ testo: 'Apri', azione: { aprePorta: 'strada_maestra:35:8' } })).toEqual({
+      tipo: 'chiudi',
+      azione: { aprePorta: 'strada_maestra:35:8' },
+    });
   });
 
   it('validazione: quest che non esistono e nodi con solo risposte condizionate', () => {

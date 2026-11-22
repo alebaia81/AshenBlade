@@ -1,4 +1,142 @@
 {
+  "re_melma": {
+    "nome": "Re Melma",
+    "comportamento": "inseguitore",
+    "vita": 85,
+    "armatura": 1,
+    "danno": "1d8",
+    "velocita": 28,
+    "raggioVista": 96,
+    "raggioAbbandono": 550,
+    "dimensione": 22,
+    "colore": "#52c878",
+    "storditoMs": 60,
+    "pausaDopoAttaccoMs": 1000,
+    "esperienza": 140,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "nucleo_melma",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "gelatina_slime",
+        "probabilita": 1
+      }
+    ],
+    "leggendari": [
+      "mazza_mugnaio",
+      "guanti_ambra"
+    ],
+    "esoticoFirma": "bastone_melma",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
+    "monete": [
+      45,
+      70
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": []
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Il Re Melma ribolle e si divide in melme più piccole!",
+        "attacchi": [
+          {
+            "tipo": "dividi",
+            "nemico": "melma_piccola",
+            "quanti": 2,
+            "massimo": 4,
+            "ricaricaMs": 6500,
+            "probabilita": 0.5
+          }
+        ]
+      }
+    ]
+  },
+  "ferrante": {
+    "nome": "Ferrante il Contrabbandiere",
+    "comportamento": "inseguitore",
+    "vita": 165,
+    "armatura": 2,
+    "danno": "1d10+1",
+    "velocita": 38,
+    "raggioVista": 96,
+    "raggioAbbandono": 600,
+    "dimensione": 18,
+    "colore": "#c87030",
+    "storditoMs": 50,
+    "pausaDopoAttaccoMs": 950,
+    "esperienza": 280,
+    "etichette": [],
+    "bottino": [
+      {
+        "oggetto": "sigillo_spezzato",
+        "probabilita": 1
+      },
+      {
+        "oggetto": "zolfo",
+        "probabilita": 1
+      }
+    ],
+    "leggendari": [
+      "balestra_contrabbandiere",
+      "corazza_ferrante"
+    ],
+    "esoticoFirma": "balestra_zolfo",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
+    "monete": [
+      80,
+      120
+    ],
+    "fasi": [
+      {
+        "sottoVita": 1,
+        "attacchi": [
+          {
+            "tipo": "bomba",
+            "ricaricaMs": 6000,
+            "quanti": 2,
+            "preavvisoMs": 1000,
+            "raggio": 14,
+            "danno": "1d6"
+          }
+        ]
+      },
+      {
+        "sottoVita": 0.5,
+        "avviso": "Ferrante accende le riserve di polvere: piovono bombe di zolfo!",
+        "attacchi": [
+          {
+            "tipo": "bomba",
+            "ricaricaMs": 4200,
+            "quanti": 4,
+            "preavvisoMs": 950,
+            "raggio": 15,
+            "danno": "1d8"
+          },
+          {
+            "tipo": "evoca",
+            "nemico": "bandito_balestriere",
+            "quanti": 1,
+            "massimo": 2,
+            "ricaricaMs": 9500
+          }
+        ]
+      }
+    ]
+  },
   "re_scheletro": {
     "nome": "Re Scheletro",
     "comportamento": "inseguitore",
@@ -22,18 +160,21 @@
         "probabilita": 1
       },
       {
-        "oggetto": "elmo_corona",
-        "probabilita": 1
-      },
-      {
         "oggetto": "pagina_diario",
         "probabilita": 1
-      },
-      {
-        "oggetto": "lama_vuoto",
-        "probabilita": 0.1
       }
     ],
+    "leggendari": [
+      "elmo_corona",
+      "stivali_re_sepolto"
+    ],
+    "esoticoFirma": "lama_vuoto",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
     "monete": [
       60,
       90
@@ -79,18 +220,21 @@
         "probabilita": 1
       },
       {
-        "oggetto": "guanti_titano",
-        "probabilita": 1
-      },
-      {
         "oggetto": "cristallo_miniera",
         "probabilita": 1
-      },
-      {
-        "oggetto": "corazza_spine",
-        "probabilita": 0.1
       }
     ],
+    "leggendari": [
+      "guanti_titano",
+      "elmo_troll"
+    ],
+    "esoticoFirma": "corazza_spine",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
     "monete": [
       100,
       150
@@ -152,16 +296,19 @@
       {
         "oggetto": "ossidiana_nera",
         "probabilita": 1
-      },
-      {
-        "oggetto": "corazza_quercia",
-        "probabilita": 1
-      },
-      {
-        "oggetto": "arco_rimbalzo",
-        "probabilita": 0.1
       }
     ],
+    "leggendari": [
+      "mantello_orvald",
+      "elmo_luna_nera"
+    ],
+    "esoticoFirma": "arco_rimbalzo",
+    "eco": {
+      "vita": 1.6,
+      "danno": 1.3,
+      "ricarica": 0.7,
+      "tinta": "#a0e0ff"
+    },
     "monete": [
       200,
       300

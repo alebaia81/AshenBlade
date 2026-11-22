@@ -176,5 +176,163 @@
       "COS": 1,
       "SAG": 1
     }
+  },
+  "stivali_re_sepolto": {
+    "id": "stivali_re_sepolto",
+    "nome": "Stivali del re sepolto",
+    "descrizione": "Leggendari: gambali d’acciaio antico del re Gualtiero. +1 COS.",
+    "pezzo": "stivali",
+    "rarita": "leggendaria",
+    "prezzo": 350,
+    "armatura": 2,
+    "effetti": [],
+    "bonus": {
+      "COS": 1
+    }
+  },
+  "elmo_troll": {
+    "id": "elmo_troll",
+    "nome": "Elmo del troll",
+    "descrizione": "Leggendario: elmo pesante rinforzato con scaglie di caverna. +1 FOR.",
+    "pezzo": "elmo",
+    "rarita": "leggendaria",
+    "prezzo": 350,
+    "armatura": 3,
+    "effetti": [],
+    "bonus": {
+      "FOR": 1
+    }
+  },
+  "mantello_orvald": {
+    "id": "mantello_orvald",
+    "nome": "Mantello di Orvald",
+    "descrizione": "Leggendario: la veste del vecchio guaritore, intessuta di rune. +1 INT, +1 SAG.",
+    "pezzo": "corazza",
+    "rarita": "leggendaria",
+    "prezzo": 500,
+    "armatura": 4,
+    "effetti": [],
+    "bonus": {
+      "INT": 1,
+      "SAG": 1
+    }
+  },
+  "elmo_luna_nera": {
+    "id": "elmo_luna_nera",
+    "nome": "Elmo della luna nera",
+    "descrizione": "Leggendario: diadema scuro forgiato per la notte del rito. +1 INT.",
+    "pezzo": "elmo",
+    "rarita": "leggendaria",
+    "prezzo": 420,
+    "armatura": 3,
+    "effetti": [],
+    "bonus": {
+      "INT": 1
+    }
+  },
+  "velo_selva": {
+    "id": "velo_selva",
+    "nome": "Velo di Selva",
+    "descrizione": "Esotica: cappa intessuta d’ombra. Dopo una capriola sei invisibile per 1 secondo.",
+    "pezzo": "corazza",
+    "rarita": "esotica",
+    "prezzo": 950,
+    "armatura": 2,
+    "effetti": [
+      "capriola_ombra"
+    ]
+  },
+  "amuleto_ferro": {
+    "id": "amuleto_ferro",
+    "nome": "Medaglione di ferro",
+    "descrizione": "Un semplice ciondolo inciso dai fabbri della valle.",
+    "pezzo": "amuleto",
+    "rarita": "non_comune",
+    "prezzo": 65,
+    "armatura": 1,
+    "effetti": []
+  },
+  "amuleto_quercia": {
+    "id": "amuleto_quercia",
+    "nome": "Talismano della Quercia",
+    "descrizione": "Leggendario: legno antico intagliato a mano. +1 SAG.",
+    "pezzo": "amuleto",
+    "rarita": "leggendaria",
+    "prezzo": 340,
+    "armatura": 1,
+    "effetti": [],
+    "bonus": {
+      "SAG": 1
+    }
+  },
+  "ciondolo_lia": {
+    "id": "ciondolo_lia",
+    "nome": "Ciondolo di Lia",
+    "descrizione": "Esotico: il piccolo ciondolo d’argento della figlia di Orvald. Una volta per zona, sotto il 25% di vita ti cura del 50%.",
+    "pezzo": "amuleto",
+    "rarita": "esotica",
+    "prezzo": 900,
+    "armatura": 1,
+    "effetti": [
+      "salvavita"
+    ]
+  },
+  "cuore_quercia": {
+    "id": "cuore_quercia",
+    "nome": "Cuore della Quercia",
+    "descrizione": "Esotico: il dono delle dodici Ghiande d’oro. Rigenera 1 punto vita ogni 5 secondi.",
+    "pezzo": "amuleto",
+    "rarita": "esotica",
+    "prezzo": 1000,
+    "armatura": 1,
+    "effetti": [
+      "rigenerazione_quercia"
+    ]
+  },
+  "guanti_ambra": {
+    "id": "guanti_ambra",
+    "nome": "Guanti d’ambra",
+    "descrizione": "Leggendari: guanti di cuoio con nocche d’ambra levigata. +1 DES.",
+    "pezzo": "guanti",
+    "rarita": "leggendaria",
+    "prezzo": 340,
+    "armatura": 2,
+    "effetti": [],
+    "bonus": {
+      "DES": 1
+    }
+  },
+  "corazza_cuoio_rinforzata": {
+    "id": "corazza_cuoio_rinforzata",
+    "nome": "Corazza di cuoio rinforzata",
+    "descrizione": "Cuoio spesso di lupo ribattuto con borchie di ferro.",
+    "pezzo": "corazza",
+    "rarita": "non_comune",
+    "prezzo": 85,
+    "armatura": 2,
+    "effetti": []
+  },
+  "corazza_ferrante": {
+    "id": "corazza_ferrante",
+    "nome": "Corazza di Ferrante",
+    "descrizione": "Leggendaria: giacca corazzata da contrabbandiere, leggera e resistente alle schegge. +1 DES.",
+    "pezzo": "corazza",
+    "rarita": "leggendaria",
+    "prezzo": 390,
+    "armatura": 3,
+    "effetti": [],
+    "bonus": {
+      "DES": 1
+    }
+  },
+  "corazza_argento": {
+    "id": "corazza_argento",
+    "nome": "Corazza d’argento",
+    "descrizione": "Piastre d’argento e acciaio forgiate da Ugo a Pietrafonda.",
+    "pezzo": "corazza",
+    "rarita": "rara",
+    "prezzo": 240,
+    "armatura": 4,
+    "effetti": []
   }
 }

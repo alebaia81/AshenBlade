@@ -27,6 +27,45 @@ describe('fasi del boss', () => {
     expect(quantiEvocare(evoca, 2)).toBe(2);
     expect(quantiEvocare(evoca, 4)).toBe(0);
   });
+
+  it('supporta l’attacco dividi del Re Melma (fase 11b)', () => {
+    const fasiMelma: FaseBoss[] = [
+      { sottoVita: 1, attacchi: [] },
+      { sottoVita: 0.5, attacchi: [{ tipo: 'dividi', nemico: 'melma_piccola', quanti: 2, massimo: 4, ricaricaMs: 6500, probabilita: 0.5 }] },
+    ];
+    expect(validaBoss('re_melma', fasiMelma, ['melma_piccola'])).toEqual([]);
+    expect(validaBoss('re_melma', fasiMelma, []).join('\n')).toContain('melma_piccola');
+  });
+
+  it('supporta l’attacco bomba di Ferrante e ne scala il danno in versione Eco (fase 12a)', async () => {
+    const { creaDefinizioneEco } = await import('../src/systems/boss');
+    const fasiFerrante: FaseBoss[] = [
+      { sottoVita: 1, attacchi: [{ tipo: 'bomba', ricaricaMs: 6000, quanti: 2, preavvisoMs: 1000, raggio: 14, danno: '1d6' }] },
+    ];
+    expect(validaBoss('ferrante', fasiFerrante, [])).toEqual([]);
+    const eco = creaDefinizioneEco({
+      id: 'ferrante',
+      nome: 'Ferrante',
+      comportamento: 'inseguitore',
+      vita: 165,
+      armatura: 2,
+      danno: '1d10',
+      velocita: 38,
+      raggioVista: 96,
+      raggioAbbandono: 600,
+      dimensione: 18,
+      colore: '#c87030',
+      storditoMs: 50,
+      pausaDopoAttaccoMs: 950,
+      esperienza: 280,
+      etichette: [],
+      bottino: [],
+      monete: [80, 120],
+      fasi: fasiFerrante,
+    });
+    const attaccoEco = eco.fasi![0]!.attacchi[0]!;
+    expect(attaccoEco.tipo === 'bomba' && attaccoEco.danno).toBe('1d8');
+  });
 });
 
 describe('validazione', () => {
@@ -88,5 +127,55 @@ describe('il Negromante (fase 8c)', () => {
     expect(tre[0]!.y).toBeCloseTo(-tre[2]!.y);
     expect(Math.atan2(tre[2]!.y, tre[2]!.x)).toBeCloseTo(Math.PI / 6);
     expect(ventaglio({ x: 0, y: 1 }, 1, 60)[0]!.y).toBeCloseTo(1);
+  });
+});
+
+describe('Eco dei boss (fase 10a)', () => {
+  it('scalaDado moltiplica facce e bonus mantenendo un formato di dado valido', async () => {
+    const { scalaDado } = await import('../src/systems/boss');
+    expect(scalaDado('1d10', 1.3)).toBe('1d13');
+    expect(scalaDado('2d6+2', 1.5)).toBe('2d9+3');
+  });
+
+  it('creaDefinizioneEco potenzia vita, danno e ricariche degli attacchi speciali e disattiva il finale', async () => {
+    const { creaDefinizioneEco } = await import('../src/systems/boss');
+    const base = {
+      id: 'negromante',
+      nome: 'Il Negromante',
+      comportamento: 'tiratore',
+      vita: 300,
+      armatura: 2,
+      danno: '1d10',
+      velocita: 40,
+      raggioVista: 110,
+      raggioAbbandono: 700,
+      dimensione: 20,
+      colore: '#9a6ad0',
+      storditoMs: 40,
+      pausaDopoAttaccoMs: 800,
+      esperienza: 800,
+      etichette: [],
+      bottino: [],
+      monete: [200, 300] as [number, number],
+      finale: true,
+      fasi: [
+        {
+          sottoVita: 1,
+          attacchi: [
+            { tipo: 'teletrasporto' as const, ricaricaMs: 6000, raggio: 112, distanzaMin: 64 },
+            { tipo: 'incantesimo' as const, ricaricaMs: 4000, colpi: 3, ventaglioGradi: 40, velocita: 150, gittata: 200, dimensione: 3, colore: '#b46bff', danno: '1d8' },
+          ],
+        },
+      ],
+    };
+    const eco = creaDefinizioneEco(base);
+    expect(eco.èEco).toBe(true);
+    expect(eco.finale).toBe(false);
+    expect(eco.vita).toBe(480); // 300 * 1.6
+    expect(eco.danno).toBe('1d13'); // 1d10 * 1.3
+    expect(eco.tintaEco).toBe('#a0e0ff');
+    expect(eco.fasi![0]!.attacchi[0]!.ricaricaMs).toBe(4200); // 6000 * 0.7
+    const inc = eco.fasi![0]!.attacchi[1]!;
+    if (inc.tipo === 'incantesimo') expect(inc.danno).toBe('1d10'); // 1d8 * 1.3
   });
 });

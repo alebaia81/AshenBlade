@@ -20,6 +20,9 @@ const COLORI_PREDEFINITI: Record<TipoCella, string> = {
   cartello: '#6b9a4b',
   porta: '#6b9a4b',
   barriera: '#6b9a4b',
+  sepolto: '#6b9a4b',
+  crepata: '#6b9a4b',
+  pietra: '#6b9a4b',
 };
 
 export interface DatiTessere {

@@ -1,0 +1,164 @@
+{
+  "id": "passo_corvo",
+  "nome": "Il Passo del Corvo",
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#3a3a36",
+      "tessera": "muro_pietra"
+    },
+    "R": {
+      "tipo": "muro",
+      "colore": "#5e5e5a",
+      "tessera": [{ "immagine": "erba", "tinta": "#d8d8a8" }, { "immagine": "cespuglio", "tinta": "#a8a8a0" }]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#4a5a36",
+      "tessera": [{ "immagine": "erba", "tinta": "#d8d8a8" }, "albero_autunno"]
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    ",": {
+      "tipo": "pavimento",
+      "colore": "#7a7a5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#9a7448",
+      "tessera": "muro_legno"
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "colline",
+      "arrivo": "q",
+      "tessera": "sentiero"
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#a89a78",
+      "tessera": "sentiero"
+    },
+    "u": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "cave_zolfo",
+      "arrivo": "a",
+      "tessera": "scale"
+    },
+    "C": {
+      "tipo": "nemico",
+      "nemico": "corvo",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "B": {
+      "tipo": "nemico",
+      "nemico": "bandito",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "v": {
+      "tipo": "vena",
+      "materiale": "argento",
+      "quantita": [1, 2],
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "z": {
+      "tipo": "vena",
+      "materiale": "zolfo",
+      "quantita": [1, 2],
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "l": {
+      "tipo": "vena",
+      "materiale": "pietra_lunare",
+      "quantita": [1, 2],
+      "colore": "#7a7a5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" }
+    },
+    "K": {
+      "tipo": "cartello",
+      "aspetto": "cartello",
+      "testo": "Un carro carico di casse d'ossidiana nera. Sul legno è impresso a fuoco il marchio: «FERRANTE — Consegna per la Brughiera». Una traccia di polvere gialla scende verso le Cave di Zolfo a est.",
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "W": {
+      "tipo": "crepata",
+      "colore": "#7a7a5e",
+      "coloreMuro": "#5e5e5a",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" },
+      "tesseraMuro": "muro_pietra"
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "zolfo"
+      ],
+      "monete": 30,
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    },
+    "Y": {
+      "tipo": "forziere",
+      "contenuto": [
+        "ghianda_oro",
+        "argento"
+      ],
+      "monete": 45,
+      "colore": "#7a7a5e",
+      "tessera": { "immagine": "erba_ciuffi", "tinta": "#d0d0a0" }
+    },
+    "Z": {
+      "tipo": "sepolto",
+      "contenuto": [
+        "argento",
+        "ghianda_oro"
+      ],
+      "monete": 50,
+      "colore": "#8a8a6a",
+      "tessera": { "immagine": "erba", "tinta": "#d8d8a8" }
+    }
+  },
+  "griglia": [
+    "######n#############################",
+    "#RRRR:a:.....T...######.....RRRRRRR#",
+    "#RRR..:::........######....v.....RR#",
+    "#RR....:::..,....######..T........R#",
+    "#R..v...:::......######....Z......R#",
+    "#........:::..C..######........T..R#",
+    "#..T......:::....######..C........R#",
+    "#..........:::...######...........R#",
+    "#....RR.....:::..######..:::......R#",
+    "#.....X......:::.######.:::..z....R#",
+    "#.............:::pppppp:::K..:bu..R#",
+    "#....T........:::######.:::.......R#",
+    "#.............:::######..:::......R#",
+    "#......R...::B...######...........R#",
+    "#.........:::....######........T..R#",
+    "#...######W####..######...z.......R#",
+    "#...###,,,,,###..######...........R#",
+    "#...###l,Y,l###..######..T.....RRRR#",
+    "#...###,,,,,###..######.......RRRRR#",
+    "####################################"
+  ]
+}

@@ -45,6 +45,7 @@ export const SCENA_MENU = 'Menu';
 export const SCENA_INTRO = 'Intro';
 export const SCENA_PAUSA = 'Pausa';
 export const SCENA_OPZIONI = 'Opzioni';
+export const SCENA_PIETRA = 'Pietra';
 
 /** Chiavi del "registro" condiviso tra le scene. */
 export const CHIAVE_NOME_MAPPA = 'nomeMappa';

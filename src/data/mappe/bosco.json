@@ -122,6 +122,18 @@
       "tipo": "arrivo",
       "colore": "#9a7b4f",
       "tessera": "sentiero"
+    },
+    "4": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "radura_nascosta",
+      "arrivo": "a",
+      "tessera": "sentiero"
+    },
+    "d": {
+      "tipo": "arrivo",
+      "colore": "#9a7b4f",
+      "tessera": "sentiero"
     }
   },
   "griglia": [
@@ -145,7 +157,7 @@
     "#...........T.:::.T.T.......T#",
     "#.T..TT.T.....::::::T.....TTT#",
     "#T.......T....T..:::...S...T.#",
-    "#.T...e..........:::.....T...#",
+    "4d::::e..........:::.....T...#",
     "#...T.TTT.......k:::T..TTT...#",
     "#.TT...TT........:::........T#",
     "#..T...........T.:::..T...T..#",

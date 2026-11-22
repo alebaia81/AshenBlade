@@ -64,6 +64,16 @@ export class Cartello {
       g.lineStyle(4, 0x5a3a1e, 1).lineBetween(x - 7, y + 3, x + 6, y - 2);
       g.fillStyle(0x3f6a2a, 1).fillCircle(x - 4, y - 2, 3).fillCircle(x + 1, y - 5, 3);
       g.fillStyle(0xd8c090, 1).fillCircle(x + 6, y - 2, 2);
+    } else if (dati.aspetto === 'ricordo') {
+      // Fase 10c: un bagliore azzurro pulsante che custodisce un ricordo della Casa sul Colle.
+      g.fillStyle(0x8fd3ff, 0.35).fillCircle(x, y, 6.5);
+      g.fillStyle(0xd8f0ff, 0.95).fillCircle(x, y, 3.2);
+      scena.tweens.add({ targets: g, alpha: 0.55, yoyo: true, repeat: -1, duration: 850 });
+    } else if (dati.aspetto === 'leva') {
+      // Fase 10c: una leva di ferro su base di pietra per aprire porte runiche.
+      g.fillStyle(0x4a4a52, 1).fillRoundedRect(x - 5, y + 1, 10, 5, 2);
+      g.lineStyle(2, 0xc8d0d8, 1).lineBetween(x, y + 2, x + 4, y - 5);
+      g.fillStyle(0xff8c32, 1).fillCircle(x + 4, y - 5, 2);
     } else {
       // Frana: un mucchio di massi grigi di grandezze diverse.
       g.fillStyle(0x5a5a5a, 1).fillCircle(x - 4, y + 3, 5).fillCircle(x + 4, y + 2, 5.5).fillCircle(x, y - 3, 5);

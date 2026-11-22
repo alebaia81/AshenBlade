@@ -1,4 +1,4 @@
 {
-  "mappaIniziale": "borgo",
-  "salvataggioAutomatico": ["borgo"]
+  "mappaIniziale": "strada_maestra",
+  "salvataggioAutomatico": ["borgo", "pietrafonda", "guado"]
 }

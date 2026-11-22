@@ -35,3 +35,29 @@ export function ingaggia<T extends ConCompagni>(s: T, id: string, prezzo: number
 export function congeda<T extends ConCompagni>(s: T): T {
   return { ...s, compagni: { ...s.compagni, attivo: null } };
 }
+
+/**
+ * Fase 10b: un compagno di viaggio si unisce gratis con la storia e diventa
+ * subito il compagno attivo (quello precedente torna disponibile in taverna/pietra).
+ */
+export function unisciCompagno<T extends { compagni: StatoCompagni }>(s: T, id: string): T {
+  const ingaggiati = s.compagni.ingaggiati.includes(id) ? s.compagni.ingaggiati : [...s.compagni.ingaggiati, id];
+  return { ...s, compagni: { ingaggiati, attivo: id } };
+}
+
+/**
+ * Fase 10b: controlla se il compagno attivo ha un commento per la mappa in cui
+ * si entra che non è ancora stato visto.
+ */
+export function commentoAllIngresso(
+  idCompagno: string | null,
+  commenti: readonly { mappa: string; testo: string }[] | undefined,
+  idMappa: string,
+  commentiVisti: readonly string[],
+): { chiave: string; testo: string } | null {
+  if (!idCompagno || !commenti) return null;
+  const chiave = `${idCompagno}:${idMappa}`;
+  if (commentiVisti.includes(chiave)) return null;
+  const trovato = commenti.find((c) => c.mappa === idMappa);
+  return trovato ? { chiave, testo: trovato.testo } : null;
+}

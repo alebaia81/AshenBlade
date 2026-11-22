@@ -5,12 +5,16 @@ import {
   aggiungiTascaMissioni,
   apriForziere,
   assegnaPuntoPartita,
+  attivaPietra,
   caratteristicheTotali,
   contaTotale,
   creaPartita,
   forziereAperto,
   guarisci,
   indossa,
+  leggiRicordo,
+  scavaSepolto,
+  sepoltoScavato,
   togliIndossato,
   togliTascaMissioni,
   usaOggetto,
@@ -308,5 +312,32 @@ describe('tascaMissioni', () => {
     p = { ...p, inventario: aggiungi(p.inventario, 'chiave_piccola', 1, 99).inventario };
     p = aggiungiTascaMissioni(p, 'chiave_piccola', 2);
     expect(contaTotale(p, 'chiave_piccola')).toBe(3);
+  });
+});
+
+describe('tesori sepolti, pietre di passaggio e ricordi nella Partita (fase 10c)', () => {
+  it('scavaSepolto richiede la pala; scavato una volta, non si scava più', () => {
+    const p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    const senzaPala = scavaSepolto(p, 'bosco:4:5');
+    expect(senzaPala.ok).toBe(false);
+    if (!senzaPala.ok) expect(senzaPala.errore).toMatch(/Servirebbe una pala/);
+
+    const conPala = aggiungiTascaMissioni(p, 'pala', 1);
+    const scavato = scavaSepolto(conPala, 'bosco:4:5');
+    expect(scavato.ok).toBe(true);
+    if (!scavato.ok) return;
+    expect(sepoltoScavato(scavato.partita, 'bosco:4:5')).toBe(true);
+    expect(scavaSepolto(scavato.partita, 'bosco:4:5').ok).toBe(false);
+  });
+
+  it('attivaPietra e leggiRicordo aggiungono le chiavi senza duplicati', () => {
+    let p = creaPartita('A', guerrieroDiProva, ['FOR', 'COS']);
+    p = attivaPietra(p, 'borgo');
+    p = attivaPietra(p, 'borgo');
+    expect(p.pietre).toEqual(['borgo']);
+
+    p = leggiRicordo(p, 'casa_colle:3:4');
+    p = leggiRicordo(p, 'casa_colle:3:4');
+    expect(p.ricordiVisti).toEqual(['casa_colle:3:4']);
   });
 });

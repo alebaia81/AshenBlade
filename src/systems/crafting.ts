@@ -7,21 +7,36 @@ import { spendiMonete } from './monete';
 import type { DefinizioneOggetto } from './oggetti';
 import type { DefinizioneArma, DefinizioneArmatura } from './tipi';
 
+export type BancoCrafting = 'fucina' | 'armature' | 'alchimia';
+
 export interface Ricetta {
   id: string;
-  /** Id dell'oggetto creato (un'arma). */
+  /** Id dell'oggetto creato (arma, armatura, pozione o sigillo dell'Eco). */
   risultato: string;
   /** Materiale → quanti ne servono. */
   materiali: Record<string, number>;
-  /** Il compenso di Bruno. */
+  /** Il compenso dell'artigiano. */
   monete: number;
-  /** Bruno la conosce già; le altre si imparano con una pergamena. */
+  /** L'artigiano la conosce già dall'inizio; le altre si imparano da pergamene o sconfiggendo un boss. */
   conosciutaDallInizio: boolean;
+  /** Fase 10a: se indicato, la ricetta si sblocca da sola dopo aver sconfitto questo boss (es. Sigilli dell'Eco). */
+  sbloccataDaBoss?: string;
+  /** Fase 10b: in quale banco si forgia (predefinito: "fucina" di Bruno). */
+  banco?: BancoCrafting;
 }
 
-/** Le ricette che il giocatore può usare: quelle di base più quelle imparate. */
-export function ricetteConosciute(tutte: readonly Ricetta[], imparate: readonly string[]): Ricetta[] {
-  return tutte.filter((r) => r.conosciutaDallInizio || imparate.includes(r.id));
+/** Le ricette che il giocatore può usare: quelle di base, quelle imparate e quelle sbloccate dai boss sconfitti. */
+export function ricetteConosciute(
+  tutte: readonly Ricetta[],
+  imparate: readonly string[],
+  bossSconfitti: readonly string[] = [],
+  banco?: BancoCrafting,
+): Ricetta[] {
+  return tutte.filter((r) => {
+    if (banco && (r.banco ?? 'fucina') !== banco) return false;
+    const sbloccata = Boolean(r.sbloccataDaBoss && bossSconfitti.includes(r.sbloccataDaBoss));
+    return r.conosciutaDallInizio || imparate.includes(r.id) || sbloccata;
+  });
 }
 
 /** Impara una ricetta (da una pergamena). "nuova" è falso se la conoscevi già. */
@@ -56,8 +71,10 @@ export function crea<T extends Bottega>(
   r: Ricetta,
   imparate: readonly string[],
   pile: Readonly<Record<string, number>>,
+  bossSconfitti: readonly string[] = [],
 ): EsitoCrafting<T> {
-  if (!r.conosciutaDallInizio && !imparate.includes(r.id)) return { ok: false, errore: 'Non conosci questa ricetta' };
+  const sbloccata = Boolean(r.sbloccataDaBoss && bossSconfitti.includes(r.sbloccataDaBoss));
+  if (!r.conosciutaDallInizio && !imparate.includes(r.id) && !sbloccata) return { ok: false, errore: 'Non conosci questa ricetta' };
   // 1. I materiali: tolti uno per uno; se ne manca anche uno solo, ci si ferma.
   let inventario = s.inventario;
   for (const [id, quantita] of Object.entries(r.materiali)) {

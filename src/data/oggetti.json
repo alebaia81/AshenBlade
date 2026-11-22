@@ -375,5 +375,325 @@
       "tipo": "ricetta",
       "ricetta": "bastone_orvald"
     }
+  },
+  "frammento_eco": {
+    "id": "frammento_eco",
+    "nome": "Frammento d’eco",
+    "descrizione": "Una scheggia pallida lasciata da un grande nemico caduto. Risuona ancora della sua forza: serve per forgiare i Sigilli dell’Eco.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 20,
+    "prezzo": 100,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "sigillo_eco_re_scheletro": {
+    "id": "sigillo_eco_re_scheletro",
+    "nome": "Sigillo dell’Eco: Re Scheletro",
+    "descrizione": "Un sigillo inciso nell’osso antico. Usalo sull’altare nella Tomba del Re per affrontare l’Eco del Re Scheletro.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "sigillo_eco_troll_caverne": {
+    "id": "sigillo_eco_troll_caverne",
+    "nome": "Sigillo dell’Eco: Troll delle Caverne",
+    "descrizione": "Un sigillo incastonato nel cristallo di miniera. Usalo sull’altare nella Tana del Troll per affrontare l’Eco del Troll.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "sigillo_eco_negromante": {
+    "id": "sigillo_eco_negromante",
+    "nome": "Sigillo dell’Eco: Il Negromante",
+    "descrizione": "Un sigillo d’ossidiana che vibra di memoria. Usalo sull’altare in cima alla Torre per affrontare l’Eco del Negromante.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "pala": {
+    "id": "pala",
+    "nome": "Pala da scavo",
+    "descrizione": "Robusta pala di ferro. Serve per dissotterrare i tesori sepolti segnalati da Brina o dall’Elmo del veggente.",
+    "tipo": "missione",
+    "rarita": "comune",
+    "pila": 1,
+    "prezzo": 40,
+    "colore": "#c0c8d0",
+    "forma": "spada"
+  },
+  "chiave_cancello_borgo": {
+    "id": "chiave_cancello_borgo",
+    "nome": "Chiave del cancello di Borgo Quercia",
+    "descrizione": "Pesante chiave di ferro custodita da Fausto, la guardia al cancello occidentale di Borgo Quercia.",
+    "tipo": "missione",
+    "rarita": "comune",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#b0b8c0",
+    "forma": "chiave"
+  },
+  "ambra": {
+    "id": "ambra",
+    "nome": "Ambra grezza",
+    "descrizione": "Resina fossile dorata che trasuda dalle vecchie travi e dalle pareti delle Cantine del Mulino.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 25,
+    "colore": "#f0a830",
+    "forma": "cristallo"
+  },
+  "nucleo_melma": {
+    "id": "nucleo_melma",
+    "nome": "Nucleo di melma",
+    "descrizione": "Il cuore denso e pulsante del Re Melma. Bruno può usarlo nella fucina.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 80,
+    "colore": "#52e088",
+    "forma": "cristallo"
+  },
+  "chiave_ottone": {
+    "id": "chiave_ottone",
+    "nome": "Chiave del becchino",
+    "descrizione": "La seconda chiave della Cripta dei Non Morti, custodita da Ottone il becchino.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#c8a850",
+    "forma": "chiave"
+  },
+  "sigillo_eco_re_melma": {
+    "id": "sigillo_eco_re_melma",
+    "nome": "Sigillo dell’Eco: Re Melma",
+    "descrizione": "Un sigillo d’ambra e gelatina. Usalo sull’altare nelle Cantine del Mulino per affrontare l’Eco del Re Melma.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "ghianda_oro": {
+    "id": "ghianda_oro",
+    "nome": "Ghianda d’oro",
+    "descrizione": "Una delle dodici ghiande d’oro lasciate cadere dalla Quercia Antica. Nonna Rosalba ne conosce la leggenda.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 12,
+    "prezzo": 0,
+    "colore": "#ffd700",
+    "forma": "frammento"
+  },
+  "ascia_aldo_rotta": {
+    "id": "ascia_aldo_rotta",
+    "nome": "Ascia spezzata di Aldo",
+    "descrizione": "La vecchia ascia da boscaiolo di Aldo, il padre di Tessa. Il legno e il ferro possono essere riforgiati da Bruno.",
+    "tipo": "missione",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 0,
+    "colore": "#b88a58",
+    "forma": "spada"
+  },
+  "pergamena_arco_aldo": {
+    "id": "pergamena_arco_aldo",
+    "nome": "Pergamena: Arco di Aldo",
+    "descrizione": "Insegna a Bruno a forgiare: Arco di Aldo. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 180,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "arco_aldo"
+    }
+  },
+  "pergamena_corazza_cuoio_rinforzata": {
+    "id": "pergamena_corazza_cuoio_rinforzata",
+    "nome": "Pergamena: Corazza di cuoio rinforzata",
+    "descrizione": "Insegna a forgiare: Corazza di cuoio rinforzata. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "non_comune",
+    "pila": 5,
+    "prezzo": 70,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "corazza_cuoio_rinforzata"
+    }
+  },
+  "mappa_mugnaio": {
+    "id": "mappa_mugnaio",
+    "nome": "Mappa del mugnaio",
+    "descrizione": "«Al Mulino del Ponte, sulla riva ovest prima dell’acqua, il vecchio mugnaio ha seppellito il suo gruzzolo.» Usala dallo zaino per guardarla.",
+    "tipo": "pergamena",
+    "rarita": "non_comune",
+    "pila": 1,
+    "prezzo": 50,
+    "colore": "#e8d9b0",
+    "forma": "mappa",
+    "effetto": {
+      "tipo": "mappa",
+      "quest": "tesoro_mugnaio"
+    }
+  },
+  "argento": {
+    "id": "argento",
+    "nome": "Minerale d’argento",
+    "descrizione": "Vena lucente estratta sulle alture di Pietrafonda e nelle Cave di Zolfo. Ugo lo usa per le armature più pregiate.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 30,
+    "colore": "#d8e0ec",
+    "forma": "minerale"
+  },
+  "zolfo": {
+    "id": "zolfo",
+    "nome": "Zolfo giallo",
+    "descrizione": "Cristalli gialli dall’odore pungente estratti nelle Cave di Zolfo. Usati da Ferrante e dai goblin per le miscele esplosive.",
+    "tipo": "materiale",
+    "rarita": "non_comune",
+    "pila": 10,
+    "prezzo": 20,
+    "colore": "#e8d030",
+    "forma": "minerale"
+  },
+  "sigillo_spezzato": {
+    "id": "sigillo_spezzato",
+    "nome": "Sigillo spezzato di Orvald",
+    "descrizione": "Un medaglione di ferro e ossidiana con cui Orvald pagava i carichi di Ferrante il Contrabbandiere.",
+    "tipo": "materiale",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 100,
+    "colore": "#a858d8",
+    "forma": "frammento"
+  },
+  "sigillo_eco_ferrante": {
+    "id": "sigillo_eco_ferrante",
+    "nome": "Sigillo dell’Eco: Ferrante",
+    "descrizione": "Un sigillo d’argento impregnato di zolfo. Usalo sull’altare nelle Cave di Zolfo per affrontare l’Eco di Ferrante.",
+    "tipo": "missione",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 0,
+    "colore": "#a0e0ff",
+    "forma": "frammento"
+  },
+  "pergamena_corazza_argento": {
+    "id": "pergamena_corazza_argento",
+    "nome": "Pergamena: Corazza d’argento",
+    "descrizione": "Insegna a Ugo a forgiare nel banco delle armature: Corazza d’argento. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 5,
+    "prezzo": 130,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "corazza_argento"
+    }
+  },
+  "pergamena_guanti_titano": {
+    "id": "pergamena_guanti_titano",
+    "nome": "Pergamena: Guanti del titano",
+    "descrizione": "Insegna a Ugo a forgiare nel banco delle armature: Guanti del titano. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 190,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "guanti_titano"
+    }
+  },
+  "pietra_lunare": {
+    "id": "pietra_lunare",
+    "nome": "Pietra lunare",
+    "descrizione": "Cristallo pallido come il chiarore della luna, nascosto nelle vene dietro le rocce crepate delle Colline e della Miniera.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 45,
+    "colore": "#b8d8ff",
+    "forma": "cristallo"
+  },
+  "pergamena_pugnali_pietrarossa": {
+    "id": "pergamena_pugnali_pietrarossa",
+    "nome": "Pergamena: Pugnali di Pietrarossa",
+    "descrizione": "Insegna a Bruno a forgiare: Pugnali di Pietrarossa. Usala dallo zaino.",
+    "tipo": "pergamena",
+    "rarita": "leggendaria",
+    "pila": 5,
+    "prezzo": 190,
+    "colore": "#e8d9b0",
+    "effetto": {
+      "tipo": "ricetta",
+      "ricetta": "pugnali_pietrarossa"
+    }
+  },
+  "mappa_ferrante": {
+    "id": "mappa_ferrante",
+    "nome": "Mappa di Ferrante",
+    "descrizione": "«Sul Passo del Corvo, oltre il burrone, sull’altopiano a nord del carro d’ossidiana ho seppellito la cassa di riserva.» Usala dallo zaino per guardarla.",
+    "tipo": "pergamena",
+    "rarita": "rara",
+    "pila": 1,
+    "prezzo": 75,
+    "colore": "#e8d9b0",
+    "forma": "mappa",
+    "effetto": {
+      "tipo": "mappa",
+      "quest": "tesoro_ferrante"
+    }
+  },
+  "giunco_palude": {
+    "id": "giunco_palude",
+    "nome": "Giunco di palude",
+    "descrizione": "Stelo flessibile che cresce nelle acque basse della Palude delle Lanterne. Usato nell’alchimia e nei sigilli.",
+    "tipo": "materiale",
+    "rarita": "non_comune",
+    "pila": 10,
+    "prezzo": 25,
+    "colore": "#68b078",
+    "forma": "erba"
+  },
+  "erica": {
+    "id": "erica",
+    "nome": "Erica notturna",
+    "descrizione": "Fiore violaceo che sboccia solo sotto il chiarore della Brughiera. Ingrediente prediletto di Selva.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 35,
+    "colore": "#c880e0",
+    "forma": "erba"
+  },
+  "essenza_ombra": {
+    "id": "essenza_ombra",
+    "nome": "Essenza d’ombra",
+    "descrizione": "Vapore condensato lasciato dai Fuochi fatui e dagli spettri della palude.",
+    "tipo": "materiale",
+    "rarita": "rara",
+    "pila": 10,
+    "prezzo": 50,
+    "colore": "#8890e8",
+    "forma": "cristallo"
   }
 }

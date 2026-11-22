@@ -131,10 +131,10 @@ export class ScenaDialogo extends Phaser.Scene {
     }
   }
 
-  /** Negozio (5b) e taverna (5c): li apre il mondo, che sa quali scene esistono. */
+  /** Negozio (5b, 11a), taverna (5c) e banchi (10b): li apre il mondo, che sa quali scene esistono. */
   private apri(cosa: CosaApribile): void {
     this.chiudi();
-    this.mondo.apri(cosa);
+    this.mondo.apri(cosa, this.idAbitante);
   }
 
   private chiudi(): void {

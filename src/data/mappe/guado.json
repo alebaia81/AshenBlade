@@ -1,0 +1,147 @@
+{
+  "id": "guado",
+  "nome": "Il Guado delle Lanterne",
+  "notte": true,
+  "legenda": {
+    "#": {
+      "tipo": "muro",
+      "colore": "#1a1420",
+      "tessera": [{ "immagine": "erba", "tinta": "#a090b8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    "T": {
+      "tipo": "muro",
+      "colore": "#2a2a3a",
+      "tessera": [{ "immagine": "erba", "tinta": "#b8a0c8" }, { "immagine": "pino", "tinta": "#9080a8" }]
+    },
+    "~": {
+      "tipo": "muro",
+      "colore": "#283858",
+      "tessera": ["#283858", { "immagine": "onde", "alfa": 0.3 }]
+    },
+    "t": {
+      "tipo": "muro",
+      "colore": "#783838",
+      "tessera": "tetto_rosso"
+    },
+    "H": {
+      "tipo": "muro",
+      "colore": "#8a6848",
+      "tessera": "muro_legno"
+    },
+    "D": {
+      "tipo": "muro",
+      "colore": "#4a3020",
+      "tessera": "porta_casa"
+    },
+    "f": {
+      "tipo": "muro",
+      "colore": "#d88030",
+      "tessera": "braciere"
+    },
+    ".": {
+      "tipo": "pavimento",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    ":": {
+      "tipo": "pavimento",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "p": {
+      "tipo": "pavimento",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "@": {
+      "tipo": "partenza",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "a": {
+      "tipo": "arrivo",
+      "colore": "#7a6a72",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "n": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "brughiera",
+      "arrivo": "c",
+      "tessera": { "immagine": "sentiero", "tinta": "#b0a0b0" }
+    },
+    "b": {
+      "tipo": "arrivo",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "o": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "palude_lanterne",
+      "arrivo": "a",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "P": {
+      "tipo": "pietra",
+      "nome": "Guado delle Lanterne",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "O": {
+      "tipo": "abitante",
+      "abitante": "orsola",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "M": {
+      "tipo": "abitante",
+      "abitante": "teodoro",
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    },
+    "g": {
+      "tipo": "vena",
+      "materiale": "giunco_palude",
+      "quantita": [1, 2],
+      "aspetto": "cespuglio",
+      "colore": "#5a4a6a",
+      "tessera": { "immagine": "erba", "tinta": "#b8a0c8" }
+    },
+    "X": {
+      "tipo": "forziere",
+      "contenuto": [
+        "pozione_vita",
+        "pozione_mana",
+        "giunco_palude"
+      ],
+      "monete": 45,
+      "colore": "#8a6e50",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#c8b090" }
+    }
+  },
+  "griglia": [
+    "###############n##############",
+    "#...T.........:a:........T...#",
+    "#......g......:::............#",
+    "#.........ttttttttttt........#",
+    "#..T......ttttttttttt.....T..#",
+    "#.........HHHHHHHHHHH........#",
+    "#.........HHHHDHHHHHH...g....#",
+    "#....f...ppppppppppppp..f....#",
+    "~~~~~~~~~ppppppOpppppp~~~~~~~~",
+    "~~~~~~~~~ppppppppppppp~~~~~~~~",
+    "~~~~~~~~~ppppPpp@ppppp~~~~~~~~",
+    "obpppppppppppppppppppMpppX~~~~",
+    "~~~~~~~~~ppppppppppppp~~~~~~~~",
+    "~~~~~~~~~fpppppppppppf~~~~~~~~",
+    "~~~~~~~~~~~~~~ppp~~~~~~~~~~~~~",
+    "#.............:::..........T.#",
+    "#....T........:::.....g......#",
+    "#......g......:::............#",
+    "#.............:::....T.......#",
+    "#...T....................T...#",
+    "#............................#",
+    "##############################"
+  ]
+}

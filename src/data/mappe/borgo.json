@@ -39,6 +39,18 @@
       "arrivo": "c",
       "tessera": "sentiero"
     },
+    "s": {
+      "tipo": "uscita",
+      "colore": "#c9a227",
+      "verso": "strada_maestra",
+      "arrivo": "b",
+      "tessera": "sentiero"
+    },
+    "o": {
+      "tipo": "arrivo",
+      "colore": "#b39b72",
+      "tessera": "sentiero"
+    },
     "Q": {
       "tipo": "muro",
       "colore": "#2f5a24",
@@ -144,6 +156,12 @@
       "colore": "#a39e92",
       "testo": "Un grosso ramo della Quercia Antica, tagliato di netto. Sul taglio la linfa è nera come l'inchiostro.",
       "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
+    },
+    "P": {
+      "tipo": "pietra",
+      "nome": "Borgo Quercia",
+      "colore": "#a39e92",
+      "tessera": { "immagine": "pietra_chiara", "tinta": "#d0ccc0" }
     }
   },
   "griglia": [
@@ -163,8 +181,8 @@
     "#..rrrrrr:::ppppppQQQppppppp:::::::::a:g",
     "#..HHHHHH:::ppppppQQQppppppp:::::::::::g",
     "#..HHHDHH:::ppppppphpppppppp...........#",
-    "#.....::::::ppppppp@pppppppp.......B...#",
-    "#...........pppppppppppppppp.....T.B...#",
+    "so::::::::::ppppppp@pppppppp.......B...#",
+    "#...........pppPpppppppppppp.....T.B...#",
     "#.T.........pppppppppppppppp.......B...#",
     "#.....::::::::..............:......B.T.#",
     "#.......U...................:.O....B...#",

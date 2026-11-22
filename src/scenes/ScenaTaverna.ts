@@ -17,6 +17,8 @@ const PANNELLO = { larghezza: 920, altezza: 490 };
 const SCHEDA = { larghezza: 205, altezza: 364, distanza: 220 };
 
 export class ScenaTaverna extends Phaser.Scene {
+  private pagina: 'taverna' | 'viaggio' = 'taverna';
+  private schedePagina?: { taverna: Pulsante; viaggio: Pulsante };
   private contenuto!: Phaser.GameObjects.Container;
   private monete!: Phaser.GameObjects.Text;
   private esito!: Phaser.GameObjects.Text;
@@ -28,6 +30,7 @@ export class ScenaTaverna extends Phaser.Scene {
   }
 
   create(): void {
+    this.pagina = 'taverna';
     const cx = this.scale.width / 2;
     const cy = ALTEZZA_SCHERMO / 2;
     this.sinistra = cx - PANNELLO.larghezza / 2;
@@ -36,6 +39,28 @@ export class ScenaTaverna extends Phaser.Scene {
     this.add.rectangle(cx, cy, PANNELLO.larghezza, PANNELLO.altezza, 0x221a14, 0.97).setStrokeStyle(2, 0xb08a5a);
     this.add.text(this.sinistra + 24, this.alto + 14, 'Il Cinghiale Zoppo', { ...STILE_TITOLO, fontSize: '22px' });
     this.add.text(this.sinistra + 24, this.alto + 42, 'Un compagno ti segue e combatte con te. Si paga una volta sola; uno alla volta.', { ...STILE_TESTO, fontSize: '13px', color: '#c8b8a0' });
+    this.schedePagina = {
+      taverna: new Pulsante(this, this.sinistra + 560, this.alto + 28, {
+        larghezza: 118,
+        altezza: 30,
+        testo: 'Taverna',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.pagina = 'taverna';
+          this.ridisegna();
+        },
+      }),
+      viaggio: new Pulsante(this, this.sinistra + 694, this.alto + 28, {
+        larghezza: 138,
+        altezza: 30,
+        testo: 'Compagni storia',
+        dimensioneTesto: 13,
+        alClic: () => {
+          this.pagina = 'viaggio';
+          this.ridisegna();
+        },
+      }),
+    };
     const icona = this.add.graphics({ x: this.sinistra + PANNELLO.larghezza - 120, y: this.alto + 28 });
     disegnaOggetto(icona, this.dati.oggetti['monete']!, 20);
     this.monete = this.add.text(this.sinistra + PANNELLO.larghezza - 104, this.alto + 17, '', { ...STILE_TESTO, fontSize: '20px', color: '#ffe680', fontStyle: 'bold' });
@@ -50,7 +75,22 @@ export class ScenaTaverna extends Phaser.Scene {
     const partita = leggiPartita(this);
     this.monete.setText(String(partita.monete));
     this.contenuto.removeAll(true);
-    Object.values(this.dati.compagni).forEach((c, i) => this.scheda(c, i));
+    this.schedePagina?.taverna.impostaSelezionato(this.pagina === 'taverna');
+    this.schedePagina?.viaggio.impostaSelezionato(this.pagina === 'viaggio');
+    const elenco = Object.values(this.dati.compagni).filter((c) =>
+      this.pagina === 'viaggio' ? Boolean(c.viaggio && partita.compagni.ingaggiati.includes(c.id)) : !c.viaggio,
+    );
+    if (elenco.length === 0) {
+      this.contenuto.add(
+        this.add.text(this.sinistra + 24, this.alto + 120, 'Non hai ancora incontrato compagni di viaggio nella storia.', {
+          ...STILE_TESTO,
+          fontSize: '15px',
+          color: '#c8b8a0',
+        }),
+      );
+      return;
+    }
+    elenco.forEach((c, i) => this.scheda(c, i));
   }
 
   /** Una "carta" per compagno: ritratto in pixel art, descrizione, numeri, bonus, abilità e pulsante. */

@@ -46,5 +46,53 @@
     "nome": "Ugo",
     "colore": "#5a6a7a",
     "dialogo": "ugo"
+  },
+  "teodoro": {
+    "id": "teodoro",
+    "nome": "Teodoro il mercante",
+    "colore": "#b87a3d",
+    "dialogo": "teodoro"
+  },
+  "fausto": {
+    "id": "fausto",
+    "nome": "Fausto la guardia",
+    "colore": "#6a8a50",
+    "dialogo": "fausto"
+  },
+  "ottone": {
+    "id": "ottone",
+    "nome": "Ottone il becchino",
+    "colore": "#6a7260",
+    "dialogo": "ottone"
+  },
+  "tessa": {
+    "id": "tessa",
+    "nome": "Tessa la cacciatrice",
+    "colore": "#5a8f48",
+    "dialogo": "tessa"
+  },
+  "matteo": {
+    "id": "matteo",
+    "nome": "Matteo",
+    "colore": "#6880a0",
+    "dialogo": "matteo"
+  },
+  "grisk": {
+    "id": "grisk",
+    "nome": "Grisk",
+    "colore": "#d07838",
+    "dialogo": "grisk"
+  },
+  "krak": {
+    "id": "krak",
+    "nome": "Krak di Pietrarossa",
+    "colore": "#70a848",
+    "dialogo": "krak"
+  },
+  "orsola": {
+    "id": "orsola",
+    "nome": "Mamma Orsola",
+    "colore": "#b86848",
+    "dialogo": "orsola"
   }
 }

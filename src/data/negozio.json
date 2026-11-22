@@ -14,10 +14,38 @@
       "pergamena_mazza_gelo",
       "bacchetta",
       "corazza_cuoio",
+      "mappa_mugnaio",
       "mappa_cavaliere",
+      "mappa_ferrante",
       "elmo_ferro",
       "guanti_ferro",
       "corazza_ferro"
+    ]
+  },
+  "teodoro": {
+    "nome": "Carro di Teodoro",
+    "merce": [
+      "pala",
+      "pozione_vita",
+      "pozione_mana",
+      "pozione_forza",
+      "pozione_resistenza",
+      "minerale_ferro",
+      "carbone",
+      "erba_medicinale",
+      "borsa"
+    ]
+  },
+  "krak": {
+    "nome": "Banco goblin di Krak",
+    "merce": [
+      "zolfo",
+      "argento",
+      "pietra_lunare",
+      "pozione_vita",
+      "pozione_forza",
+      "pozione_resistenza",
+      "mappa_ferrante"
     ]
   }
 }

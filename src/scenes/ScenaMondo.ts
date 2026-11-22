@@ -25,6 +25,7 @@ import {
   SCENA_MAPPA_TESORO,
   SCENA_FINALE,
   SCENA_PAUSA,
+  SCENA_PIETRA,
   CHIAVE_SLOT,
   SCENA_REGISTRO,
   SCENA_TAVERNA,
@@ -50,17 +51,19 @@ import { scuotiSchermo, mostraVignetteDanno } from './mondo/feedbackVisivo';
 import { apriConChiave, apriPorta, portaAperta } from '../systems/porte';
 import type { Nemico } from '../entities/Nemico';
 import { creaStatoAbilita, frazioneRicarica, puòUsare, usa, type StatoAbilita } from '../systems/abilita';
-import { tiraBottino } from '../systems/bottino';
+import { bottinoBoss, tiraBottino } from '../systems/bottino';
+import { creaDefinizioneEco } from '../systems/boss';
 import type { Caratteristiche } from '../systems/caratteristiche';
 import { casualeVero } from '../systems/casuale';
 import { calcolaDanno } from '../systems/combattimento';
 import { assorbiDanno, type Protezione } from '../systems/compagno';
+import { commentoAllIngresso, unisciCompagno } from '../systems/taverna';
 import type { AzioneDialogo, Condizione, CosaApribile } from '../systems/dialoghi';
 import { modificatore } from '../systems/caratteristiche';
 import { applicaCondizioni, type CondizioneCella } from '../systems/condizioniMappa';
 import { èDiMissione } from '../systems/oggetti';
 import { accetta, automatichePronte, avvisiRaccolta, concludi, registraEvento, segnoSopra, statoDi, type EventoQuest } from '../systems/quest';
-import { danniRimandati, NUMERI_EFFETTI, prossimoRimbalzo } from '../systems/effettiArmi';
+import { bersagliEsplosione, danniRimandati, direzioniDardoDiviso, NUMERI_EFFETTI, prossimoRimbalzo } from '../systems/effettiArmi';
 import { aggiungiMonete, moneteDelNemico } from '../systems/monete';
 import {
   armaturaTotale,
@@ -71,7 +74,7 @@ import {
 import { areaDiColpo, direzioneDa, intersecano, VERSI } from '../systems/geometria';
 import { aTiro, direzioneVerso } from '../systems/mira';
 import { attivi, bonus, rimanente } from '../systems/effettiTemporanei';
-import { aggiungi, conta, togli } from '../systems/inventario';
+import { aggiungi, conta, togli, togliPerId } from '../systems/inventario';
 import { smontaOggettoDaInventario } from '../systems/crafting';
 import { cellaDaPixel, centroCella } from '../systems/coordinate';
 import { assegnaPreferito, cosaFa, svuotaPreferito } from '../systems/preferiti';
@@ -80,6 +83,9 @@ import {
   celleForziere,
   celleNemico,
   celleSegrete,
+  celleCrepate,
+  celleSepolte,
+  cellePietra,
   celleVena,
   celleCartello,
   cellePorte,
@@ -95,13 +101,17 @@ import {
   aggiungiTascaMissioni,
   apriForziere,
   apriMuro,
+  attivaPietra,
   caratteristicheTotali,
   contaTotale,
   forziereAperto,
   guarisci,
   indossa,
   invertiArmi,
+  leggiRicordo,
   muroAperto,
+  scavaSepolto,
+  sepoltoScavato,
   togliIndossato,
   togliTascaMissioni,
   usaOggetto,
@@ -170,12 +180,38 @@ export class ScenaMondo extends Phaser.Scene {
   private vene: Vena[] = [];
   private cartelli: Cartello[] = [];
   private porte: Porta[] = [];
+  /** Fase 10c: tesori sepolti (invisibili finché non rivelati da Brina o Elmo del veggente). */
+  private sepolti: {
+    cella: Cella;
+    posizione: Vettore;
+    chiave: string;
+    contenuto: string[];
+    monete: number;
+    scavato: boolean;
+    visibile: boolean;
+    grafica: Phaser.GameObjects.Container;
+  }[] = [];
+  /** Fase 10c: pietre di passaggio nel villaggio/avamposto. */
+  private pietre: {
+    cella: Cella;
+    posizione: Vettore;
+    nome: string;
+    forma: Phaser.GameObjects.Rectangle;
+    grafica: Phaser.GameObjects.Container;
+  }[] = [];
   private tiriNemici!: GestoreTiriNemici;
   /** Per i massi del troll: un colpo all'eroe che non arriva per contatto. */
   private colpoDaLontano!: ColpoDaLontano;
   private barriere: Barriera[] = [];
   /** Il boss della mappa, se c'è e non è già stato sconfitto (fase 8a). */
   private boss: GestoreBoss | null = null;
+  /** Fase 10a: l'altare dell'Eco che compare nella stanza del boss sconfitto. */
+  private altareEco: {
+    idBoss: string;
+    posizione: Vettore;
+    grafica: Phaser.GameObjects.Container;
+    visibile: boolean;
+  } | null = null;
   private livello!: Phaser.Tilemaps.TilemapLayer;
   private griglia!: Griglia;
   // ---- compagno (fase 5c) ----
@@ -184,10 +220,14 @@ export class ScenaMondo extends Phaser.Scene {
   private collisioniCompagno: Phaser.Physics.Arcade.Collider[] = [];
   /** Parata di Corrado o scudo di Elisa sull'eroe. */
   private protezione: Protezione = null;
-  /** Fino a quando il fiuto di Volpe fa brillare i tesori. */
+  /** Fino a quando il fiuto di Volpe o di Brina fa brillare i tesori. */
   private segnaleFino = 0;
   /** Ultima cura "nel tempo" di Sorella Agata. */
   private ultimaCuraCompagno = 0;
+  /** Fase 10b: ultima cura nel tempo del Cuore della Quercia (1 vita ogni 5 s). */
+  private ultimaCuraQuercia = 0;
+  /** Fase 10b: Ciondolo di Lia (salvavita), si attiva al massimo una volta per zona. */
+  private salvavitaUsato = false;
   /** Disegno dello scudo intorno all'eroe. */
   private disegnoProtezione!: Phaser.GameObjects.Graphics;
   /**
@@ -233,12 +273,21 @@ export class ScenaMondo extends Phaser.Scene {
     this.physics.add.collider(this.eroe.forma, livello);
 
     // I nemici rinascono ogni volta che la scena riparte (design §11).
-    this.nemici = new GruppoNemici(this, livello, (d) => aspettoDi(this.dati.sprite, 'nemici', d.id));
+    this.nemici = new GruppoNemici(this, livello, (d) => {
+      const base = aspettoDi(this.dati.sprite, 'nemici', d.id);
+      if (!base || !d.tintaEco) return base;
+      return { ...base, tinta: parseInt(d.tintaEco.replace('#', ''), 16), alfa: d.opacita ?? 0.85 };
+    });
+    this.altareEco = null;
     let bossQui: Nemico | null = null;
+    let cellaAltareEco: { cella: Cella; idBoss: string } | null = null;
     for (const { cella: c, idNemico } of celleNemico(this.mappa)) {
       const def = this.dati.nemici[idNemico]!;
-      // I boss sconfitti non ricompaiono (§11); i nemici normali sì.
-      if (def.fasi && this.partita.bossSconfitti.includes(idNemico)) continue;
+      // I boss sconfitti non ricompaiono (§11); al loro posto compare l'Altare dell'Eco (fase 10a).
+      if (def.fasi && this.partita.bossSconfitti.includes(idNemico)) {
+        if (def.eco) cellaAltareEco = { cella: c, idBoss: idNemico };
+        continue;
+      }
       const n = this.nemici.aggiungi(def, centroCella(c, TESSERA));
       if (def.fasi) bossQui = n;
     }
@@ -249,7 +298,13 @@ export class ScenaMondo extends Phaser.Scene {
     this.creaVene();
     this.creaCartelli();
     this.creaPorte();
+    this.creaSepolti();
+    this.creaPietre();
     // Quest: i segni sopra le persone seguono la Partita (accetti, raccogli, vendi…).
+    if (this.mappa.id === 'strada_maestra' && this.dati.quest['prologo_strada'] && !this.partita.quest['prologo_strada']) {
+      const quest = accetta(this.partita.quest, 'prologo_strada', this.dati.quest);
+      if (quest !== this.partita.quest) scriviPartita(this, { ...this.partita, quest });
+    }
     const segni = () => this.aggiornaSegni();
     this.registry.events.on(`changedata-${CHIAVE_PARTITA}`, segni);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.registry.events.off(`changedata-${CHIAVE_PARTITA}`, segni));
@@ -264,30 +319,14 @@ export class ScenaMondo extends Phaser.Scene {
       (c, r) => this.barriere.some((b) => b.chiusa && qui(b, c, r)),
     );
     this.griglia = griglia;
-    this.boss = bossQui
-      ? new GestoreBoss(
-          this,
-          bossQui,
-          this.barriere,
-          this.nemici,
-          griglia,
-          this.dati.nemici,
-          (t) => {
-            mostraAvviso(this, t);
-            this.scuotiSchermo(200, 0.004);
-          },
-          {
-            eroe: () => ({ x: this.eroe.x, y: this.eroe.y }),
-            colpisci: (n, dado, da) => this.colpoDaLontano(n, dado, da),
-            casuale: casualeVero,
-            tira: (n, direzione, parametri, dado) => this.tiriNemici.tiraCon(n, direzione, parametri, dado),
-          },
-        )
-      : null;
+    this.boss = bossQui ? this.creaGestoreBoss(bossQui) : null;
     if (!bossQui) this.registry.set(CHIAVE_BOSS, null);
+    if (cellaAltareEco) this.creaAltareEco(centroCella(cellaAltareEco.cella, TESSERA), cellaAltareEco.idBoss);
     this.guida = new GuidaEroe(this.eroe, this.nemici, griglia, (p) => this.interagibileSotto(p));
     this.protezione = null;
     this.segnaleFino = 0;
+    this.salvavitaUsato = false;
+    this.ultimaCuraQuercia = 0;
     this.disegnoProtezione = this.add.graphics().setDepth(12);
     this.preparaMouse();
     this.lineaPercorso = this.add.graphics().setDepth(3);
@@ -309,6 +348,12 @@ export class ScenaMondo extends Phaser.Scene {
     this.proiettili = new GestoreProiettili(this, griglia.calpestabile, this.nemici);
     // Il bastone del Mago: ogni attacco lancia un dardo magico.
     this.eroe.quandoTira = (da, direzione) => this.tiraProiettile(this.eroe.arma, da, direzione);
+    // Fase 10b (Velo di Selva): dopo una capriola sei invisibile per 1 secondo.
+    this.eroe.quandoSchiva = (adesso) => {
+      if (this.effettiArmatura().includes('capriola_ombra')) {
+        this.eroe.rendiInvisibile(adesso + 1000);
+      }
+    };
     this.mira = null;
     this.secondariaPronta = 0;
     const colpoDaLontano = gestisciContatti(
@@ -386,6 +431,7 @@ export class ScenaMondo extends Phaser.Scene {
     if (this.compagno && !this.compagno.alTappeto && !this.eroe.sconfitto) bersagli.push({ x: this.compagno.x, y: this.compagno.y });
     this.nemici.aggiorna(adesso, bersagli);
     this.aggiornaCompagno(adesso);
+    this.aggiornaEffettiAmuleto(adesso);
     this.attacchi.aggiorna(adesso);
     this.combattimento.aggiorna(this.nemici.vivi(), adesso);
     if (!this.eroe.sconfitto) this.boss?.aggiorna(adesso, { x: this.eroe.x, y: this.eroe.y });
@@ -401,10 +447,10 @@ export class ScenaMondo extends Phaser.Scene {
 
   /** Apre la scheda del personaggio mettendo in pausa il mondo (icona del ritratto o C). */
   apriScheda(): void {
-    if (this.inTransizione || this.eroe.sconfitto || !this.scene.isActive()) return;
+    if (this.inTransizione || this.eroe.sconfitto || (!this.scene.isActive() && !this.scene.isPaused())) return;
     this.salvaRisorse();
     this.scene.launch(SCENA_SCHEDA);
-    this.scene.pause();
+    if (this.scene.isActive()) this.scene.pause();
   }
 
   /**
@@ -496,10 +542,10 @@ export class ScenaMondo extends Phaser.Scene {
 
   /** Apre il registro delle quest (icona della pergamena o L). */
   apriRegistro(): void {
-    if (this.inTransizione || this.eroe.sconfitto || !this.scene.isActive()) return;
+    if (this.inTransizione || this.eroe.sconfitto || (!this.scene.isActive() && !this.scene.isPaused())) return;
     this.salvaRisorse();
     this.scene.launch(SCENA_REGISTRO);
-    this.scene.pause();
+    if (this.scene.isActive()) this.scene.pause();
   }
 
   // ---- quest (fase 7) ----
@@ -527,7 +573,10 @@ export class ScenaMondo extends Phaser.Scene {
     scriviPartita(this, { ...p, quest });
     mostraAvviso(this, `Nuova quest: «${this.dati.quest[idQuest]!.nome}» (registro: L)`);
     for (const passo of this.dati.quest[idQuest]!.passi) {
-      if (passo.obiettivo.tipo === 'trova' && this.partita.forzieriAperti.includes(passo.obiettivo.forziere)) {
+      if (
+        passo.obiettivo.tipo === 'trova' &&
+        (this.partita.forzieriAperti.includes(passo.obiettivo.forziere) || this.partita.sepoltiScavati.includes(passo.obiettivo.forziere))
+      ) {
         this.eventoQuest({ tipo: 'aperto', forziere: passo.obiettivo.forziere });
       }
     }
@@ -555,22 +604,58 @@ export class ScenaMondo extends Phaser.Scene {
   }
 
   /**
-   * Il dialogo esegue un'azione: accettare o concludere una quest. Restituisce
-   * una riga da mostrare nel riquadro del dialogo (l'avviso in basso resterebbe coperto).
+   * Il dialogo esegue un'azione: accettare o concludere una quest, oppure unire
+   * un compagno di viaggio (fase 10b). Restituisce una riga da mostrare nel riquadro del dialogo.
    */
   azioneQuest(azione: AzioneDialogo): string | null {
-    const p = this.partita;
-    if ('accetta' in azione) {
+    const messaggi: string[] = [];
+    if ('accetta' in azione && azione.accetta) {
+      const p = this.partita;
       const quest = accetta(p.quest, azione.accetta, this.dati.quest);
-      if (quest === p.quest) return null;
-      scriviPartita(this, { ...p, quest });
-      // Alcune quest danno subito qualcosa da portare (la lettera di Bruno).
-      for (const o of this.dati.quest[azione.accetta]!.oggettiAllInizio ?? []) this.daiOTerra(o.id, o.quantita);
-      const testo = `Nuova quest: «${this.dati.quest[azione.accetta]!.nome}» (registro: L)`;
-      mostraAvviso(this, testo);
-      return testo;
+      if (quest !== p.quest) {
+        scriviPartita(this, { ...p, quest });
+        // Alcune quest danno subito qualcosa da portare (la lettera di Bruno).
+        for (const o of this.dati.quest[azione.accetta]!.oggettiAllInizio ?? []) this.daiOTerra(o.id, o.quantita);
+        for (const passo of this.dati.quest[azione.accetta]!.passi) {
+          if (
+            passo.obiettivo.tipo === 'trova' &&
+            (this.partita.forzieriAperti.includes(passo.obiettivo.forziere) || this.partita.sepoltiScavati.includes(passo.obiettivo.forziere))
+          ) {
+            this.eventoQuest({ tipo: 'aperto', forziere: passo.obiettivo.forziere });
+          }
+        }
+        const testo = `Nuova quest: «${this.dati.quest[azione.accetta]!.nome}» (registro: L)`;
+        mostraAvviso(this, testo);
+        messaggi.push(testo);
+      }
     }
-    return this.concludiQuest(azione.concludi);
+    if ('concludi' in azione && azione.concludi) {
+      const esito = this.concludiQuest(azione.concludi);
+      if (esito) messaggi.push(esito);
+    }
+    if ('unisci' in azione && azione.unisci) {
+      const comp = this.dati.compagni[azione.unisci];
+      if (comp) {
+        scriviPartita(this, unisciCompagno(this.partita, comp.id));
+        this.creaCompagno();
+        const testo = `${comp.nome} si unisce al tuo viaggio!`;
+        mostraAvviso(this, testo);
+        messaggi.push(testo);
+      }
+    }
+    if ('aprePorta' in azione && azione.aprePorta) {
+      const chiavePorta = azione.aprePorta.split(':').length === 3 ? azione.aprePorta : `${this.mappa.id}:${azione.aprePorta}`;
+      const bersaglio = this.porte.find((p) => p.chiave === chiavePorta);
+      if (bersaglio && !bersaglio.aperta) {
+        bersaglio.apri();
+        suoni.effetto('porta');
+        scriviPartita(this, apriPorta(this.partita, chiavePorta));
+        const testo = `${bersaglio.nome} si apre!`;
+        mostraAvviso(this, testo);
+        messaggi.push(testo);
+      }
+    }
+    return messaggi.length > 0 ? messaggi.join(' · ') : null;
   }
 
   /** Nello zaino, o ai piedi dell'eroe se non c'è posto. */
@@ -1101,8 +1186,15 @@ export class ScenaMondo extends Phaser.Scene {
   /** Cosa c'è da usare sotto un punto: forzieri chiusi e muri segreti ancora chiusi. */
   private interagibileSotto(punto: Vettore): Interagibile | null {
     const sotto = (posizione: Vettore, mezzo: number) => Math.abs(posizione.x - punto.x) <= mezzo && Math.abs(posizione.y - punto.y) <= mezzo;
+    if (this.altareEco && this.altareEco.visibile && sotto(this.altareEco.posizione, 10)) {
+      return { posizione: this.altareEco.posizione, distanza: 24, interagisci: () => this.usaAltareEco() };
+    }
+    const pietra = this.pietre.find((x) => sotto(x.posizione, 9));
+    if (pietra) return { posizione: pietra.posizione, distanza: 24, interagisci: () => this.usaPietra(pietra.nome) };
     const f = this.forzieri.find((x) => !x.aperto && sotto(x.posizione, 9));
     if (f) return { posizione: f.posizione, distanza: 20, interagisci: () => this.apriForziere(f) };
+    const sep = this.sepolti.find((x) => !x.scavato && sotto(x.posizione, 8));
+    if (sep) return { posizione: sep.posizione, distanza: 20, interagisci: () => this.scavaTesoroSepolto(sep) };
     const v = this.vene.find((x) => !x.esaurita && sotto(x.posizione, 8));
     if (v) return { posizione: v.posizione, distanza: 22, interagisci: () => this.scava(v) };
     const porta = this.porte.find((x) => !x.aperta && sotto(x.posizione, 8));
@@ -1110,7 +1202,7 @@ export class ScenaMondo extends Phaser.Scene {
     const c = this.cartelli.find((x) => sotto(x.posizione, 8));
     if (c) return { posizione: c.posizione, distanza: 22, interagisci: () => this.leggiCartello(c) };
     const m = this.muri.find((x) => !x.aperto && sotto(x.posizione, 8));
-    if (m) return { posizione: m.posizione, distanza: 22, interagisci: () => this.apriMuro(m) };
+    if (m) return { posizione: m.posizione, distanza: 22, interagisci: () => this.tentaMuro(m) };
     // Le persone hanno un'area un po' più alta: si clicca anche sulla testa.
     const a = this.abitanti.find((x) => Math.abs(x.posizione.x - punto.x) <= 7 && punto.y >= x.posizione.y - 10 && punto.y <= x.posizione.y + 8);
     if (a) return { posizione: a.posizione, distanza: 24, cursore: 'parla', interagisci: () => this.parla(a.definizione.id) };
@@ -1158,6 +1250,44 @@ export class ScenaMondo extends Phaser.Scene {
       mostraNumero(this, c.x, c.y - 4, c.alTappeto ? `${d.nome} al tappeto!` : danno, 'avviso');
     });
     this.collisioniCompagno.push(contatto);
+    this.controllaCommentoCompagno();
+  }
+
+  /** Fase 10b: se il compagno di viaggio ha un commento per questa mappa mai mostrato prima, lo dice. */
+  private controllaCommentoCompagno(): void {
+    const d = this.definizioneCompagno;
+    if (!d) return;
+    const p = this.partita;
+    const visti = p.commentiVisti ?? [];
+    const cm = commentoAllIngresso(d.id, d.commenti, this.mappa.id, visti);
+    if (!cm) return;
+    scriviPartita(this, { ...p, commentiVisti: [...visti, cm.chiave] });
+    this.time.delayedCall(450, () => {
+      if (this.scene.isActive()) mostraAvviso(this, cm.testo);
+    });
+  }
+
+  /** Fase 10b: effetti passivi degli amuleti esotici (Cuore della Quercia e Ciondolo di Lia). */
+  private aggiornaEffettiAmuleto(adesso: number): void {
+    if (!this.eroe || this.eroe.sconfitto) return;
+    const effetti = this.effettiArmatura();
+    if (effetti.includes('rigenerazione_quercia') && adesso - this.ultimaCuraQuercia >= 5000) {
+      this.ultimaCuraQuercia = adesso;
+      if (this.eroe.recuperaVita(1) > 0) mostraNumero(this, this.eroe.x, this.eroe.y - 8, '+1', 'cura');
+    }
+    if (effetti.includes('salvavita') && !this.salvavitaUsato) {
+      const { attuale, massima } = this.eroe.vita;
+      if (attuale > 0 && attuale <= massima * 0.25) {
+        this.salvavitaUsato = true;
+        const cura = Math.max(1, Math.round(massima * 0.5));
+        const recuperata = this.eroe.recuperaVita(cura);
+        if (recuperata > 0) {
+          suoni.effetto('magia');
+          mostraNumero(this, this.eroe.x, this.eroe.y - 10, `+${recuperata} (Ciondolo di Lia!)`, 'cura');
+          mostraAvviso(this, 'Il Ciondolo di Lia brilla e ti protegge!');
+        }
+      }
+    }
   }
 
   /** A ogni fotogramma: il compagno decide e si muove; Agata cura un poco. */
@@ -1282,6 +1412,48 @@ export class ScenaMondo extends Phaser.Scene {
         else avviso('fiuto per i tesori!');
         break;
       }
+      case 'fiuta_tutto': {
+        this.segnaleFino = adesso + (a.durataMs ?? 10000);
+        suoni.effetto('raccolta');
+        avviso('Brina fiuta i segreti!');
+        mostraAvviso(this, 'Brina fiuta l’aria: i segreti e i tesori vicini si rivelano!');
+        break;
+      }
+      case 'polvere_nera': {
+        // Se c'è una roccia crepata chiusa vicina all'eroe (entro 64 px), Grisk mira proprio lì!
+        const rocciaVicina = this.muri.find(
+          (m) => m.soloBomba && !m.aperto && Math.hypot(m.posizione.x - this.eroe.x, m.posizione.y - this.eroe.y) <= 64,
+        );
+        const punto = rocciaVicina ? rocciaVicina.posizione : this.puntoAbilitaVersoBersaglio();
+        const raggio = a.raggio ?? 40;
+        const danno = a.quantita ?? 12;
+        const lampo = this.add.circle(punto.x, punto.y, raggio, 0xff8c32, 0.55).setStrokeStyle(2, 0xffe680).setDepth(12);
+        this.tweens.add({ targets: lampo, scale: 1.25, alpha: 0, duration: 350, onComplete: () => lampo.destroy() });
+        suoni.effetto('colpo');
+        this.scuotiSchermo(180, 0.005);
+        for (const n of this.nemici.vivi()) {
+          if (Math.hypot(n.forma.x - punto.x, n.forma.y - punto.y) <= raggio) {
+            this.combattimento.danneggiaDiretto(n, danno, adesso);
+          }
+        }
+        // Fase 10c: la Polvere nera apre le rocce crepate (e anche i muri segreti) nel raggio dell'esplosione.
+        for (const m of this.muri) {
+          if (!m.aperto && Math.hypot(m.posizione.x - punto.x, m.posizione.y - punto.y) <= raggio) {
+            this.apriMuro(m, true);
+          }
+        }
+        avviso('Grisk fa BUM!');
+        break;
+      }
+      case 'velo_ombra': {
+        const durata = a.durataMs ?? 6000;
+        this.eroe.rendiInvisibile(adesso + durata);
+        const velo = this.add.circle(this.eroe.x, this.eroe.y, 18, 0xb46bff, 0.45).setDepth(12);
+        this.tweens.add({ targets: velo, scale: 1.8, alpha: 0, duration: 400, onComplete: () => velo.destroy() });
+        suoni.effetto('magia');
+        avviso('velo d’ombra!');
+        break;
+      }
     }
     this.registry.set(CHIAVE_ABILITA_COMPAGNO, usa(this.statoAbilitaCompagno, a, adesso));
   }
@@ -1395,7 +1567,18 @@ export class ScenaMondo extends Phaser.Scene {
     const p = this.partita;
     this.porte = cellePorte(this.mappa).map((d) => {
       const chiave = `${this.mappa.id}:${d.cella.col}:${d.cella.riga}`;
-      return new Porta(this, d.cella, centroCella(d.cella, TESSERA), chiave, d.chiave, d.nome, d.aspetto, portaAperta(p, chiave), aspettoDi(this.dati.sprite, 'oggetti', `porta_${d.aspetto}`));
+      return new Porta(
+        this,
+        d.cella,
+        centroCella(d.cella, TESSERA),
+        chiave,
+        d.chiave,
+        d.nome,
+        d.aspetto,
+        portaAperta(p, chiave),
+        aspettoDi(this.dati.sprite, 'oggetti', `porta_${d.aspetto}`),
+        Boolean(d.runica),
+      );
     });
     this.barriere = celleBarriera(this.mappa).map((d) => new Barriera(this, d.cella, centroCella(d.cella, TESSERA)));
     const forme = [...this.porte, ...this.barriere].map((x) => x.forma);
@@ -1403,13 +1586,23 @@ export class ScenaMondo extends Phaser.Scene {
     this.physics.add.collider(this.nemici.gruppo, forme);
   }
 
-  /** Clic su una porta: si apre se nello zaino o nella tasca missioni c'è la sua chiave (che resta: è "di missione"). */
+  /** Clic su una porta: si apre con la chiave (fase 8a) oppure, se è runica (fase 10c), quando Selva è il compagno attivo. */
   private tentaPorta(porta: Porta): void {
     this.eroe.girati(porta.posizione);
-    const nomeChiave = this.dati.oggetti[porta.serveChiave]?.nome ?? porta.serveChiave;
-    const possiede = contaTotale(this.partita, porta.serveChiave) > 0;
-    // "Chiuso a chiave: la porta d'ossa" invece di "La porta è chiusa": così il testo
-    // va bene sia per "il cancello" sia per "la porta", senza accordare il genere.
+    if (porta.runica) {
+      if (this.partita.compagni.attivo !== 'selva') {
+        mostraAvviso(this, `Chiuso da un sigillo runico: ${porta.nome}. Serve Selva (o una leva) per sciogliere le rune`);
+        return;
+      }
+      porta.apri();
+      suoni.effetto('magia');
+      scriviPartita(this, apriPorta(this.partita, porta.chiave));
+      mostraAvviso(this, `Selva legge le rune di Orvald: ${porta.nome} si apre!`);
+      return;
+    }
+    const idChiave = porta.serveChiave ?? '';
+    const nomeChiave = this.dati.oggetti[idChiave]?.nome ?? idChiave;
+    const possiede = contaTotale(this.partita, idChiave) > 0;
     if (!possiede) {
       mostraAvviso(this, `Chiuso a chiave: ${porta.nome}. Serve: ${nomeChiave}`);
       return;
@@ -1422,6 +1615,28 @@ export class ScenaMondo extends Phaser.Scene {
 
   private leggiCartello(c: Cartello): void {
     this.eroe.girati(c.posizione);
+    const { aspetto, aprePorta, cella } = c.dati;
+    if (aspetto === 'ricordo') {
+      const chiave = `${this.mappa.id}:${cella.col}:${cella.riga}`;
+      scriviPartita(this, leggiRicordo(this.partita, chiave));
+      this.guida.annulla();
+      this.eroe.ferma();
+      suoni.effetto('magia');
+      this.scene.launch(SCENA_FINALE, { pagine: [c.dati.testo] });
+      this.scene.pause();
+      return;
+    }
+    if (aprePorta) {
+      const chiavePorta = aprePorta.split(':').length === 3 ? aprePorta : `${this.mappa.id}:${aprePorta}`;
+      const bersaglio = this.porte.find((p) => p.chiave === chiavePorta);
+      if (bersaglio && !bersaglio.aperta) {
+        bersaglio.apri();
+        suoni.effetto('porta');
+        scriviPartita(this, apriPorta(this.partita, chiavePorta));
+        mostraAvviso(this, `${c.dati.testo} (${bersaglio.nome} si apre!)`);
+        return;
+      }
+    }
     mostraAvviso(this, c.testo((id) => contaTotale(this.partita, id) > 0));
   }
 
@@ -1441,16 +1656,29 @@ export class ScenaMondo extends Phaser.Scene {
     this.eroe.ferma();
     this.salvaRisorse();
     // Parlare è anche un evento per le quest (consegnare una lettera, "parla con…").
+    const passoPrima = this.partita.quest['prologo_strada']?.passo;
     this.eventoQuest({ tipo: 'parlato', abitante: idAbitante });
+    if (idAbitante === 'fausto' && passoPrima === 1 && (this.partita.quest['prologo_strada']?.passo ?? 0) > 1) {
+      for (const p of this.porte) {
+        if (!p.aperta) {
+          p.apri();
+          suoni.effetto('porta');
+          scriviPartita(this, apriPorta(this.partita, p.chiave));
+        }
+      }
+    }
     this.scene.launch(SCENA_DIALOGO, { idAbitante });
     this.scene.pause();
   }
 
-  /** Una risposta del dialogo apre qualcosa: il negozio o (dalla 5c) la taverna. */
-  apri(cosa: CosaApribile): void {
+  /** Una risposta del dialogo apre qualcosa: il negozio (di Gemma o Teodoro), la taverna o uno dei tre banchi di crafting (fase 10b). */
+  apri(cosa: CosaApribile, idAbitante?: string): void {
     if (cosa === 'taverna') this.scene.launch(SCENA_TAVERNA);
-    else if (cosa === 'fucina') this.scene.launch(SCENA_FUCINA);
-    else this.scene.launch(SCENA_NEGOZIO, { negozio: 'gemma' });
+    else if (cosa === 'fucina' || cosa === 'armature' || cosa === 'alchimia') this.scene.launch(SCENA_FUCINA, { banco: cosa });
+    else {
+      const negozio = idAbitante && this.dati.negozi[idAbitante] ? idAbitante : 'gemma';
+      this.scene.launch(SCENA_NEGOZIO, { negozio });
+    }
     this.scene.pause();
   }
 
@@ -1463,49 +1691,163 @@ export class ScenaMondo extends Phaser.Scene {
     return chiuso && aperto && rinforzato ? { chiuso, aperto, rinforzato } : null;
   }
 
-  // ---- muri segreti ----
+  // ---- muri segreti, rocce crepate, tesori sepolti e pietre di passaggio ----
 
   private creaMuriSegreti(): void {
     const p = this.partita;
-    this.muri = celleSegrete(this.mappa).map((cella) => {
+    const costruisci = (cella: Cella, soloBomba: boolean) => {
       const chiave = `${this.mappa.id}:${cella.col}:${cella.riga}`;
       const voce = this.mappa.legenda[this.mappa.simboli[cella.riga]![cella.col]!]!;
       const colore = parseInt((voce.coloreMuro ?? '#2f3b2f').replace('#', ''), 16);
       const simbolo = this.mappa.simboli[cella.riga]![cella.col]!;
       const muro = voce.tesseraMuro ? { chiave: chiaveTessere(this.mappa), fotogramma: fotogrammaMuroSegreto(simbolo) } : null;
-      return new MuroSegreto(this, cella, centroCella(cella, TESSERA), chiave, colore, muroAperto(p, chiave), muro);
-    });
+      return new MuroSegreto(this, cella, centroCella(cella, TESSERA), chiave, colore, muroAperto(p, chiave), muro, soloBomba);
+    };
+    this.muri = [
+      ...celleSegrete(this.mappa).map((c) => costruisci(c, false)),
+      ...celleCrepate(this.mappa).map((c) => costruisci(c, true)),
+    ];
     const forme = this.muri.map((m) => m.forma);
     this.physics.add.collider(this.eroe.forma, forme);
     this.physics.add.collider(this.nemici.gruppo, forme);
   }
 
-  /** A ogni fotogramma: un fendente che tocca un muro segreto lo apre; l'Elmo del veggente lo fa brillare. */
+  /** Fase 10c: crea i tesori sepolti della mappa (invisibili finché non rivelati da Brina o dall'Elmo del veggente). */
+  private creaSepolti(): void {
+    const p = this.partita;
+    this.sepolti = celleSepolte(this.mappa).map(({ cella, contenuto, monete }) => {
+      const chiave = `${this.mappa.id}:${cella.col}:${cella.riga}`;
+      const posizione = centroCella(cella, TESSERA);
+      const scavato = sepoltoScavato(p, chiave);
+      const ciuffo = this.add.graphics();
+      ciuffo.fillStyle(0xc8a860, 0.85).fillEllipse(0, 2, 10, 5);
+      ciuffo.lineStyle(1.2, 0x8fe08f, 1).lineBetween(-3, 2, -5, -3).lineBetween(0, 2, 0, -4).lineBetween(3, 2, 5, -3);
+      const bagliore = this.add.circle(0, 0, 7, 0xffe680, 0.25).setStrokeStyle(1, 0xffe680, 0.9);
+      const grafica = this.add.container(posizione.x, posizione.y, [bagliore, ciuffo]).setDepth(2.5).setVisible(false);
+      return { cella, posizione, chiave, contenuto, monete, scavato, visibile: false, grafica };
+    });
+  }
+
+  /** Fase 10c: crea le pietre di passaggio (viaggio rapido e cambio compagno). */
+  private creaPietre(): void {
+    this.pietre = cellePietra(this.mappa).map(({ cella, nome }) => {
+      const posizione = centroCella(cella, TESSERA);
+      const forma = this.add.rectangle(posizione.x, posizione.y, TESSERA, TESSERA).setVisible(false);
+      this.physics.add.existing(forma, true);
+      const base = this.add.ellipse(0, 5, 13, 5, 0x2a3442).setStrokeStyle(1, 0x5a7088);
+      const obelisco = this.add.polygon(0, -1, [-4, 6, -3, -5, 0, -8, 3, -5, 4, 6], 0x526880).setStrokeStyle(1, 0x8fd3ff);
+      const runa = this.add.circle(0, -1, 2.2, 0x8fd3ff, 0.95);
+      const grafica = this.add.container(posizione.x, posizione.y, [base, obelisco, runa]).setDepth(3);
+      this.tweens.add({ targets: runa, alpha: 0.35, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+      return { cella, posizione, nome, forma, grafica };
+    });
+    const forme = this.pietre.map((p) => p.forma);
+    this.physics.add.collider(this.eroe.forma, forme);
+    this.physics.add.collider(this.nemici.gruppo, forme);
+  }
+
+  /** Clic su una pietra di passaggio: la attiva nella Partita e apre il pannello di viaggio rapido e compagni. */
+  private usaPietra(nome: string): void {
+    if (this.inTransizione || this.eroe.sconfitto || !this.scene.isActive()) return;
+    this.guida.annulla();
+    this.eroe.ferma();
+    this.salvaRisorse();
+    const prima = (this.partita.pietre ?? []).includes(this.mappa.id);
+    if (!prima) {
+      scriviPartita(this, attivaPietra(this.partita, this.mappa.id));
+      suoni.effetto('magia');
+      mostraAvviso(this, `Pietra di passaggio risvegliata: ${nome}`);
+    }
+    this.scene.launch(SCENA_PIETRA, { idMappa: this.mappa.id });
+    this.scene.pause();
+  }
+
+  idMappaAttuale(): string {
+    return this.mappa.id;
+  }
+
+  /** Viaggio rapido verso la pietra di un'altra mappa. */
+  viaggiaAPietra(idMappa: string): void {
+    const destinazione = this.dati.mappe[idMappa];
+    if (!destinazione || idMappa === this.mappa.id) return;
+    this.salvaRisorse();
+    suoni.effetto('magia');
+    this.cambiaMappa({ idMappa, arrivo: puntoIngressoPredefinito(destinazione), daMappa: this.mappa.id });
+  }
+
+  /** Clic su un tesoro sepolto: richiede la pala nello zaino o nella tasca missioni. */
+  private scavaTesoroSepolto(s: (typeof this.sepolti)[number]): void {
+    if (s.scavato) return;
+    this.eroe.girati(s.posizione);
+    const esito = scavaSepolto(this.partita, s.chiave);
+    if (!esito.ok) {
+      s.visibile = true;
+      s.grafica.setVisible(true);
+      mostraAvviso(this, esito.errore);
+      return;
+    }
+    s.scavato = true;
+    s.grafica.setVisible(false);
+    suoni.effetto('forziere');
+    scriviPartita(this, esito.partita);
+    mostraAvviso(this, 'Scavi nella terra smossa e dissotterri un tesoro!');
+    this.eventoQuest({ tipo: 'aperto', forziere: s.chiave });
+    const dentro = s.contenuto.map((id) => ({ id, quantita: 1 }));
+    if (s.monete > 0) dentro.push({ id: 'monete', quantita: s.monete });
+    this.oggettiATerra.lascia(dentro, s.posizione, false, {
+      verso: { x: this.eroe.x, y: this.eroe.y },
+      distanzaMinima: 10,
+    });
+  }
+
+  /** A ogni fotogramma: un fendente apre i muri segreti normali; Veggente e Fiuta! fanno brillare tutti i segreti. */
   private aggiornaMuri(adesso: number): void {
     const fiuto = adesso < this.segnaleFino;
     const raggioFiuto = this.definizioneCompagno?.abilita.raggio ?? 160;
+    const veggente = this.effettiArmatura().includes('veggente');
+    const raggio = fiuto ? raggioFiuto : NUMERI_EFFETTI.raggioVeggente;
+
     for (const f of this.forzieri) {
       f.segnala(fiuto && Math.hypot(f.posizione.x - this.eroe.x, f.posizione.y - this.eroe.y) <= raggioFiuto, adesso);
     }
+    for (const s of this.sepolti) {
+      if (s.scavato) {
+        s.grafica.setVisible(false);
+        continue;
+      }
+      const vicino = (veggente || fiuto) && Math.hypot(s.posizione.x - this.eroe.x, s.posizione.y - this.eroe.y) <= raggio;
+      if (vicino) s.visibile = true;
+      s.grafica.setVisible(s.visibile || vicino);
+      if (s.grafica.visible) s.grafica.setAlpha(0.65 + 0.35 * Math.sin(adesso / 150));
+    }
     if (this.muri.length === 0) return;
     const area = this.eroe.areaDiColpoAttiva();
-    const veggente = this.effettiArmatura().includes('veggente');
-    // Il fiuto di Volpe funziona come l'Elmo del veggente, ma più lontano e solo per poco.
-    const raggio = fiuto ? raggioFiuto : NUMERI_EFFETTI.raggioVeggente;
     for (const m of this.muri) {
       if (m.aperto) continue;
-      if (area && intersecano(area, m.rettangolo())) this.apriMuro(m);
+      if (!m.soloBomba && area && intersecano(area, m.rettangolo())) this.apriMuro(m);
       m.aggiorna({ x: this.eroe.x, y: this.eroe.y }, veggente || fiuto, raggio, adesso);
     }
   }
 
-  private apriMuro(m: MuroSegreto): void {
+  /** Clic diretto su un muro segreto o su una roccia crepata. */
+  private tentaMuro(m: MuroSegreto): void {
     if (m.aperto) return;
+    if (m.soloBomba) {
+      this.eroe.girati(m.posizione);
+      mostraAvviso(this, 'Una parete di roccia crepata. Un’arma non basta: serve la Polvere nera di Grisk.');
+      return;
+    }
+    this.apriMuro(m);
+  }
+
+  private apriMuro(m: MuroSegreto, conEsplosivo = false): void {
+    if (m.aperto) return;
+    if (m.soloBomba && !conEsplosivo) return;
     m.apri();
     suoni.effetto('porta');
     scriviPartita(this, apriMuro(this.partita, m.chiave));
     this.scuotiSchermo(150, 0.003);
-    mostraAvviso(this, 'Un passaggio segreto!');
+    mostraAvviso(this, m.soloBomba ? 'La Polvere nera sbriciola la roccia crepata!' : 'Un passaggio segreto!');
   }
 
   /** Apre un forziere. Se è chiuso a chiave serve una chiave piccola, oppure Volpe ("scassinatore"). */
@@ -1652,11 +1994,19 @@ export class ScenaMondo extends Phaser.Scene {
     direzione: Vettore,
     colpiti: Set<number> = new Set(),
     rimbalzi = arma.effetti.includes('rimbalzo') ? NUMERI_EFFETTI.rimbalzi : 0,
+    giàDiviso = false,
   ): void {
     const tiro = arma.proiettile;
     if (!tiro) return;
+    if (!giàDiviso && colpiti.size === 0 && arma.effetti.includes('dardo_diviso')) {
+      suoni.effetto('magia');
+      for (const dir of direzioniDardoDiviso(direzione)) {
+        this.tiraProiettile(arma, da, dir, new Set(), rimbalzi, true);
+      }
+      return;
+    }
     // Il primo tiro suona; i rimbalzi no (sarebbe un frastuono).
-    if (colpiti.size === 0) suoni.effetto('magia');
+    if (colpiti.size === 0 && !giàDiviso) suoni.effetto('magia');
     this.proiettili.lancia({
       da,
       direzione,
@@ -1671,7 +2021,22 @@ export class ScenaMondo extends Phaser.Scene {
         colpiti.add(nemico.id);
         const { modificatore: mod, probabilitaCritico } = this.statisticheArma(arma);
         const posizione = { x: nemico.forma.x, y: nemico.forma.y };
-        this.combattimento.infliggi(nemico, this.combattimento.colpoArma(arma, mod, probabilitaCritico, da), this.time.now);
+        const colpo = this.combattimento.colpoArma(arma, mod, probabilitaCritico, da);
+        this.combattimento.infliggi(nemico, colpo, this.time.now);
+        if (arma.effetti.includes('esplosione')) {
+          const lampo = this.add.circle(posizione.x, posizione.y, NUMERI_EFFETTI.raggioEsplosione, 0xffcf40, 0.45).setDepth(11).setStrokeStyle(1.5, 0xff7020);
+          this.tweens.add({ targets: lampo, scale: 1.2, alpha: 0, duration: 240, onComplete: () => lampo.destroy() });
+          const vivi = this.nemici.vivi();
+          const idVicini = bersagliEsplosione(
+            posizione,
+            vivi.map((n) => ({ id: n.id, posizione: { x: n.forma.x, y: n.forma.y } })),
+            nemico.id,
+          );
+          for (const idV of idVicini) {
+            const vicino = vivi.find((n) => n.id === idV);
+            if (vicino) this.combattimento.infliggi(vicino, colpo, this.time.now);
+          }
+        }
         if (rimbalzi <= 0) return;
         const candidati = this.nemici.vivi().map((n) => ({ id: n.id, posizione: { x: n.forma.x, y: n.forma.y } }));
         const prossimo = prossimoRimbalzo(posizione, candidati, colpiti, NUMERI_EFFETTI.raggioRimbalzo);
@@ -1885,26 +2250,119 @@ export class ScenaMondo extends Phaser.Scene {
     if (profilo.arma.id !== this.eroe.arma.id) this.eroe.impostaArma(profilo.arma, this.time.now, attesaArmaMs);
   }
 
+  private creaGestoreBoss(nemicoBoss: Nemico): GestoreBoss {
+    return new GestoreBoss(
+      this,
+      nemicoBoss,
+      this.barriere,
+      this.nemici,
+      this.griglia,
+      this.dati.nemici,
+      (t) => {
+        mostraAvviso(this, t);
+        this.scuotiSchermo(200, 0.004);
+      },
+      {
+        eroe: () => ({ x: this.eroe.x, y: this.eroe.y }),
+        colpisci: (n, dado, da) => this.colpoDaLontano(n, dado, da),
+        casuale: casualeVero,
+        tira: (n, direzione, parametri, dado) => this.tiriNemici.tiraCon(n, direzione, parametri, dado),
+      },
+    );
+  }
+
+  /** Crea l'Altare dell'Eco nel punto di nascita di un boss già sconfitto (fase 10a). */
+  private creaAltareEco(posizione: Vettore, idBoss: string): void {
+    this.altareEco?.grafica.destroy();
+    const alone = this.add.circle(0, 0, 10, 0xa0e0ff, 0.25).setStrokeStyle(1.5, 0xa0e0ff, 0.85);
+    const nucleo = this.add.rectangle(0, 0, 8, 10, 0x6ac8ff, 0.9).setStrokeStyle(1, 0xffffff, 0.9);
+    const grafica = this.add.container(posizione.x, posizione.y, [alone, nucleo]).setDepth(4);
+    this.tweens.add({
+      targets: alone,
+      scale: 1.25,
+      alpha: 0.45,
+      yoyo: true,
+      repeat: -1,
+      duration: 900,
+    });
+    this.altareEco = { idBoss, posizione, grafica, visibile: true };
+  }
+
+  /** Clic sull'Altare dell'Eco: se hai il sigillo del boss lo consuma ed evoca l'Eco potenziata. */
+  private usaAltareEco(): void {
+    if (!this.altareEco || !this.altareEco.visibile || this.boss?.inCorso) return;
+    const { idBoss, posizione } = this.altareEco;
+    const defOriginale = this.dati.nemici[idBoss];
+    if (!defOriginale) return;
+    this.eroe.girati(posizione);
+    const idSigillo = `sigillo_eco_${idBoss}`;
+    const nomeSigillo = this.dati.oggetti[idSigillo]?.nome ?? idSigillo;
+    if (contaTotale(this.partita, idSigillo) <= 0) {
+      mostraAvviso(this, `Altare dell’Eco (${defOriginale.nome}). Serve: ${nomeSigillo}`);
+      return;
+    }
+    // Consuma 1 sigillo (dalla tasca missioni o dallo zaino).
+    let p = this.partita;
+    if ((p.tascaMissioni ?? []).some((v) => v.id === idSigillo && v.quantita > 0)) {
+      p = togliTascaMissioni(p, idSigillo, 1);
+    } else {
+      const inv = togliPerId(p.inventario, idSigillo, 1);
+      if (inv) p = { ...p, inventario: inv };
+    }
+    scriviPartita(this, p);
+
+    this.altareEco.visibile = false;
+    this.altareEco.grafica.setVisible(false);
+    const defEco = creaDefinizioneEco(defOriginale);
+    const nemicoEco = this.nemici.aggiungi(defEco, posizione);
+    this.boss = this.creaGestoreBoss(nemicoEco);
+    suoni.effetto('boss');
+    mostraAvviso(this, `Il sigillo si spezza: appare ${defEco.nome}!`);
+  }
+
   private nemicoSconfitto(nemico: Nemico): void {
     suoni.effetto('sconfitto');
     const { esperienza } = nemico.definizione;
+    const èBoss = Boolean(nemico.definizione.fasi);
+    const èEco = Boolean(nemico.definizione.èEco);
     mostraNumero(this, nemico.forma.x, nemico.forma.y - 8, `+${esperienza} esp`, 'esperienza');
     this.salvaRisorse();
     this.guadagnaEsperienza(esperienza);
     this.eventoQuest({ tipo: 'sconfitto', nemico: nemico.definizione.id });
-    // Un boss sconfitto non ricompare più, e la stanza si riapre.
-    if (nemico.definizione.fasi) {
+
+    // Calcoliamo il bottino del boss PRIMA di aggiornare ecoSconfitti, così bottinoBoss sa se è la prima vittoria Eco.
+    const defOriginale = this.dati.nemici[nemico.definizione.id] ?? nemico.definizione;
+    const grezzo = èBoss
+      ? bottinoBoss(defOriginale, this.partita, casualeVero, èEco)
+      : tiraBottino(nemico.definizione.bottino, casualeVero);
+
+    if (èBoss) {
       const p = this.partita;
-      if (!p.bossSconfitti.includes(nemico.definizione.id)) scriviPartita(this, { ...p, bossSconfitti: [...p.bossSconfitti, nemico.definizione.id] });
+      if (èEco) {
+        if (!p.ecoSconfitti.includes(nemico.definizione.id)) {
+          scriviPartita(this, { ...p, ecoSconfitti: [...p.ecoSconfitti, nemico.definizione.id] });
+        }
+      } else if (!p.bossSconfitti.includes(nemico.definizione.id)) {
+        scriviPartita(this, { ...p, bossSconfitti: [...p.bossSconfitti, nemico.definizione.id] });
+      }
       this.boss?.sconfitto();
+      this.boss = null;
       this.scuotiSchermo(400, 0.008);
       mostraAvviso(this, `${nemico.definizione.nome} è sconfitto!`);
-      // Il Negromante (fase 8c): dopo un attimo, le pagine del finale con il mondo in pausa.
-      if (nemico.definizione.finale) this.time.delayedCall(1500, () => this.apriFinale());
+      if (defOriginale.eco) {
+        if (this.altareEco) {
+          this.altareEco.visibile = true;
+          this.altareEco.grafica.setVisible(true);
+        } else {
+          const cellaBoss = celleNemico(this.mappa).find((n) => n.idNemico === defOriginale.id)?.cella;
+          this.creaAltareEco(cellaBoss ? centroCella(cellaBoss, TESSERA) : { x: nemico.forma.x, y: nemico.forma.y }, defOriginale.id);
+        }
+      }
+      // Il Negromante (fase 8c): dopo un attimo, le pagine del finale con il mondo in pausa (non per l'Eco).
+      if (nemico.definizione.finale && !èEco) this.time.delayedCall(1500, () => this.apriFinale());
     }
-    // Bottino: ogni voce della tabella del nemico ha la sua probabilità.
-    // Non droppa duplicati di oggetti missione/lettere se già posseduti o se la quest è conclusa.
-    const bottino = tiraBottino(nemico.definizione.bottino, casualeVero).filter((voce) => {
+    // Bottino: non lascia duplicati di oggetti missione/lettere se già posseduti o se la quest è conclusa.
+    const bottino = grezzo.filter((voce) => {
       const def = this.dati.oggetti[voce.id];
       if (def?.tipo === 'missione') {
         if (voce.id === 'pagina_diario' && this.partita.quest['atto1_cripta']?.stato === 'conclusa') return false;

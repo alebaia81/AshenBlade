@@ -1,4 +1,41 @@
 {
+  "prologo_strada": {
+    "id": "prologo_strada",
+    "nome": "Prologo: la strada dei morti",
+    "tipo": "principale",
+    "daChi": "teodoro",
+    "descrizione": "La Strada Maestra è bloccata da un carro rovesciato e dagli scheletri. Il cancello di Borgo Quercia è barricato: aiuta la guardia Fausto a respingere i non morti per entrare nel villaggio.",
+    "passi": [
+      {
+        "descrizione": "Sconfiggi 3 scheletri sulla Strada Maestra",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "scheletro",
+          "quantita": 3
+        }
+      },
+      {
+        "descrizione": "Parla con Fausto al cancello di Borgo Quercia",
+        "obiettivo": {
+          "tipo": "parla",
+          "a": "fausto"
+        }
+      },
+      {
+        "descrizione": "Entra a Borgo Quercia",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "borgo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 25,
+      "esperienza": 50
+    },
+    "concludeDa": "berta",
+    "prossimo": "Atto I: il cimitero sulla collina (chiedi a Berta)"
+  },
   "lupi_dario": {
     "id": "lupi_dario",
     "nome": "I lupi di Dario",
@@ -102,6 +139,446 @@
         {
           "id": "chiave_cripta",
           "quantita": 1
+        }
+      ]
+    },
+    "prossimo": "Atto I: il becchino sparito (chiedi a Berta)"
+  },
+  "atto1_becchino": {
+    "id": "atto1_becchino",
+    "nome": "Atto I: il becchino sparito",
+    "tipo": "principale",
+    "daChi": "berta",
+    "richiede": [
+      "atto1_cimitero"
+    ],
+    "descrizione": "Il cancello della cripta ha una seconda serratura: la chiave la tiene Ottone il becchino, fuggito al Mulino del Ponte a nord della Radura. Le cantine del mulino però sono invase dalle melme.",
+    "passi": [
+      {
+        "descrizione": "Raggiungi il Mulino del Ponte (a nord della Radura)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "mulino_ponte"
+        }
+      },
+      {
+        "descrizione": "Scendi nelle Cantine del Mulino e sconfiggi il Re Melma",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "re_melma",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 60,
+      "esperienza": 150,
+      "oggetti": [
+        {
+          "id": "chiave_ottone",
+          "quantita": 1
+        }
+      ]
+    },
+    "concludeDa": "ottone",
+    "prossimo": "Atto I: la Cripta dei Non Morti (chiedi a Berta)"
+  },
+  "tessa_tracce": {
+    "id": "tessa_tracce",
+    "nome": "Le tracce di Aldo",
+    "tipo": "secondaria",
+    "daChi": "tessa",
+    "descrizione": "Tessa e il suo cane Brina cercano Aldo, il padre di Tessa, scomparso nel bosco quando i morti hanno spinto i lupi fuori dalle tane.",
+    "passi": [
+      {
+        "descrizione": "Segui le tracce fino alla radura di Aldo (a ovest del sentiero nel bosco)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "radura_nascosta"
+        }
+      },
+      {
+        "descrizione": "Sconfiggi i 3 lupi nella radura di Aldo",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "lupo",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 40,
+      "esperienza": 90
+    }
+  },
+  "tessa_ascia": {
+    "id": "tessa_ascia",
+    "nome": "L’ascia di mio padre",
+    "tipo": "secondaria",
+    "daChi": "tessa",
+    "richiede": [
+      "tessa_tracce"
+    ],
+    "descrizione": "Accanto alla tomba di Aldo, nella radura nascosta, è sepolta la sua vecchia ascia da boscaiolo. Con il fiuto di Brina e una pala si può dissotterrare e portare a Bruno.",
+    "passi": [
+      {
+        "descrizione": "Dissotterra l'ascia di Aldo accanto alla sua tomba nella radura nascosta",
+        "obiettivo": {
+          "tipo": "trova",
+          "forziere": "radura_nascosta:3:9"
+        }
+      },
+      {
+        "descrizione": "Porta l'ascia spezzata di Aldo a Bruno il fabbro",
+        "obiettivo": {
+          "tipo": "consegna",
+          "oggetto": "ascia_aldo_rotta",
+          "a": "bruno"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 50,
+      "esperienza": 110,
+      "oggetti": [
+        {
+          "id": "pergamena_arco_aldo",
+          "quantita": 1
+        }
+      ]
+    },
+    "concludeDa": "bruno"
+  },
+  "fausto_forcone": {
+    "id": "fausto_forcone",
+    "nome": "Un’arma vera per Fausto",
+    "tipo": "secondaria",
+    "daChi": "fausto",
+    "richiede": [
+      "prologo_strada"
+    ],
+    "descrizione": "Fausto monta la guardia al cancello di Borgo Quercia con un vecchio forcone. Vorrebbe una Spada lunga forgiata da Bruno (o acquistata da Gemma).",
+    "passi": [
+      {
+        "descrizione": "Porta una Spada lunga a Fausto al cancello della Strada Maestra",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "spada_lunga",
+          "quantita": 1
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 60,
+      "esperienza": 70,
+      "oggetti": [
+        {
+          "id": "pergamena_corazza_cuoio_rinforzata",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "pozzo_desideri": {
+    "id": "pozzo_desideri",
+    "nome": "Il pozzo dei desideri",
+    "tipo": "secondaria",
+    "daChi": "rosalba",
+    "descrizione": "Secondo nonna Rosalba, sul fondo del vecchio pozzo di Borgo Quercia brilla una delle dodici Ghiande d’oro della Quercia Antica, ma la carrucola è bloccata dalla ruggine.",
+    "passi": [
+      {
+        "descrizione": "Porta 3 pezzi di gelatina di slime a nonna Rosalba per ungere la carrucola del pozzo",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "gelatina_slime",
+          "quantita": 3
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 20,
+      "esperienza": 60,
+      "oggetti": [
+        {
+          "id": "ghianda_oro",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "tesoro_mugnaio": {
+    "id": "tesoro_mugnaio",
+    "nome": "La mappa del mugnaio",
+    "tipo": "secondaria",
+    "daChi": "gemma",
+    "descrizione": "La mappa venduta da Gemma indica un tesoro sepolto dal vecchio mugnaio sulla riva ovest del Mulino del Ponte.",
+    "passi": [
+      {
+        "descrizione": "Dissotterra con la pala il tesoro segnato sulla riva ovest del Mulino del Ponte",
+        "obiettivo": {
+          "tipo": "trova",
+          "forziere": "mulino_ponte:5:10"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 0,
+      "esperienza": 80,
+      "oggetti": [
+        {
+          "id": "ghianda_oro",
+          "quantita": 1
+        }
+      ]
+    },
+    "siAccettaCon": "mappa_mugnaio",
+    "automatica": true
+  },
+  "ritorno_matteo": {
+    "id": "ritorno_matteo",
+    "nome": "Il ritorno di Matteo",
+    "tipo": "secondaria",
+    "daChi": "matteo",
+    "descrizione": "Matteo, il figlio di Bruno il fabbro creduto morto nel crollo della miniera, è vivo ma prigioniero di Ferrante il Contrabbandiere nelle Cave di Zolfo.",
+    "passi": [
+      {
+        "descrizione": "Sconfiggi Ferrante il Contrabbandiere nelle Cave di Zolfo",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "ferrante",
+          "quantita": 1
+        }
+      },
+      {
+        "descrizione": "Torna a Borgo Quercia e porta a Bruno la notizia che suo figlio Matteo è salvo",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "borgo"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 100,
+      "esperienza": 220,
+      "oggetti": [
+        {
+          "id": "argento",
+          "quantita": 2
+        }
+      ]
+    },
+    "concludeDa": "bruno"
+  },
+  "atto2_pietrafonda": {
+    "id": "atto2_pietrafonda",
+    "nome": "Atto II: liberare Pietrafonda",
+    "tipo": "principale",
+    "daChi": "ugo",
+    "richiede": [
+      "atto1_cripta"
+    ],
+    "descrizione": "Il villaggio minerario di Pietrafonda, a est dell'accampamento di Ugo nelle Colline Grigie, è stato occupato dai goblin fuggiti dalle montagne. Se liberi le strade, Ugo potrà riaccendere il banco delle armature.",
+    "passi": [
+      {
+        "descrizione": "Raggiungi il villaggio di Pietrafonda (a est dell'accampamento di Ugo)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "pietrafonda"
+        }
+      },
+      {
+        "descrizione": "Sconfiggi i 6 goblin che occupano le strade di Pietrafonda",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "goblin",
+          "quantita": 6
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 90,
+      "esperienza": 200,
+      "oggetti": [
+        {
+          "id": "pergamena_corazza_argento",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "grisk_liberato": {
+    "id": "grisk_liberato",
+    "nome": "Grisk fa BUM!",
+    "tipo": "secondaria",
+    "daChi": "grisk",
+    "descrizione": "Nelle gallerie della Miniera dei Goblin il piccolo artificiere Grisk è stato incatenato dal Troll a scavare ossidiana. Con due pezzi di Zolfo giallo può preparare una carica per spezzare le catene.",
+    "passi": [
+      {
+        "descrizione": "Porta 2 pezzi di Zolfo giallo a Grisk nelle gallerie della miniera",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "zolfo",
+          "quantita": 2
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 30,
+      "esperienza": 120
+    }
+  },
+  "grisk_clan": {
+    "id": "grisk_clan",
+    "nome": "Pace con il clan",
+    "tipo": "secondaria",
+    "daChi": "grisk",
+    "richiede": [
+      "grisk_liberato"
+    ],
+    "descrizione": "Il clan Pietrarossa ha dovuto abbandonare le sue tane sulle colline perché i lupi le hanno invase. Se porti 5 pelli di lupo a Krak, a Pietrafonda, il clan stringerà la pace con i minatori.",
+    "passi": [
+      {
+        "descrizione": "Porta 5 pelli di lupo a Krak di Pietrarossa, nel villaggio di Pietrafonda",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "pelle_lupo",
+          "quantita": 5
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 70,
+      "esperienza": 180,
+      "oggetti": [
+        {
+          "id": "pergamena_pugnali_pietrarossa",
+          "quantita": 1
+        }
+      ]
+    },
+    "concludeDa": "krak"
+  },
+  "argento_ugo": {
+    "id": "argento_ugo",
+    "nome": "L’argento di Ugo",
+    "tipo": "secondaria",
+    "daChi": "ugo",
+    "richiede": [
+      "atto2_pietrafonda"
+    ],
+    "descrizione": "Ora che Pietrafonda è libera, Ugo vuole rimettere in sesto le scorte della fucina d’armature con del Minerale d’argento fresco.",
+    "passi": [
+      {
+        "descrizione": "Porta 4 pezzi di Minerale d'argento a Ugo",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "argento",
+          "quantita": 4
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 80,
+      "esperienza": 140,
+      "oggetti": [
+        {
+          "id": "elmo_acciaio",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "lanterne_minatori": {
+    "id": "lanterne_minatori",
+    "nome": "La luce delle gallerie",
+    "tipo": "secondaria",
+    "daChi": "ugo",
+    "richiede": [
+      "atto2_pietrafonda"
+    ],
+    "descrizione": "I vecchi minatori di Pietrafonda usavano cristalli di Pietra lunare per illuminare i pozzi senza consumare olio. Le vene di Pietra lunare si trovano dietro le rocce crepate del Passo del Corvo e della Miniera.",
+    "passi": [
+      {
+        "descrizione": "Usa la Polvere nera di Grisk sulle rocce crepate e porta 2 Pietre lunari a Ugo",
+        "obiettivo": {
+          "tipo": "raccogli",
+          "oggetto": "pietra_lunare",
+          "quantita": 2
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 80,
+      "esperienza": 160,
+      "oggetti": [
+        {
+          "id": "ghianda_oro",
+          "quantita": 1
+        }
+      ]
+    }
+  },
+  "tesoro_ferrante": {
+    "id": "tesoro_ferrante",
+    "nome": "La mappa di Ferrante",
+    "tipo": "secondaria",
+    "daChi": "krak",
+    "descrizione": "La mappa di Ferrante indica una cassa di riserva sepolta sull'altopiano a nord del carro d'ossidiana sul Passo del Corvo.",
+    "passi": [
+      {
+        "descrizione": "Dissotterra con la pala il tesoro di Ferrante sul Passo del Corvo",
+        "obiettivo": {
+          "tipo": "trova",
+          "forziere": "passo_corvo:27:4"
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 0,
+      "esperienza": 140,
+      "oggetti": [
+        {
+          "id": "ghianda_oro",
+          "quantita": 1
+        }
+      ]
+    },
+    "siAccettaCon": "mappa_ferrante",
+    "automatica": true
+  },
+  "traghetto_orsola": {
+    "id": "traghetto_orsola",
+    "nome": "Il traghetto di Orsola",
+    "tipo": "principale",
+    "daChi": "orsola",
+    "richiede": [
+      "atto2_miniera"
+    ],
+    "descrizione": "Al Guado delle Lanterne, a sud della Brughiera, la locandiera Mamma Orsola custodisce il traghetto che porta alla vecchia Casa sul Colle di Orvald. Ma la barca non può salpare finché i Fuochi fatui infestano la Palude delle Lanterne.",
+    "passi": [
+      {
+        "descrizione": "Entra nella Palude delle Lanterne (a ovest del Guado)",
+        "obiettivo": {
+          "tipo": "raggiungi",
+          "mappa": "palude_lanterne"
+        }
+      },
+      {
+        "descrizione": "Spegni 4 Fuochi fatui nella Palude delle Lanterne",
+        "obiettivo": {
+          "tipo": "elimina",
+          "nemico": "fuoco_fatuo",
+          "quantita": 4
+        }
+      }
+    ],
+    "ricompensa": {
+      "monete": 110,
+      "esperienza": 260,
+      "oggetti": [
+        {
+          "id": "pozione_mana",
+          "quantita": 2
         }
       ]
     }

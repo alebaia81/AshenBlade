@@ -27,6 +27,8 @@ export class MuroSegreto {
     aperto: boolean,
     /** Fase 9b: texture e fotogramma del muro (dall'immagine delle tessere della mappa). */
     muro: { chiave: string; fotogramma: string } | null = null,
+    /** Fase 10c: vero per le rocce crepate, che non si aprono con le armi ma solo con la Polvere nera di Grisk. */
+    readonly soloBomba = false,
   ) {
     this._aperto = aperto;
     const { x, y } = posizione;
@@ -35,12 +37,15 @@ export class MuroSegreto {
     this.immagine = muro ? scena.add.image(x, y, muro.chiave, muro.fotogramma).setDepth(2) : null;
     if (this.immagine) this.forma.setFillStyle(colore, 0);
     // (la crepa va disegnata sopra il muro: la creiamo prima, la alziamo qui)
-    // La crepa: tre segmenti scuri a zig-zag. È l'unico indizio per chi guarda bene.
+    // La crepa: tre segmenti scuri a zig-zag (arancione/bruno per le rocce crepate da esplosivo).
     this.crepa = scena.add.graphics().setDepth(2);
-    this.crepa.lineStyle(1, 0x5a7a50, 1).beginPath();
+    this.crepa.lineStyle(soloBomba ? 1.4 : 1, soloBomba ? 0xd88038 : 0x5a7a50, 1).beginPath();
     this.crepa.moveTo(x - 3, y - 6).lineTo(x + 1, y - 1).lineTo(x - 2, y + 2).lineTo(x + 3, y + 6).strokePath();
+    if (soloBomba) {
+      this.crepa.beginPath().moveTo(x + 4, y - 4).lineTo(x + 1, y - 1).lineTo(x - 4, y + 4).strokePath();
+    }
     this.crepa.setDepth(2.1);
-    this.luccichio = scena.add.rectangle(x, y, LATO, LATO).setStrokeStyle(1.5, 0xffe680).setDepth(3).setVisible(false);
+    this.luccichio = scena.add.rectangle(x, y, LATO, LATO).setStrokeStyle(1.5, soloBomba ? 0xff9a4a : 0xffe680).setDepth(3).setVisible(false);
     if (aperto) this.nascondi();
   }
 

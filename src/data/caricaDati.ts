@@ -13,7 +13,7 @@ import { EFFETTI_ARMA, EFFETTI_ARMATURA } from '../systems/effettiArmi';
 import { PEZZI_ARMATURA, type CatalogoIndossabili, type Indossabile } from '../systems/equipaggiamento';
 import { comportamentoEsiste } from '../systems/ia/comportamenti';
 import { validaNegozio } from '../systems/negozio';
-import { analizzaMappa, celleAbitante, celleBarriera, celleForziere, celleNemico, cellePorte, celleVena } from '../systems/mappa';
+import { analizzaMappa, celleAbitante, celleBarriera, celleForziere, celleNemico, cellePorte, celleSepolte, celleVena } from '../systems/mappa';
 import { validaBoss } from '../systems/boss';
 import { validaCondizioni } from '../systems/condizioniMappa';
 import { RICHIESTE } from '../systems/ia/comportamenti';
@@ -148,10 +148,23 @@ export function caricaDati(): DatiGioco {
       const serve = RICHIESTE[n.comportamento];
       return serve && !n[serve] ? [`Nemico "${n.id}": il comportamento "${n.comportamento}" richiede "${serve}"`] : [];
     }),
-    ...Object.values(nemici).flatMap((n) => (n.fasi ? validaBoss(n.id, n.fasi, Object.keys(nemici)) : [])),
+    ...Object.values(nemici).flatMap((n) =>
+      n.fasi
+        ? validaBoss(n.id, n.fasi, Object.keys(nemici), {
+            leggendari: n.leggendari,
+            esoticoFirma: n.esoticoFirma,
+            oggetti,
+          })
+        : [],
+    ),
     ...Object.values(mappe).flatMap((m) => [
-      ...cellePorte(m).filter((p) => !oggetti[p.chiave]).map((p) => `Mappa "${m.id}": la porta in (${p.cella.col}, ${p.cella.riga}) si apre con "${p.chiave}", che non esiste`),
+      ...cellePorte(m)
+        .filter((p) => !p.runica && (!p.chiave || !oggetti[p.chiave]))
+        .map((p) => `Mappa "${m.id}": la porta in (${p.cella.col}, ${p.cella.riga}) si apre con "${p.chiave ?? ''}", che non esiste`),
       ...celleForziere(m).filter((f) => f.chiusoCon && !oggetti[f.chiusoCon]).map((f) => `Mappa "${m.id}": il forziere in (${f.cella.col}, ${f.cella.riga}) chiede "${f.chiusoCon}", che non esiste`),
+      ...celleSepolte(m).flatMap((s) =>
+        s.contenuto.filter((id) => !oggetti[id]).map((id) => `Mappa "${m.id}": il tesoro sepolto in (${s.cella.col}, ${s.cella.riga}) contiene "${id}", che non esiste`),
+      ),
       ...celleBarriera(m)
         .filter((b) => !celleNemico(m).some((n) => n.idNemico === b.boss && nemici[b.boss]?.fasi))
         .map((b) => `Mappa "${m.id}": la barriera è del boss "${b.boss}", che non è in questa mappa`),
@@ -161,7 +174,7 @@ export function caricaDati(): DatiGioco {
     ...questSenzaDialogo(quest, dialoghi, abitanti, oggetti),
     ...Object.entries(negozi).flatMap(([id, n]) => validaNegozio(id, n.merce, oggetti)),
     ...Object.entries(compagni).flatMap(([id, c]) => controllaCompagno(id, c, classi)),
-    ...controllaRicette(ricette, oggetti),
+    ...controllaRicette(ricette, oggetti, nemici),
     ...Object.values(mappe).flatMap((m) =>
       celleVena(m)
         .filter(({ materiale }) => oggetti[materiale]?.tipo !== 'materiale')
@@ -198,7 +211,7 @@ export function caricaDati(): DatiGioco {
         Object.values(mappe).flatMap((m) =>
           Object.entries(m.legenda).flatMap(([s, v]): [string, Strato | Strato[] | undefined][] => [
             [`Mappa "${m.id}", simbolo "${s}"`, v.tessera],
-            ...(v.tipo === 'segreto' ? [[`Mappa "${m.id}", muro segreto "${s}"`, v.tesseraMuro] as [string, Strato | Strato[] | undefined]] : []),
+            ...(v.tipo === 'segreto' || v.tipo === 'crepata' ? [[`Mappa "${m.id}", muro segreto "${s}"`, v.tesseraMuro] as [string, Strato | Strato[] | undefined]] : []),
           ]),
         ),
       ),
@@ -236,9 +249,12 @@ function voci<T, R>(dati: Record<string, T>, trasforma: (v: T) => R): Record<str
   return Object.fromEntries(Object.entries(dati).map(([id, v]) => [id, trasforma(v)]));
 }
 
-/** Tutti i forzieri del mondo, come "mappa:colonna:riga" (lo stesso formato della Partita). */
+/** Tutti i forzieri e tesori sepolti del mondo, come "mappa:colonna:riga" (lo stesso formato della Partita). */
 function tuttiIForzieri(mappe: Record<string, Mappa>): string[] {
-  return Object.values(mappe).flatMap((m) => celleForziere(m).map(({ cella }) => `${m.id}:${cella.col}:${cella.riga}`));
+  return Object.values(mappe).flatMap((m) => [
+    ...celleForziere(m).map(({ cella }) => `${m.id}:${cella.col}:${cella.riga}`),
+    ...celleSepolte(m).map(({ cella }) => `${m.id}:${cella.col}:${cella.riga}`),
+  ]);
 }
 
 /**
@@ -442,30 +458,50 @@ function controllaCompagno(id: string, c: DefinizioneCompagno, classi: Record<st
   }
   if (c.id !== id) errori.push(`Compagno "${id}": il campo id vale "${c.id}"`);
   if (!classi[c.classe]) errori.push(`Compagno "${id}": la classe "${c.classe}" non esiste`);
-  if (!(c.prezzo > 0)) errori.push(`Compagno "${id}": serve un "prezzo"`);
+  if (c.viaggio) {
+    if (c.prezzo !== 0) errori.push(`Compagno di viaggio "${id}": il prezzo deve essere 0`);
+  } else if (!(c.prezzo > 0)) {
+    errori.push(`Compagno "${id}": serve un "prezzo"`);
+  }
   if (!(BONUS_COMPAGNO as readonly string[]).includes(c.bonus.tipo)) errori.push(`Compagno "${id}": bonus "${c.bonus.tipo}" sconosciuto`);
   if (!(ABILITA_COMPAGNO as readonly string[]).includes(c.abilita.id)) errori.push(`Compagno "${id}": abilità "${c.abilita.id}" sconosciuta`);
+  for (const cm of c.commenti ?? []) {
+    if (!cm.mappa.trim() || !cm.testo.trim()) errori.push(`Compagno "${id}": commento con mappa o testo vuoto`);
+  }
   return errori;
 }
 
 /**
- * Le ricette: creano armi (mai esotiche, §8), con materiali veri. Ogni ricetta
- * non di base deve avere una pergamena che la insegna, altrimenti nessuno
- * potrebbe mai impararla; e ogni pergamena deve insegnare una ricetta esistente.
+ * Le ricette: creano armi, armature, pozioni o sigilli dell'Eco (mai esotiche, §8),
+ * con materiali veri. Ogni ricetta non di base deve avere una pergamena che la
+ * insegna o un boss che la sblocca (`sbloccataDaBoss`).
  */
-function controllaRicette(ricette: Record<string, Ricetta>, oggetti: Record<string, DefinizioneOggetto>): string[] {
+function controllaRicette(
+  ricette: Record<string, Ricetta>,
+  oggetti: Record<string, DefinizioneOggetto>,
+  nemici: Record<string, DefinizioneNemico>,
+): string[] {
   const errori: string[] = [];
+  const tipiCreabili = ['arma', 'armatura', 'pozione', 'missione'];
   const insegnate = Object.values(oggetti).flatMap((o) => (o.effetto?.tipo === 'ricetta' ? [o.effetto.ricetta] : []));
   for (const [id, r] of Object.entries(ricette)) {
     const risultato = oggetti[r.risultato];
     if (r.id !== id) errori.push(`Ricetta "${id}": il campo id vale "${r.id}"`);
-    if (risultato?.tipo !== 'arma') errori.push(`Ricetta "${id}": "${r.risultato}" non è un'arma`);
-    else if (risultato.rarita === 'esotica') errori.push(`Ricetta "${id}": le armi esotiche non si creano col crafting (§8)`);
+    if (!risultato || !tipiCreabili.includes(risultato.tipo)) {
+      errori.push(`Ricetta "${id}": "${r.risultato}" non è un oggetto creabile`);
+    } else if (risultato.rarita === 'esotica') {
+      errori.push(`Ricetta "${id}": gli oggetti esotici non si creano col crafting (§8)`);
+    }
     for (const [m, q] of Object.entries(r.materiali)) {
       if (oggetti[m]?.tipo !== 'materiale') errori.push(`Ricetta "${id}": "${m}" non è un materiale`);
       if (!(Number.isInteger(q) && q > 0)) errori.push(`Ricetta "${id}": quantità di "${m}" non valida`);
     }
-    if (!r.conosciutaDallInizio && !insegnate.includes(id)) errori.push(`Ricetta "${id}": nessuna pergamena la insegna`);
+    if (r.sbloccataDaBoss && !nemici[r.sbloccataDaBoss]?.fasi) {
+      errori.push(`Ricetta "${id}": sbloccataDaBoss "${r.sbloccataDaBoss}" non è un boss`);
+    }
+    if (!r.conosciutaDallInizio && !insegnate.includes(id) && !r.sbloccataDaBoss) {
+      errori.push(`Ricetta "${id}": nessuna pergamena la insegna`);
+    }
     if (r.conosciutaDallInizio && insegnate.includes(id)) errori.push(`Ricetta "${id}": è di base, una pergamena non servirebbe`);
   }
   for (const i of insegnate) if (!ricette[i]) errori.push(`Una pergamena insegna "${i}", che non è una ricetta`);
